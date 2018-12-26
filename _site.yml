@@ -1,0 +1,19 @@
+name: "Site navigation"
+output_dir: "."
+navbar:
+  title: "Navigate"
+  left:
+    - text: "Home"
+      href: index.html
+    - text: "Research"
+      href: research.html
+
+
+output:
+  html_document:
+    theme: spacelab
+    css: style.css  
+
+    toc: true
+    toc_depth: 3
+    toc_float: true  

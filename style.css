@@ -1,0 +1,27 @@
+
+img{ 
+ width:80%;
+ height:auto;
+ float: left;
+ margin: 10px;
+
+}
+
+
+a {font-weight: bold;}
+
+.list-group-item.active {
+z-index: 3;
+color: rgb(199, 199, 199);
+background-color: #FFFFFF;
+border-color: #446e9b;
+font-weight: bold;
+}
+
+.list-group-item.active:hover {
+z-index: 3;
+color: #FFFFFF;
+background-color: #3399f3;;
+border-color: #3399f3;;
+font-weight: bold;
+}
