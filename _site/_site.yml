@@ -1,0 +1,14 @@
+name: "Mariësse"
+output_dir: "."
+navbar:
+  title: "Mariësse's page"
+  left:
+    - text: "Home"
+      href: index.html
+    - text: "Industry results"
+      href: industry.html
+output:
+  html_document:
+    theme: flatly
+    css: style.css      
+      

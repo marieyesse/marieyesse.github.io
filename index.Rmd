@@ -1,0 +1,26 @@
+---
+title: "User:/Marieyesse"
+output: html_document
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+```
+
+# Welcome 
+
+  | 
+---------------------- | ----------------------------------------
+![](img/profile.jpg)            | Welcome to the landing page of Mariësse van Sluisveld (Marie-yes-se), PhD, scientific employee at PBL Netherlands Environmental Assessment Agency researching potential decarbonisation pathways for various long-term futures. As I am using an Integrated Assessment Model [IMAGE_PBL](http://www.twitter.com/IMAGE_PBL), producing a lot of data, I will mostly present on this page my research findings in a dynamic plotting style.
+
+
+## Also find me at the following places
+
+- [Twitter](http://www.twitter.com/marieyesse)
+- [Google Scholar](https://scholar.google.nl/citations?user=kZoVZGYAAAAJ&hl=nl)
+- [LinkedIn](http://www.linkedin.com/mvansluisveld)
+- [GitHub](http://www.github.com/marieyesse)
+- [ResearchGate]()
+- Or get in touch: [mariesse.vansluisveld@pbl.nl](mariesse.vansluisveld@pbl.nl)
+
+
