@@ -1,5 +1,5 @@
 ---
-title: "User:/Marieyesse"
+title: "Marieyesse"
 output: html_document
 ---
 
@@ -7,11 +7,11 @@ output: html_document
 knitr::opts_chunk$set(echo = TRUE)
 ```
 
-# Welcome 
+# Welcome to my corner of experimentation
 
   | 
 ---------------------- | ----------------------------------------
-![](img/profile.jpg)            | Welcome to the landing page of Mariësse van Sluisveld (Marie-yes-se), PhD, scientific employee at PBL Netherlands Environmental Assessment Agency researching potential decarbonisation pathways for various long-term futures. As I am using an Integrated Assessment Model [IMAGE_PBL](http://www.twitter.com/IMAGE_PBL), producing a lot of data, I will mostly present on this page my research findings in a dynamic plotting style.
+![](img/profile.jpg)            | Welcome to the webpage of Mariësse van Sluisveld ("Marie-yes-se""), PhD, scientific employee at PBL Netherlands Environmental Assessment Agency researching potential decarbonisation pathways for various long-term futures. As I am using an Integrated Assessment Model [IMAGE_PBL](http://www.twitter.com/IMAGE_PBL), producing a lot of data, I will mostly present on this page my research findings in a dynamic plotting style.
 
 
 ## Also find me at the following places
