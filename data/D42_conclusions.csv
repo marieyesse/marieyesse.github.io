@@ -1,0 +1,20 @@
+Model;Scenario;Indicator;Unit;Iron & Steel;Pulp & Paper;Chemicals & Petrochemicals;Food Processing
+IMAGE;Baseline;Biofuels;%;14;69;18;21
+IMAGE;Baseline;Electrification;%;23;24;0;36
+IMAGE;Baseline;Fossil fuel;%;63;7;72;40
+IMAGE;2 Degrees;Biofuels;%;15;71;34;37
+IMAGE;2 Degrees;Electrification;%;26;25;1;38
+IMAGE;2 Degrees;Fossil fuel;%;60;4;52;25
+IMAGE;2 Degrees;CCS;Mt CO2 /yr;78;0;-;-
+IMAGE;1.5 Degrees;Biofuels;%;6;78;4;54
+IMAGE;1.5 Degrees;Electrification;%;35;21;1;42
+IMAGE;1.5 Degrees;Fossil fuel;%;59;0;82;5
+IMAGE;1.5 Degrees;CCS;Mt CO2 /yr;75;290;-;-
+WISEE;CCS;Biofuels;%;-;65;-;
+WISEE;CCS;Electrification;%;16;35;23;
+WISEE;CCS;Fossil fuel;%;84;;77;
+WISEE;CCS;CCS;Mt CO2 /yr;100;30;9;
+WISEE;CIRC;Biofuels;%;13;32;71;
+WISEE;CIRC;Electrification;%;87;68;29;
+WISEE;CIRC;Fossil fuel;%;-;-;-;
+WISEE;CIRC;CCS;Mt CO2 /yr;-;-;-;
