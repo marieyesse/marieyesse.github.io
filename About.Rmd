@@ -8,6 +8,10 @@ output: html_document
 
 1. **van Sluisveld**, M.A.E. (2017) 2°C through different lenses - Evaluating long-term energy system change for a 2°C constrained world https://dspace.library.uu.nl/handle/1874/350885
 
+> On 4 July PBL researcher Mariësse van Sluisveld obtained her PhD at Utrecht University. The main conclusion of her research is that, in order to stay well below the 2°C climate objective, it is essential to combine different sources of knowledge.
+
+[Read further on the PBL site](https://www.pbl.nl/en/news/newsitems/2017/phd-promotion-mariesse-van-sluisveld-2-degree-c-through-different-lenses)
+
 # Academic publications
 
 
