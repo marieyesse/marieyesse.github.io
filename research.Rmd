@@ -1,5 +1,14 @@
 ---
 title: "Research"
+description: |
+  A new article created using the Radix format.
+author:
+  - name: Mariesse van Sluisveld
+    url: http://marieyesse.github.io
+    affiliation: 
+    affiliation_url: 
+date: "`r Sys.Date()`"
+output: radix::radix_article
 ---
 
 
@@ -10,6 +19,8 @@ This project specifically focused on industry decarbonisations and the quanitati
 
 1. [Industry decarbonization towards 2050](industry.html) 
 
+<blockquote class="twitter-tweet" data-lang="nl"><p lang="en" dir="ltr">[THREAD] 🆕In REINVENT’s latest report, we scratch the surface of our analytical capacity by presenting our zero-order analysis on 2050 <a href="https://twitter.com/hashtag/EU?src=hash&amp;ref_src=twsrc%5Etfw">#EU</a> <a href="https://twitter.com/hashtag/industry?src=hash&amp;ref_src=twsrc%5Etfw">#industry</a> <a href="https://twitter.com/hashtag/decarbonisation?src=hash&amp;ref_src=twsrc%5Etfw">#decarbonisation</a> <a href="https://twitter.com/hashtag/pathways?src=hash&amp;ref_src=twsrc%5Etfw">#pathways</a>, using the <a href="https://twitter.com/IMAGE_PBL?ref_src=twsrc%5Etfw">@IMAGE_PBL</a> and <a href="https://twitter.com/Wupperinst?ref_src=twsrc%5Etfw">@Wupperinst</a> <a href="https://twitter.com/hashtag/WISEE?src=hash&amp;ref_src=twsrc%5Etfw">#WISEE</a> models 👉 <a href="https://t.co/Tdq7328zb0">https://t.co/Tdq7328zb0</a> <a href="https://t.co/1Ur03QC6hI">pic.twitter.com/1Ur03QC6hI</a></p>&mdash; REINVENT (@REINVENT_EU) <a href="https://twitter.com/REINVENT_EU/status/1016220149580517377?ref_src=twsrc%5Etfw">9 juli 2018</a></blockquote>
+<script async src="https://platform.twitter.com/widgets.js" charset="utf-8"></script>
 
 
 
