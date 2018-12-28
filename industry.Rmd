@@ -1,25 +1,801 @@
 ---
 title: "Industry decarbonization by 2050"
+author: "Mariësse van Sluisveld (PBL) & Stefan Lechtenböhmer (Wuppertal Institute)"
+date: "27/11/2018"
 ---
 
-Here I am going to distribute our model findings
+## Integrated Perspective
+
+[REINVENT](http://www.reinvent-project.eu)’s zero-order analysis utilises an **analytical framework** in which two quantitative models are used to independently provide long-term perspectives on EU industry **decarbonisation by 2050** via common indicators (CO~2~, energy use and production volume)
+
+## Traditional Strategies dont add up 
+
+Our study shows that today‘s available technologies and **BAT energy efficiency** options are **not** sufficient to reach full industry decarbonization.  All industries need novel low-carbon technologies, processes & materials. 
+
+```{r results=TRUE, message=FALSE, warning=FALSE, echo=FALSE}
+
+library(plotly)
+library(ggplot2)
+library(data.table)
+library(dplyr)
+library(tidyr)
 
 
+WISEECO2_0= read.csv("data/WISEE_CO2_emissions_22_6_2018.csv", sep=";", dec=",")
+WISEECO2=melt(WISEECO2_0,  id.vars=c("Model", "Sector", "Variable","Scenario"), variable.name="Year")
+WISEECO2$Year = as.numeric(as.character(substr(WISEECO2$Year, 2, stop=100)))
+WISEECO2$value = as.numeric(WISEECO2$value)
+#WISEECO2 <- na.omit(WISEECO2)
+WISEECO2=data.table(WISEECO2)
 
-This is an R Markdown document. Markdown is a simple formatting syntax for authoring HTML, PDF, and MS Word documents. For more details on using R Markdown see <http://rmarkdown.rstudio.com>.
+WISEECO2=spread(WISEECO2, Year, value)
+setnames(WISEECO2, "2015", "X2015")
+setnames(WISEECO2, "2030", "X2030")
+setnames(WISEECO2, "2050", "X2050")
+WISEECO2 = WISEECO2 %>% mutate(RED2030=(1-(X2030/X2015))*100, RED2050=(1-(X2050/X2015))*100)
+WISEECO2=data.table(WISEECO2)
+WISEECO2=WISEECO2[Sector=="Chemical", Sector:=c("Chemicals and Petrochemicals")]
 
-When you click the **Knit** button a document will be generated that includes both content as well as the output of any embedded R code chunks within the document. You can embed an R code chunk like this:
+# IMAGE
 
-```{r cars}
-summary(cars)
+ALLVAR=read.csv("data/Compilation_IMAGE_REINENT_everything.csv", sep=";", dec=".")
+ALLVAR$value <- as.numeric(ALLVAR$value)
+ALLVAR$Year <- as.numeric(ALLVAR$Year)
+ALLVAR=data.table(ALLVAR)
+
+CO2TAB= ALLVAR[ Variable %in% c(
+                  "Emissions|CO2|Iron and Steel|Direct emissions",
+                  "Emissions|CO2|Pulp and Paper|Direct emissions", 
+                  "Emissions|CO2|Chemicals and Petrochemicals|Direct emissions",
+                  "Emissions|CO2|Food Processing|Direct emissions"
+                ) & Year %in% c("2015", "2030", "2050") & Region=="EU28"]
+CO2TAB$Variable <- gsub("|Direct emissions", "", CO2TAB$Variable, fixed=T )
+
+CO2TAB$Variable <- gsub("Emissions|CO2|", "", CO2TAB$Variable, fixed=T )
+CO2TAB=spread(CO2TAB, Year, value)
+setnames(CO2TAB, "2015", "X2015")
+setnames(CO2TAB, "2030", "X2030")
+setnames(CO2TAB, "2050", "X2050")
+CO2TAB=CO2TAB %>% mutate(RED2050=(1-(X2050/X2015))*100, RED2030=(1-(X2030/X2015))*100)
+setnames(CO2TAB, "Variable", "Sector")
+
+CO2REDTAB = rbind(WISEECO2[Variable=="Emissions|CO2", c("Model","Sector", "Scenario", "RED2030", "RED2050")],CO2TAB[, c("Sector", "Scenario", "Model", "RED2030", "RED2050")] )
+CO2REDTAB2=gather(CO2REDTAB, RED, value, c(RED2030, RED2050))
+
+#write.table(file="datatables/overview_table_indicators_CO2RED.csv", CO2REDTAB2, sep=",", dec=".", row.names=FALSE)
+CO2REDTAB2=rbind(CO2REDTAB2, data.table(Model=c("WISEE", "WISEE"),
+                                                Sector=c("Food Processing","Food Processing"),
+                                                Scenario=c("CIRC", "CCS"),
+                                                RED=c("RED2030", "RED2050"),
+                                                value=c(0,0)))
+CO2REDTAB2=data.table(CO2REDTAB2)
+CO2REDTABminmax=CO2REDTAB2[!Scenario=="Baseline",list(ymax=max(value,na.rm = TRUE),ymin=min(value,na.rm = TRUE)),by=c("Model","Sector", "RED")]
+CO2REDTABminmax$Variable <- "CO2 Emissions"
+
+## FINAL ENERGY REDUCTIONS
+FINETABRED=ALLVAR[Variable %in% c("Final Energy|Industry|Pulp and Paper",
+                                  "Final Energy|Industry|Iron and Steel",
+                                  "Final Energy|Industry|Chemicals and Petrochemicals",
+                                  "Final Energy|Industry|Food Processing"
+) & Year %in% c("2015", "2030", "2050") & Region=="EU28"]
+FINETABRED$Variable <- gsub("Final Energy|Industry|", "", FINETABRED$Variable, fixed=TRUE)
+setnames(FINETABRED,"Variable", "Sector")
+FINETABRED=spread(FINETABRED, Year, value)
+setnames(FINETABRED, "2015", "X2015")
+setnames(FINETABRED, "2030", "X2030")
+setnames(FINETABRED, "2050", "X2050")
+FINETABRED=FINETABRED %>% mutate(RED2050=(1-(X2050/X2015))*100, RED2030=(1-(X2030/X2015))*100)
+
+FINEREDTAB = rbind(WISEECO2[Variable=="Final Energy", c("Model","Sector", "Scenario", "RED2030", "RED2050")],FINETABRED[, c("Sector", "Scenario", "Model", "RED2030", "RED2050")] )
+FINEREDTAB2=gather(FINEREDTAB, RED, value, c(RED2030, RED2050))
+FINEREDTAB2=data.table(FINEREDTAB2)
+FINEREDTAB2=rbind(FINEREDTAB2, data.table(Model=c("WISEE", "WISEE"),
+                                        Sector=c("Food Processing","Food Processing"),
+                                        Scenario=c("CIRC", "CCS"),
+                                        RED=c("RED2030", "RED2050"),
+                                        value=c(0,0)))
+FINEREDTABminmax=FINEREDTAB2[!Scenario=="Baseline",list(ymax=max(value,na.rm = TRUE),ymin=min(value,na.rm = TRUE)),by=c("Model","Sector", "RED")]
+FINEREDTABminmax$Variable <- "Energy Use"
+
+## PRODUCTVOLUME
+PRODVOLTAB=ALLVAR[Variable %in% c("Chemical|HVC|Total Demand",
+                                  "Pulp and Paper|Total",
+                                  "Iron and Steel|Crude Steel",
+                                  "Food Processing|Total"
+) & Year %in% c("2015", "2030","2050") & Region=="EU28"]
+#PRODVOLTAB$Variable <- gsub("Production|Industry|", "", PRODVOLTAB$Variable, fixed=TRUE)
+PRODVOLTAB$Variable <- gsub("|HVC|Total Demand", "", PRODVOLTAB$Variable, fixed=TRUE)
+PRODVOLTAB$Variable <- gsub("|Total", "", PRODVOLTAB$Variable, fixed=TRUE)
+PRODVOLTAB$Variable <- gsub("|Crude Steel", "", PRODVOLTAB$Variable, fixed=TRUE)
+
+setnames(PRODVOLTAB,"Variable", "Sector")
+PRODVOLTAB=spread(PRODVOLTAB, Year, value)
+setnames(PRODVOLTAB, "2015", "X2015")
+setnames(PRODVOLTAB, "2030", "X2030")
+setnames(PRODVOLTAB, "2050", "X2050")
+PRODVOLTABRED=PRODVOLTAB %>% mutate(RED2050=(1-(X2050/X2015))*100, RED2030=(1-(X2030/X2015))*100)
+
+PRODVOLTABRED = rbind(WISEECO2[Variable=="Production", c("Model","Sector", "Scenario",  "RED2030", "RED2050")],PRODVOLTABRED[, c("Sector", "Scenario", "Model", "RED2030", "RED2050")] )
+PRODVOLTABRED=PRODVOLTABRED[Sector=="Chemical", Sector:=c("Chemicals and Petrochemicals")]
+PRODVOLTABRED2=gather(PRODVOLTABRED, RED, value, c(RED2030, RED2050))
+PRODVOLTABRED2=data.table(PRODVOLTABRED2)
+PRODVOLTABRED2=rbind(PRODVOLTABRED2, data.table(Model=c("WISEE", "WISEE"),
+                                                Sector=c("Food Processing","Food Processing"),
+                                                Scenario=c("CIRC", "CCS"),
+                                                RED=c("RED2030", "RED2050"),
+                                                value=c(0,0)))
+
+PRODVOLTABREDminmax=PRODVOLTABRED2[!Scenario=="Baseline",list(ymax=max(value,na.rm = TRUE),ymin=min(value,na.rm = TRUE)),by=c("Model","Sector", "RED")]
+PRODVOLTABREDminmax$Variable <- "Production volume"
+
+
+###
+
+MINMAX2050=ggplot()+
+  geom_crossbar(data=CO2REDTABminmax[RED=="RED2050"], aes(x=Sector, ymin=ymin, ymax=ymax, y=ymax, fill=Model, colour=Model), width=.7, position=position_dodge(width=0.7))+
+  
+  annotate("rect", xmin=-Inf,xmax=Inf,ymin=0,ymax=100, fill="lightgrey", alpha=0.6) +
+  annotate("rect", xmin=-Inf,xmax=Inf,ymin=100,ymax=Inf, fill="lightblue", alpha=0.6) +
+  annotate("text", x=0.6,y=104, label="Net negative", size=3, angle=90, colour="dimgrey", hjust=0) +
+  annotate("text", x=0.6, y=35, label="Reductions", size=3, angle=90, colour="dimgrey",  hjust=0) +
+  annotate("text", x=0.6, y=-5, label="Increase", size=3, angle=90, colour="dimgrey",  hjust=1) +
+  geom_crossbar(data=CO2REDTABminmax[RED=="RED2050"], aes(x=Sector, ymin=ymin, ymax=ymax, y=ymax, fill=Model, colour=Model),  width=.7, position=position_dodge(width=0.7))+
+  
+  geom_crossbar(data=FINEREDTABminmax[RED=="RED2050"], aes(x=Sector, ymin=ymin, ymax=ymax, y=ymax, fill=Model, colour=Model),  width=.7, position=position_dodge(width=0.7))+
+  geom_crossbar(data=PRODVOLTABREDminmax[RED=="RED2050"], aes(x=Sector, ymin=ymin, ymax=ymax, y=ymax, fill=Model, colour=Model),  width=.7, position=position_dodge(width=0.7))+
+
+  geom_hline(yintercept=100)+
+  geom_hline(yintercept=0)+
+  
+   ggtitle(bquote("Indexed change in 2050 compared to 2015")) +
+  xlab("Industry sector") + ylab("% Reduction ")+
+  facet_wrap(~Variable)+
+  scale_fill_manual(
+    breaks=c("IMAGE", "WISEE"),
+    values=c('blue', '#2ca25f'))+
+  scale_colour_manual(
+    breaks=c("IMAGE", "WISEE"),
+    values=c('blue', '#2ca25f')) +
+  guides(colour = element_blank()) +
+  scale_x_discrete(breaks=c("Iron and Steel", "Chemicals and Petrochemicals", "Pulp and Paper", "Food Processing"),
+                   labels=c("Steel",  "Chemicals","Paper", "Food")) +
+  
+  coord_cartesian(ylim=c(-40:150)) +
+  theme_bw() +
+
+  theme(
+        axis.text.x = element_text(angle = 45, size=14,  hjust=1),
+        axis.title.y = element_text(size=13),
+        axis.title.x = element_text(size=13),
+        axis.text.y = element_text(size=12),
+        strip.text.x = element_text(size=12, face="bold"),
+        strip.text.y = element_text(size=12, face="bold"),
+        legend.text= element_text(size=12),
+        legend.title=element_text(size=13,  face="bold"),
+        plot.title=element_text(size=16, hjust=0.5, face="bold"), 
+        plot.subtitle=element_text(size=14,hjust=0.5),
+        panel.border = element_rect(colour = "black", size=1),
+        legend.key =  element_rect(fill = 'white', size = 0.5),
+        strip.background = element_rect(colour="white", fill="#FFFFFF")
+    )
+
+ggplotly(MINMAX2050)
+
 ```
 
-## Including Plots
 
-You can also embed plots, for example:
+## Electrification, Biofuels and CCS 
 
-```{r pressure, echo=FALSE}
-plot(pressure)
+The [REINVENT](http://www.reinvent-project.eu) quantitative models depict a variety of strategies to overcome technological lock-in while meeting the climate objective, including, **energy efficiency, biofuels, electrification** of processes or utilizing renewable power to produce feedstock or synthetic fuel (e.g. hydrogen) and **carbon capture & storage** (CCS). **End-use sectors** also contribute via recycling.
+
+
+```{r results=TRUE, message=FALSE, warning=FALSE, echo=FALSE}
+
+library(plotly)
+library(ggplot2)
+library(data.table)
+library(dplyr)
+
+CONCLUSIONS0=read.csv("data/D42_conclusions.csv", sep=";", dec=",")
+CONCLUSIONS=data.table(CONCLUSIONS0)
+CONCLUSIONS=CONCLUSIONS[!Scenario=="Baseline"]
+CONCLUSIONS=melt(CONCLUSIONS, id.vars = c("Model", "Scenario", "Indicator", "Unit"), variable.name = c("Sector"))
+CONCLUSIONS$value <- as.numeric(CONCLUSIONS$value)
+CONCLUSIONS = CONCLUSIONS %>%  mutate(value = if_else(is.na(value), 0, value))
+CONCLUSIONS=data.table(CONCLUSIONS)
+
+CONCLUSIONSminmax=CONCLUSIONS[,list(ymax=max(value,na.rm = TRUE),ymin=min(value,na.rm = TRUE)),by=c("Model","Sector", "Indicator")]
+CONCLUSIONSminmax$Sector <- factor(CONCLUSIONSminmax$Sector, levels=unique(CONCLUSIONSminmax$Sector), labels=c("Steel", "Paper", "Chemicals", "Food"))
+
+
+
+MINMAXCONC2050=ggplot()+
+  geom_crossbar(data=CONCLUSIONSminmax[!Indicator=="CCS"], aes(x=Sector, ymin=ymin, ymax=ymax, y=ymax, fill=Model, colour=Model), width=.7, position=position_dodge(width=0.7))+
+  
+  annotate("rect", xmin=-Inf,xmax=Inf,ymin=0,ymax=100, fill="lightgrey", alpha=0.6) +
+# annotate("rect", xmin=-Inf,xmax=Inf,ymin=100,ymax=Inf, fill="lightblue", alpha=0.6) +
+# annotate("text", x=0.6,y=109, label="Net negative", size=3, angle=90, colour="dimgrey", hjust=0) +
+ annotate("text", x=0.6, y=95, label="High use", size=3, angle=90, colour="dimgrey",  hjust=1) + 
+  annotate("text", x=0.6, y=5, label="Low use", size=3, angle=90, colour="dimgrey",  hjust=0) + 
+  geom_crossbar(data=CONCLUSIONSminmax[!Indicator=="CCS"], aes(x=Sector, ymin=ymin, ymax=ymax, y=ymax, fill=Model, colour=Model), stat="identity",  width=.7, position=position_dodge(width=0.7))+
+  
+  geom_hline(yintercept=100)+
+  geom_hline(yintercept=0)+
+  
+  ggtitle(bquote("Relative change in 2050 compared to 2015")) +
+  xlab("Industry sector") + ylab("% application ")+
+  facet_wrap(~Indicator, nrow=1)+
+  scale_fill_manual(
+    breaks=c("IMAGE", "WISEE"),
+    values=c('#2ca25f','blue')) +
+  scale_colour_manual(
+    breaks=c("IMAGE", "WISEE"),
+    values=c('#2ca25f','blue')) +
+  guides(colour = element_blank()) +
+  coord_cartesian(ylim=c(-0:100)) +
+  theme_bw() +
+  theme(
+        axis.text.x = element_text(angle = 45, size=14,  hjust=1),
+        axis.title.y = element_text(size=13),
+        axis.title.x = element_text(size=13),
+        axis.text.y = element_text(size=12),
+        strip.text.x = element_text(size=12, face="bold"),
+        strip.text.y = element_text(size=12, face="bold"),
+        legend.text= element_text(size=12),
+        legend.title=element_text(size=13,  face="bold"),
+        plot.title=element_text(size=16, hjust=0.5, face="bold"), 
+        plot.subtitle=element_text(size=14,hjust=0.5),
+        panel.border = element_rect(colour = "black", size=1),
+        legend.key =  element_rect(fill = 'white', size = 0.5),
+        strip.background = element_rect(colour="white", fill="#FFFFFF")
+    
+        )
+
+ggplotly(MINMAXCONC2050)
+
 ```
 
-Note that the `echo = FALSE` parameter was added to the code chunk to prevent printing of the R code that generated the plot.
+
+## Changing landscape towards 2050 
+
+For 2050 our analyses show that **close to zero** or even **negative emissions** are required in basic industries. However, **inertia of existing assets** and the **ramp up of low carbon infrastructures and technologies** seem to be underestimated in many studies. This may result in a **≥ doubling** of required **emission efficiency rates**.
+
+
+```{r results=TRUE, message=FALSE, warning=FALSE, echo=FALSE}
+
+library(plotly)
+library(ggplot2)
+library(data.table)
+library(dplyr)
+library(tidyr)
+library(gridExtra)
+
+
+WISEECO2_0= read.csv("data/WISEE_CO2_emissions_22_6_2018.csv", sep=";", dec=",")
+WISEECO2=melt(WISEECO2_0,  id.vars=c("Model", "Sector", "Variable","Scenario"), variable.name="Year")
+WISEECO2$Year = as.numeric(as.character(substr(WISEECO2$Year, 2, stop=100)))
+WISEECO2$value = as.numeric(WISEECO2$value)
+#WISEECO2 <- na.omit(WISEECO2)
+WISEECO2=data.table(WISEECO2)
+setnames(WISEECO2, "Model", "Study")
+
+WISEECO22010=WISEECO2[Year=="2015"]
+WISEECO2= merge(WISEECO2, WISEECO22010, by=c("Study", "Sector", "Variable","Scenario"))
+WISEECO2share=WISEECO2  %>% mutate(Index=(value.x/value.y)*100)
+WISEECO2share=data.table(WISEECO2share)
+
+# IMAGE
+
+ALLVAR=read.csv("data/Compilation_IMAGE_REINENT_everything.csv", sep=";", dec=".")
+ALLVAR$value <- as.numeric(ALLVAR$value)
+ALLVAR$Year <- as.numeric(ALLVAR$Year)
+ALLVAR=data.table(ALLVAR)
+
+  
+CO2index=ALLVAR[Variable %in% c(  "Emissions|CO2|Iron and Steel|Direct emissions",
+                                    "Emissions|CO2|Pulp and Paper|Direct emissions",
+                                    "Emissions|CO2|Chemicals and Petrochemicals|Direct emissions",
+                                    "Emissions|CO2|Food Processing|Direct emissions"
+  )& Region %in% c("EU28") & Scenario %in% c("2 Degrees", "1.5 Degrees")]
+  
+  CO2index2010=CO2index[Year=="2010"]
+  CO2indexcalc=merge(CO2index, CO2index2010, by=c("Variable","Scenario",  "Unit", "Model", "Region"))
+  CO2indexcalc=CO2indexcalc %>% mutate(INDEX=(value.x/value.y)*100)
+  CO2indexcalc=data.table(CO2indexcalc)
+  CO2indexcalc=CO2indexcalc[Variable=="Emissions|CO2|Chemicals and Petrochemicals|Direct emissions", Variable:=c("Chemical")]
+  CO2indexcalc=CO2indexcalc[Variable=="Emissions|CO2|Food Processing|Direct emissions", Variable:=c("Food")]
+  CO2indexcalc=CO2indexcalc[Variable=="Emissions|CO2|Pulp and Paper|Direct emissions", Variable:=c("PPI")]
+  CO2indexcalc=CO2indexcalc[Variable=="Emissions|CO2|Iron and Steel|Direct emissions", Variable:=c("Iron and Steel")]
+  
+  
+  setnames(CO2indexcalc, "Model", "Study")
+  ############## CO2 Emissions
+  #################################################################
+  # Data: CEFIC/Ecofys
+  
+  ###### CEFIC/Ecofys (2013) p. vii, read from graph)
+  CEFICchem.emis=data.table(
+    Year=c(2010,2020,2030,2050,2010,2020,2030,2050),
+    Scenario=c("BL","BL","BL", "BL","n2DS","n2DS","n2DS","n2DS"),
+    Chemical =c(240,375,330,440, 240, 180, 160,25) # MtCO2e /yr
+  )
+  
+  CEFICchem.emis=gather(CEFICchem.emis, Sector, value, by=c("Chemical"))
+  CEFICchem.emis$Variable <- "Final Energy|Industry"
+  CEFICchem.emis$Study <- "CEFIC/Ecofys (2013)"
+  CEFICchem.emis=data.table(CEFICchem.emis)
+  
+  #Y2010 
+  CEFICchem.emis=merge(CEFICchem.emis,CEFICchem.emis[Scenario=="BL", -c("Scenario")], by=c("Year", "Sector", "Study", "Variable"))
+  setnames(CEFICchem.emis, "value.y", "BL")
+  CEFICchem.emis=merge(CEFICchem.emis, CEFICchem.emis[Year=="2010", -c("Year", "BL")], by=c("Scenario", "Sector", "Study", "Variable"))
+  setnames(CEFICchem.emis, "value.x.x", "value")
+  setnames(CEFICchem.emis, "value.x.y", "Y2010")
+  # Replaced Y2005 with Y2015(IEA)
+  CEFICchem.emis = CEFICchem.emis %>% mutate(ByBL=(value/BL)*100, ByY=(value/Y2010)*100, ByX=(BL/Y2010)*100)
+  CEFICchem.emis=data.table(CEFICchem.emis)
+  
+
+  ###### Broeren et al. (2014) p. 281, read from graph)
+  Broerenchem.emis=data.table(
+    Year=c(2010,2030,2010,2030),
+    Scenario=c("BL", "BL","n2DS","n2DS"),
+    Chemical =c(0.75, 1.1, 0.75, 0.87) # GtCO2e /yr
+  )
+  
+  Broerenchem.emis=gather(Broerenchem.emis, Sector, value, by=c("Chemical"))
+  Broerenchem.emis$Variable <- "Emissions|CO2"
+  Broerenchem.emis$Study <- "Broeren et al. (2014)"
+  Broerenchem.emis=data.table(Broerenchem.emis)
+  
+  #Y2010 
+  Broerenchem.emis=merge(Broerenchem.emis,Broerenchem.emis[Scenario=="BL", -c("Scenario")], by=c("Year", "Sector", "Study", "Variable"))
+  setnames(Broerenchem.emis, "value.y", "BL")
+  Broerenchem.emis=merge(Broerenchem.emis, Broerenchem.emis[Year=="2010", -c("Year", "BL")], by=c("Scenario", "Sector", "Study", "Variable"))
+  setnames(Broerenchem.emis, "value.x.x", "value")
+  setnames(Broerenchem.emis, "value.x.y", "Y2010")
+  # Replaced Y2005 with Y2015(IEA)
+  Broerenchem.emis = Broerenchem.emis %>% mutate(ByBL=(value/BL)*100, ByY=(value/Y2010)*100, ByX=(BL/Y2010)*100)
+  Broerenchem.emis=data.table(Broerenchem.emis)
+  
+  
+  # DECHEMA (2016) emissions in MtCO2 - required a calculation of BAU - RED (p108-111)
+  DECHEMA.emis= data.table(
+                    Year=c(rep(c(2015,	2030,	2050), 2)),	
+                    Scenario=c("BL","BL","BL", "n2DS","n2DS","n2DS"),
+                    Olefins=c(29,	33,	38,	29,	8,	-52)) #MtCO2
+  
+  DECHEMA.emis=gather(DECHEMA.emis, Sector, value, by=c("Olefins"))
+  DECHEMA.emis$Variable <- "Emissions|CO2"
+  DECHEMA.emis$Study <- "DECHEMA (2017)"
+  DECHEMA.emis=data.table(DECHEMA.emis)
+  
+  #Y2010 
+  DECHEMA.emis=merge(DECHEMA.emis,DECHEMA.emis[Scenario=="BL", -c("Scenario")], by=c("Year", "Sector", "Study", "Variable"))
+  setnames(DECHEMA.emis, "value.y", "BL")
+  DECHEMA.emis=merge(DECHEMA.emis, DECHEMA.emis[Year=="2015", -c("Year", "BL")], by=c("Scenario", "Sector", "Study", "Variable"))
+  setnames(DECHEMA.emis, "value.x.x", "value")
+  setnames(DECHEMA.emis, "value.x.y", "Y2015")
+  # Replaced Y2005 with Y2015(IEA)
+  DECHEMA.emis = DECHEMA.emis %>% mutate(ByBL=(value/BL)*100, ByY=(value/Y2015)*100, ByX=(BL/Y2015)*100)
+  DECHEMA.emis=data.table(DECHEMA.emis)
+  
+  ## WSP  Reference, Max Tech & Max Tech no biomass (p. 64). Emission reductionss compared to 2012 (for "Current trends")
+ WSP.emis= data.table(
+    Year=c(rep(c(2010, 2020,	2030, 2040,	2050), 3)),	
+    Scenario=c("BL","BL","BL", "BL","BL","n2DS","n2DS","n2DS","n2DS","n2DS","n2DSnb","n2DSnb","n2DSnb","n2DSnb","n2DSnb"),
+    Chemical=c(100,	82,	81,	85,	90,
+               100, 73,45, 18,12,
+               100, 78, 64, 21, 20)) 
+
+ WSP.emis=gather(WSP.emis, Sector, value, by=c("Chemical"))
+ WSP.emis$Variable <- "Emissions|CO2"
+ WSP.emis$Study <- "WSP/DNV-GL (2015)"
+ WSP.emis=data.table(WSP.emis)
+ 
+ #Y2010 
+ WSP.emis=merge(WSP.emis,WSP.emis[Scenario=="BL", -c("Scenario")], by=c("Year", "Sector", "Study", "Variable"))
+ setnames(WSP.emis, "value.y", "BL")
+ WSP.emis=merge(WSP.emis, WSP.emis[Year=="2010", -c("Year", "BL")], by=c("Scenario", "Sector", "Study", "Variable"))
+ setnames(WSP.emis, "value.x.x", "value")
+ setnames(WSP.emis, "value.x.y", "Y2010")
+ # Replaced Y2005 with Y2015(IEA)
+ WSP.emis = WSP.emis %>% mutate(ByBL=(value/BL)*100,  ByX=(BL/Y2010)*100)
+ setnames(WSP.emis, "value", "ByY")
+ WSP.emis=data.table(WSP.emis)
+  
+# #D4.1 versions Steel and paper Clemens
+D41STEEL=read.csv("data/D4_1_steel.csv", sep=";", dec=".")
+D41STEEL=data.table(D41STEEL)
+D41STEEL = D41STEEL %>% mutate(index=(value2/value1)*100)
+D41STEEL=data.table(D41STEEL)
+setnames(D41STEEL, "Variable", "Indicator")
+D41STEEL$Variable <- "Iron and Steel"
+
+
+ ########## PPI emissions
+D41PAPER=read.csv("data/D4_1_paper.csv", sep=";", dec=".")
+D41PAPER=data.table(D41PAPER)
+D41PAPER=D41PAPER %>% mutate(index=(value2/value1)*100)
+D41PAPER=data.table(D41PAPER)
+setnames(D41PAPER, "Variable", "Indicator")
+D41PAPER$Variable <- "Pulp and Paper"
+
+#################################################################
+  ##################### FOOD  EMISSIONS  ##########################
+  #################################################################
+  
+  WSP.foodemis=data.table(Year=c(rep(c(2010,2020,2030,2040,2050),3)),
+                          Scenario=c(rep("BL", 5), rep("n2DS2noelec",5), rep("n2DS1", 5)),
+                          Food=c(100,75,70,68,70,
+                                      100, 67,56,45,35,
+                                      100, 67, 53,37,25))
+  
+  WSP.foodemis=gather(WSP.foodemis, Sector, value, by=c("Food"))
+  WSP.foodemis$Variable <- "Emissions|CO2"
+  WSP.foodemis$Study <- "WSP/DNV-GL (2015b)"
+  WSP.foodemis=data.table(WSP.foodemis)
+  
+  #Y2010 
+  WSP.foodemis=merge(WSP.foodemis,WSP.foodemis[Scenario=="BL", -c("Scenario")], by=c("Year", "Sector", "Study", "Variable"))
+  setnames(WSP.foodemis, "value.y", "BL")
+  WSP.foodemis=merge(WSP.foodemis, WSP.foodemis[Year=="2010", -c("Year", "BL")], by=c("Scenario", "Sector", "Study", "Variable"))
+  setnames(WSP.foodemis, "value.x.x", "value")
+  setnames(WSP.foodemis, "value.x.y", "Y2010")
+  # Replaced Y2005 with Y2015(IEA)
+  WSP.foodemis = WSP.foodemis %>% mutate(ByBL=(value/BL)*100,  ByX=(BL/Y2010)*100)
+  setnames(WSP.foodemis, "value", "ByY")
+  WSP.foodemis=data.table(WSP.foodemis)
+  ###################################
+ ###################################
+ ############Poster
+```  
+
+### Steel industry scenarios
+```{r results=TRUE, message=FALSE, warning=FALSE, echo=FALSE}
+  
+  INDTEELemisbyPoster=ggplot() +
+    geom_hline(yintercept=100, linetype=2) +
+    
+    # Data Clemens????
+    geom_line(data=D41STEEL[Indicator=="GHG Emissions"], aes(x=Target, y=index, group=Scenario), colour='darkgrey')+
+    
+    geom_hline(yintercept = 0, linetype=1, alpha=0.4) +
+    #IMAGE
+    geom_line(data=CO2indexcalc[Variable %in% c("Iron and Steel") & Region %in% c("EU28") & Scenario %in% c("2 Degrees", "1.5 Degrees") ], aes(x=Year.x, y=INDEX, group=Scenario, linetype=Scenario, colour=Study), size=1)+
+    
+    # WISEE
+    geom_line(data=WISEECO2share[Sector=="Iron and Steel" & Variable=="Emissions|CO2"], aes(x=Year.x, y=Index, group=Scenario, linetype=Scenario, colour=Study), size=1) +
+    
+    # Other
+    geom_line(data=data.table(Year.x=c(2020),
+                              INDEX=c(0),
+                              Scenario=c("2 Degrees"),
+                              Study=c("Others"),
+                              Sector=c("Iron and Steel")), aes(x=Year.x, y=INDEX, group=Scenario, linetype=Scenario, colour=Study), size=1)+
+    
+    facet_wrap(~Sector, ncol=1) +
+    coord_cartesian(xlim=c(2005:2050), ylim=c(0:150)) +
+    theme_bw() +
+    ggtitle(bquote(bold("Total"~CO[2]~"emissions"))) +
+    labs(y="Index (2010=100) ", x = "Year") +
+    guides(fill=guide_legend("Sector"))+
+    scale_colour_manual(values=c('#2ca25f', "darkgrey",'blue'),
+                        breaks=c( "IMAGE", "WISEE", "Others") ) +
+    scale_linetype_manual(values=c(6,1,6,1)) +
+     theme(
+        axis.text.x = element_text(angle = 45, size=14,  hjust=1),
+        axis.title.y = element_text(size=13),
+        axis.title.x = element_text(size=13),
+        axis.text.y = element_text(size=12),
+        strip.text.x = element_text(size=12, face="bold"),
+        strip.text.y = element_text(size=12, face="bold"),
+        legend.text= element_text(size=12),
+        legend.title=element_text(size=13,  face="bold"),
+        plot.title=element_text(size=16, hjust=0.5, face="bold"), 
+        plot.subtitle=element_text(size=14,hjust=0.5),
+        panel.border = element_rect(colour = "black", size=1),
+        legend.key =  element_rect(fill = 'white', size = 0.5),
+        strip.background = element_rect(colour="white", fill="#FFFFFF")
+            ) 
+  
+  print(INDTEELemisbyPoster)
+
+```
+
+
+### Chemical industry scenarios
+```{r results=TRUE, message=FALSE, warning=FALSE, echo=FALSE}
+  #####
+  INDCHEMemisbyPoster=ggplot() +
+    geom_hline(yintercept=100, linetype=2) +
+    
+    #CEFIC/Ecofys (2013)
+    geom_line(data=CEFICchem.emis[!Scenario=="BL" & Sector=="Chemical"], aes(x=Year, y=ByY,  group=Scenario), colour='darkgrey') +
+    
+    #Broeren et al. (2014)
+    geom_line(data=Broerenchem.emis[!Scenario=="BL" & Sector=="Chemical"], aes(x=Year, y=ByY, group=Scenario), colour='darkgrey' ) +
+    
+    
+    
+    #WSP p. 64  this is UK based
+    geom_line(data=WSP.emis[!Scenario=="BL" & Sector=="Chemical"], aes(x=Year, y=ByY,  group=Scenario), colour='darkgrey') +
+    
+    geom_hline(yintercept = 0, linetype=1, alpha=0.4) +
+    #IMAGE
+    geom_line(data=CO2indexcalc[Variable %in% c( "Chemical") & Region %in% c("EU28") & Scenario %in% c("2 Degrees", "1.5 Degrees") ], aes(x=Year.x, y=INDEX, group=Scenario, linetype=Scenario, colour=Study), size=1)+
+    
+    # WISEE
+    geom_line(data=WISEECO2share[Sector=="Chemical" & Variable=="Emissions|CO2"], aes(x=Year.x, y=Index, group=Scenario, linetype=Scenario, colour=Study), size=1) +
+    
+    facet_wrap(~Sector, ncol=1) +
+    coord_cartesian(xlim=c(2005:2050), ylim=c(0:150)) +
+    theme_bw() +
+    ggtitle(bquote(bold("Total"~CO[2]~"emissions"))) +
+    labs(y="Index (2010=100) ", x = "Year") +
+    guides(fill=guide_legend("Sector"))+
+    scale_colour_manual(values=c('#2ca25f','blue'),
+                        breaks=c("IMAGE", "WISEE")
+    ) +
+    scale_linetype_manual(values=c(6,1,6,1)) +
+    
+    theme(
+        axis.text.x = element_text(angle = 45, size=14,  hjust=1),
+        axis.title.y = element_text(size=13),
+        axis.title.x = element_text(size=13),
+        axis.text.y = element_text(size=12),
+        strip.text.x = element_text(size=12, face="bold"),
+        strip.text.y = element_text(size=12, face="bold"),
+        legend.text= element_text(size=12),
+        legend.title=element_text(size=13,  face="bold"),
+        plot.title=element_text(size=16, hjust=0.5, face="bold"), 
+        plot.subtitle=element_text(size=14,hjust=0.5),
+        panel.border = element_rect(colour = "black", size=1),
+        legend.key =  element_rect(fill = 'white', size = 0.5),
+        strip.background = element_rect(colour="white", fill="#FFFFFF")
+            ) 
+  
+  ggplotly(INDCHEMemisbyPoster)
+```
+  
+### Pulp & paper industry scenarios
+```{r results=TRUE, message=FALSE, warning=FALSE, echo=FALSE}
+
+  ##
+  INDPPIemisbyPoster=ggplot() +
+    geom_hline(yintercept=100, linetype=2) +
+    
+    # Data Clemens????
+    # ??????????? Clemens data
+    geom_line(data=D41PAPER[Indicator=="GHG Emissions"], aes(x=Target, y=index, group=Scenario), colour='darkgrey')+
+    
+    geom_hline(yintercept = 0, linetype=1, alpha=0.4) +
+    #IMAGE
+    geom_line(data=CO2indexcalc[Variable %in% c("Pulp and Paper") & Region %in% c("EU28") & Scenario %in% c("2 Degrees", "1.5 Degrees") ], aes(x=Year.x, y=INDEX, group=Scenario, linetype=Scenario, colour=Study), size=1)+
+    
+    # WISEE
+    geom_line(data=WISEECO2share[Sector=="Pulp and Paper" & Variable=="Emissions|CO2"], aes(x=Year.x, y=Index, group=Scenario, linetype=Scenario, colour=Study), size=1) +
+    
+    
+    facet_wrap(~Sector, ncol=1) +
+    coord_cartesian(xlim=c(2005:2050), ylim=c(-50:120)) +
+    theme_bw() +
+    ggtitle(bquote(bold("Total"~CO[2]~"emissions"))) +
+    labs(y="Index (2010=100) ", x = "Year") +
+    guides(fill=guide_legend("Sector"))+
+    scale_colour_manual(values=c( '#2ca25f','blue'),
+                        breaks=c( "IMAGE",  "WISEE")) +
+    
+    scale_linetype_manual(values=c(6,1,6,1)) +
+     theme(
+        axis.text.x = element_text(angle = 45, size=14,  hjust=1),
+        axis.title.y = element_text(size=13),
+        axis.title.x = element_text(size=13),
+        axis.text.y = element_text(size=12),
+        strip.text.x = element_text(size=12, face="bold"),
+        strip.text.y = element_text(size=12, face="bold"),
+        legend.text= element_text(size=12),
+        legend.title=element_text(size=13,  face="bold"),
+        plot.title=element_text(size=16, hjust=0.5, face="bold"), 
+        plot.subtitle=element_text(size=14,hjust=0.5),
+        panel.border = element_rect(colour = "black", size=1),
+        legend.key =  element_rect(fill = 'white', size = 0.5),
+        strip.background = element_rect(colour="white", fill="#FFFFFF")
+            ) 
+  
+  print(INDPPIemisbyPoster)
+```
+
+### Food industry scenarios
+
+```{r results=TRUE, message=FALSE, warning=FALSE, echo=FALSE}
+  ###
+ 
+  INDFOODemisbyPoster=ggplot() +
+    geom_hline(yintercept=100, linetype=2) +
+    
+    #WSP p. 64  this is UK based
+    geom_line(data=WSP.foodemis[!Scenario=="BL" & Sector=="Food"], aes(x=Year, y=ByY, colour=Study, group=Scenario), colour='grey' ) +
+    #geom_line(data=WSP.foodemis[Scenario=="BL" & Sector=="Food"], aes(x=Year, y=ByX, colour=Study, group=Scenario), size=1, linetype=2 ) +
+    
+    #Audrey et al (2009) (WWF) all areas scenario.  this is UK based
+    geom_line(data=data.table(Year=c(2010,2020,2030,2040,2050),
+                              Study=c(rep("Audsley et al. (2009)",5)),
+                              Scenario=c(rep("Decarbonisation", 5)),
+                              ByY=c(100,79,62,48,30)), aes(x=Year, y=ByY,  group=Scenario), colour='grey' ) +
+    
+    #IMAGE
+    geom_line(data=CO2indexcalc[Variable %in% c( "Food") & Region %in% c("EU28") & Scenario %in% c("2 Degrees", "1.5 Degrees") ], aes(x=Year.x, y=INDEX, group=Scenario, linetype=Scenario, colour=Study), size=1)+
+    scale_colour_manual(values=c('#2ca25f'),
+                        breaks=c( "IMAGE")
+    ) +
+    
+    facet_wrap(~Sector, ncol=1) +
+    coord_cartesian(xlim=c(2005:2050), ylim=c(0:150)) +
+    theme_bw() +
+    ggtitle(bquote(bold("Total"~CO[2]~"emissions"))) +
+    labs(y="Index (2010=100) ", x = "Year") +
+    guides(fill=guide_legend("Sector"))+
+     theme(
+        axis.text.x = element_text(angle = 45, size=14,  hjust=1),
+        axis.title.y = element_text(size=13),
+        axis.title.x = element_text(size=13),
+        axis.text.y = element_text(size=12),
+        strip.text.x = element_text(size=12, face="bold"),
+        strip.text.y = element_text(size=12, face="bold"),
+        legend.text= element_text(size=12),
+        legend.title=element_text(size=13,  face="bold"),
+        plot.title=element_text(size=16, hjust=0.5, face="bold"), 
+        plot.subtitle=element_text(size=14,hjust=0.5),
+        panel.border = element_rect(colour = "black", size=1),
+        legend.key =  element_rect(fill = 'white', size = 0.5),
+        strip.background = element_rect(colour="white", fill="#FFFFFF")
+            ) 
+  
+  
+  ggplotly(INDFOODemisbyPoster)                      
+                        
+  # ###
+  # get_legend<-function(myggplot){
+  #   tmp <- ggplot_gtable(ggplot_build(myggplot))
+  #   leg <- which(sapply(tmp$grobs, function(x) x$name) == "guide-box")
+  #   legend <- tmp$grobs[[leg]]
+  #   return(legend)
+  # }
+  # legend.overviewpost <- get_legend(INDTEELemisbyPoster)
+  # 
+  # 
+  # # a grob in a grob in a grob 
+  # LITREVIEWPOSTER <-arrangeGrob(arrangeGrob(arrangeGrob(
+  #                         INDTEELemisbyPoster 
+  #                         + theme(
+  #                           legend.position="none",
+  #                           plot.title = element_blank(),
+  #                           plot.subtitle= element_blank(),
+  #                           strip.text.x = element_text(size=18, face="bold"),
+  #                           strip.text.y = element_text(size=18, face="bold"),
+  #                           axis.text.x = element_text(angle = 45, size=16,  hjust=1),
+  #                           axis.text.y = element_text(size=18,  hjust=1),
+  #                           axis.title.y = element_text(size=16)),
+  #                         INDCHEMemisbyPoster + theme(
+  #                           legend.position="none",
+  #                           plot.title = element_blank(),
+  #                           plot.subtitle= element_blank(),
+  #                           strip.text.x = element_text(size=18, face="bold"),
+  #                           strip.text.y = element_text(size=18, face="bold"),
+  #                           axis.text.x = element_text(angle = 45, size=16,  hjust=1),
+  #                           axis.text.y = element_text(size=18,  hjust=1),
+  #                           axis.title.y = element_text(size=16)),
+  #                         nrow=1, widths=c(3,3))
+  #                         ,
+  #                         
+  #                         arrangeGrob(
+  #                           INDPPIemisbyPoster + theme(
+  #                             legend.position="none",
+  #                             plot.title = element_blank(),
+  #                             plot.subtitle= element_blank(),
+  #                             strip.text.x = element_text(size=18, face="bold"),
+  #                             strip.text.y = element_text(size=18, face="bold"),
+  #                             axis.text.x = element_text(angle = 45, size=16,  hjust=1),
+  #                             axis.text.y = element_text(size=18,  hjust=1),
+  #                             axis.title.y = element_text(size=16)), 
+  #                           
+  #                           
+  #                           INDFOODemisbyPoster + theme(
+  #                             legend.position="none",
+  #                             plot.title = element_blank(),
+  #                             plot.subtitle= element_blank(),
+  #                             strip.text.x = element_text(size=18, face="bold"),
+  #                             strip.text.y = element_text(size=18, face="bold"),
+  #                             axis.text.x = element_text(angle = 45, size=16,  hjust=1),
+  #                             axis.text.y = element_text(size=18,  hjust=1),
+  #                             axis.title.y = element_text(size=16)
+  #                             ), 
+  #                           nrow=1, widths=c(3,3)), 
+  #                         
+  #   
+  #   ncol=1,
+  #   bottom=NULL,
+  #   #top=textGrob("Indexed CO2 emissions", vjust = 0.5, rot=0, gp=gpar(fontsize=26, fontface="bold")) ,
+  #   heights=c(4,4)),
+  #   nrow=1,
+  #   legend.overviewpost,
+  #   widths=c(4,1))
+  # 
+  # 
+  # grid.newpage()
+  # grid.draw(LITREVIEWPOSTER)
+  # 
+  
+```
+
+
+
+## Invest in lock-in or structural change? 
+
+Technical assets in several big industry clusters around Europe **are growing old**, creating a natural **window of opportunity** in the **next 1-2 decades**. Re-investing in Paris-proof processes and technologies will **need infrastructures** to supply **clean energy, technological innovation** and **risk taking investment decisions**. 
+
+```{r results=TRUE, message=FALSE, warning=FALSE, echo=FALSE}
+
+library(plotly)
+library(ggplot2)
+library(data.table)
+library(dplyr)
+
+## WISEE Reinvestments
+
+WISEECAPACITYPOSTERinvest=data.table(
+  Technology=c(	"Primary Steel",	"Primary Steel",	"Primary Steel",	"Primary Steel",	"Primary Steel",	"Primary Steel",	"Olefin capacity",	"Olefin capacity",	"Olefin capacity",	"Olefin capacity",	"Olefin capacity",	"Olefin capacity"	),
+  Region=c(	"CEE",	"SE",	"NE",	"NWE",	"SEE",	"UK",	"CEE",	"SE",	"NE",	"NWE",	"SEE",	"UK"	),
+  Shortterm=c(	14235.25,	450,	0,	29460,	0,	750,	1834,	1070,	330,	3380,	1032,	0	),
+  Midterm=c(	11265.5,	12900,	5642.85714285714,	24668.5,	3700,	3875,	0,	0,	0,	840,	0,	830	),
+  Longterm=c(	14235.25,	450,	0,	31460,	0,	3000,	0,	440,	0,	1080,	0,	0	)
+)
+
+WISEECAPACITYPOSTERinvest=gather(WISEECAPACITYPOSTERinvest, Period, value, c(Shortterm, Midterm, Longterm))
+WISEECAPACITYPOSTERinvest=data.table(WISEECAPACITYPOSTERinvest)
+WISEECAPACITYPOSTERinvest$value=WISEECAPACITYPOSTERinvest$value/1000
+
+## BAR chart
+INDUSCAPCHANGEinvest=ggplot() +
+  geom_bar(data=WISEECAPACITYPOSTERinvest, aes(x=Region, y=value,  fill=Period), colour='black', stat="identity", position="stack", width=.8)+
+  
+  facet_wrap(~Technology, scales="free_y") +
+  theme_bw() +
+  #coord_cartesian(ylim = c(0:12)) +
+  ggtitle("Reinvestments") +
+  labs(y="Investment change (Mt/yr)", x = "Year") +
+  guides(fill=guide_legend("Sector"))+
+  scale_fill_manual(values=c('#2ca25f','blue', 'darkgrey'))  +
+  
+  theme(
+        axis.text.x = element_text(angle = 45, size=14,  hjust=1),
+        axis.title.y = element_text(size=13),
+        axis.title.x = element_text(size=13),
+        axis.text.y = element_text(size=12),
+        strip.text.x = element_text(size=12, face="bold"),
+        strip.text.y = element_text(size=12, face="bold"),
+        legend.text= element_text(size=12),
+        legend.title=element_text(size=13,  face="bold"),
+        plot.title=element_text(size=16, hjust=0.5, face="bold"), 
+        plot.subtitle=element_text(size=14,hjust=0.5),
+        panel.border = element_rect(colour = "black", size=1),
+        legend.key =  element_rect(fill = 'white', size = 0.5),
+        strip.background = element_rect(colour="white", fill="#FFFFFF")
+    
+        )
+
+
+ggplotly(INDUSCAPCHANGEinvest)
+
+```
+
+## Smart Industrial policies needed 
+
+Radical changes are needed in all major industrial clusters. To avoid fossil lock-ins, new low-carbon infrastructures and **joint technological visions** are **needed**. In globally competitive environments such a change needs **strong cooperation of public and private investment**. Linking with **demand side strategies** and **circularity** creates additional benefits and challenges.
+
+## Moving beyond existing thinking... 
+
+Clear **bottle-necks** have been observed in scenario studies assuming **business-as-usual operations** and **rising consumption patterns**. New [REINVENT](http://www.reinvent-project.eu) research is set out on exploring (1) the **break away** from current systems and (infra)structures and (2) opportunties **between** sectors, organisations and down the value chains.
+
+
