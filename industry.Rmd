@@ -4,6 +4,15 @@ author: "Mariësse van Sluisveld (PBL) & Stefan Lechtenböhmer (Wuppertal Instit
 date: "27/11/2018"
 ---
 
+This page is a remake of a full-length report written in June. Twitter short-read to be fond here;
+
+
+```{r echo=FALSE}
+blogdown::shortcode('tweet', '1016220149580517377')
+```
+
+
+
 ## Integrated Perspective
 
 [REINVENT](http://www.reinvent-project.eu)’s zero-order analysis utilises an **analytical framework** in which two quantitative models are used to independently provide long-term perspectives on EU industry **decarbonisation by 2050** via common indicators (CO~2~, energy use and production volume)

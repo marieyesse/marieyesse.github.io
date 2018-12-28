@@ -19,9 +19,4 @@ This project specifically focused on industry decarbonisations and the quanitati
 
 1. [Industry decarbonization towards 2050](industry.html) 
 
-```{r echo=FALSE}
-blogdown::shortcode('tweet', '1016220149580517377')
-```
-
-
 
