@@ -4,14 +4,6 @@ author: "Mariësse van Sluisveld (PBL) & Stefan Lechtenböhmer (Wuppertal Instit
 date: "27/11/2018"
 ---
 
-This page is a remake of a full-length report written in June. Twitter short-read to be fond here;
-
-
-```{r echo=FALSE}
-blogdown::shortcode('tweet', '1016220149580517377')
-```
-
-
 
 ## Integrated Perspective
 
