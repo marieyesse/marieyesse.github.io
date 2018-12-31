@@ -7,8 +7,8 @@ title: "Research"
 ### [REINVENT - Realising innovation in transitions for decarbonisation](http://www.reinvent-project.eu)
 This project specifically focused on industry decarbonisations and the quanitative representations that exist for the future of (basic) industries. The studies include data comparisons of IMAGE <http://www.pbl.nl>, WISEE <https://wupperinst.org/en/>.
 
-
-1. [Industry decarbonization towards 2050](industry.html) 
+1. [Dashboard: European industry decarbonization Strategies](IAM_dashboard.html) 
+2. [Interactive Poster: Industry decarbonization towards 2050](industry.html) 
 
 
 
