@@ -1,5 +1,9 @@
 ---
 title: "Research"
+output: 
+  html_document:
+    includes:
+      after_body: footer.html
 ---
 
 ### [Data Dashboard: European industry decarbonization Strategies](IAM_dashboard.html)  

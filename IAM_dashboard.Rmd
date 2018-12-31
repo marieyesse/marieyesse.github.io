@@ -1,7 +1,9 @@
 ---
 title: "Model intercomparison"
-output: flexdashboard::flex_dashboard
-orientation: rows
+output: 
+  html_document:
+    includes:
+      after_body: footer.html
 ---
 
 ```{r setup, include=FALSE}

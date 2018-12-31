@@ -2,6 +2,10 @@
 title: "Industry decarbonization by 2050"
 author: "Mariësse van Sluisveld (PBL) & Stefan Lechtenböhmer (Wuppertal Institute)"
 date: "27/11/2018"
+output: 
+  html_document:
+    includes:
+      after_body: footer.html
 ---
 
 
