@@ -16,7 +16,10 @@ output:
   html_document:
     theme: spacelab
     css: style.css  
-
+    includes:
+      before_body: header.html
+      after_body: footer.html
+      
     toc: true
     toc_depth: 3
     toc_float: true  

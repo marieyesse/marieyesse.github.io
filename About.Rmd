@@ -1,10 +1,6 @@
 ---
 title: "About me"
 author: "Mariësse van Sluisveld"
-output: 
-  html_document:
-    includes:
-      after_body: footer.html
 ---
 
   | 
