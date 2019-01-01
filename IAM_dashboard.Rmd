@@ -333,10 +333,9 @@ EMF28meltEUEmeffratecompoundminmaxBY=EMF28meltEUEmeffratecompound[!Model %in% c(
 
 ```
 
-Decarbonization strategies {.tabset .tabset-fade}
--------------------------------------
+### Decarbonization strategies 
 
-Most long-term integrative assessment studies are less detailed about industrial decarbonisation strategies and describe response strategies in more aggregate indicators. Only a more limited set of studies have assessed industrial decarbonisation strategies in Europe more explicitly (see Table). We use the data of these studies on this page
+Only a limited set of integrated assessment studies have assessed industrial decarbonisation strategies in Europe more explicitly (see Table). We use the data of these studies on this page.
 
 Study | Shortname
 ------|--------
@@ -345,13 +344,14 @@ Study | Shortname
 [OECD/IEA (2017)]() | IEA
 [Fragkos et al. (2013)]() | FRAGKOS
 
-Most of the industrial improvement depictions in Förster et al. (2013) assume energy efficiency
-improvements in the short-term (until 2030) for both the policy baseline and decarbonisation
-scenarios. The average annual decline in energy demand is largest early on in the century for both scenarios, but the relative annual reductions are higher in decarbonisation scenarios later on in the century. Until 2030, annual efficiency improvements of about -0.7% to 2% (compound rate, baseline) or 1.7% to 4% (compound rate, decarbonisation) are projected in Förster et al. (2013), while this rate increases to 2% to 5% under decarbonisation assumptions in the period from 2030 to 2050. This equates to a decades-long sustained energy efficiency improvement of 1 to 3 times the current rate, which has only been observed incidentally in emerging economies to date (e.g. China, with a 5.6% rate in 2015 (OECD/IEA, 2016)).
-
-The emission intensity improvements in decarbonisation strategies have a smaller contribution in the short term (ranging from 0%-1%) than later in the century (0.2% to 5%, for which compound rates are higher than linear rates over a sustained period). The rates of change in Förster et al. (2013) are broadly in agreement with the other studies (Schade et al. 2009, OECD/IEA 2017b, Fragkos et al. 2007). This reflects the fact that only in a policy scenario with stringent climate policy, and only after 2030, more aggressive emission efficiency measures are adopted. The scenarios in Figure 8 project emissions intensities of between 40-60 g CO<sub>2</sub>/kJ (Förster et al., 2013) by 2050. These are higher than in other European studies, depicting carbon intensities of 13-20 g CO<sub>2</sub>/kJ (OECD/IEA, 2017), 32-36 g CO<sub>2</sub>/kJ (Schade et al., 2009) and 32 g CO2/kJ (Fragkos et al., 2017) for the same year.
     
-### Decarbonisation pathway
+Decarbonisation pathway {.tabset .tabset-fade}
+-------------------------------------
+  
+Most of the industrial improvement depictions in Förster et al. (2013) assume energy efficiency
+improvements in the short-term (until 2030) for both the policy baseline (EU11) and decarbonisation scenarios (EU9). The decarbonization scenario shows a decades-long sustained energy efficiency improvement of 1 to 3 times the current rate, which has only been observed incidentally in emerging economies to date (e.g. China, with a 5.6% rate in 2015 (OECD/IEA, 2016)). The emission intensity improvements in decarbonisation strategies have a smaller contribution in the short term (ranging from 0%-1%) than later in the century (0.2% to 5%, for which compound rates are higher than linear rates over a sustained period). The rates of change in Förster et al. (2013) are broadly in agreement with the other studies (Schade et al. 2009, OECD/IEA 2017b, Fragkos et al. 2007). This reflects the fact that only in a policy scenario with stringent climate policy, and only after 2030, more aggressive emission efficiency measures are adopted.
+
+### Pathways
   
 ```{r results=TRUE, message=FALSE, warning=FALSE, echo=FALSE}
 
@@ -463,15 +463,20 @@ BARCHARTby=ggplot() +
             ) 
 
 ggplotly(BARCHARTby)
+
+
 ```
 
-   
- 
+
 -------------------------------------
+
+
   
 ## Emission and energy efficiency rate p.a.
+**Legend:**
 
-
+- ByYeff: By Year, Energy efficiency
+- ByYdecarb: By year, Emission efficiency
 
 ```{r echo=FALSE}
 
@@ -480,4 +485,6 @@ DT::datatable(EMF28carbeneffplot[Scenario %in% c("EU9", "EU11")], options = list
 ))
 
 ```
-  
+
+
+
