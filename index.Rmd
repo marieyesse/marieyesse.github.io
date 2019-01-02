@@ -10,5 +10,5 @@ knitr::opts_chunk$set(echo = TRUE)
 
   | 
 ---------------------- | ----------------------------------------
-![](img/profile.jpg)            | Welcome to the webpage of Mariësse van Sluisveld ("Marie-yes-se""), PhD, scientific employee at PBL Netherlands Environmental Assessment Agency researching potential decarbonisation pathways for various long-term futures. As I am using an Integrated Assessment Model [IMAGE_PBL](http://www.twitter.com/IMAGE_PBL), producing a lot of data, I will mostly present on this page my research findings in a dynamic plotting style.
+![](img/profile.jpg)            | Welcome to the webpage of Mariësse (_"Marie-yes-se"_) van Sluisveld (PhD). I am a scientific employee at PBL Netherlands Environmental Assessment Agency,  using and producing data on a daily base to advise and support decision making on long-term systemic change. My little corner of creation will mostly function as archive of achievement and wrapper for various short reads, data showcasings and code storage.
 

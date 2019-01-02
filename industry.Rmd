@@ -1,6 +1,5 @@
 ---
 title: "Industry decarbonization by 2050"
-author: "Mariësse van Sluisveld (PBL) & Stefan Lechtenböhmer (Wuppertal Institute)"
 date: "27/11/2018"
 ---
 
@@ -16,7 +15,7 @@ Our study shows that today‘s available technologies and **BAT energy efficienc
 
 
 
-```{r results=TRUE, message=FALSE, warning=FALSE, echo=FALSE}
+```{r results=TRUE, message=FALSE, warning=FALSE, echo=FALSE, fig.align="center", fig.width=8, fig.height=4, fig.cap="_**Figure**: Expected and required change of decarbonisation, energy efficiency and sufficiency_"}
 
 library(plotly)
 library(ggplot2)
@@ -193,7 +192,7 @@ ggplotly(MINMAX2050)
 The [REINVENT](http://www.reinvent-project.eu) quantitative models depict a variety of strategies to overcome technological lock-in while meeting the climate objective, including, **energy efficiency, biofuels, electrification** of processes or utilizing renewable power to produce feedstock or synthetic fuel (e.g. hydrogen) and **carbon capture & storage** (CCS). **End-use sectors** also contribute via recycling.
 
 
-```{r results=TRUE, message=FALSE, warning=FALSE, echo=FALSE}
+```{r results=TRUE, message=FALSE, warning=FALSE, echo=FALSE, fig.align="center", fig.width=8, fig.height=4, fig.cap="_**Figure**: Available strategies to reach (full) decarbonisation in industry_"}
 
 library(plotly)
 library(ggplot2)
@@ -742,7 +741,7 @@ D41PAPER$Variable <- "Pulp and Paper"
 
 Technical assets in several big industry clusters around Europe **are growing old**, creating a natural **window of opportunity** in the **next 1-2 decades**. Re-investing in Paris-proof processes and technologies will **need infrastructures** to supply **clean energy, technological innovation** and **risk taking investment decisions**. 
 
-```{r results=TRUE, message=FALSE, warning=FALSE, echo=FALSE}
+```{r results=TRUE, message=FALSE, warning=FALSE, echo=FALSE,WISEECO2, fig.align="center", fig.width=8, fig.height=4, fig.cap="_**Figure**: Investments for the short-term (2015-2030), mid-term (2030-2040), and long-term (2040-2050)_"}
 
 library(plotly)
 library(ggplot2)
@@ -773,7 +772,9 @@ INDUSCAPCHANGEinvest=ggplot() +
   ggtitle("Reinvestments") +
   labs(y="Investment change (Mt/yr)", x = "Year") +
   guides(fill=guide_legend("Sector"))+
-  scale_fill_manual(values=c('#2ca25f','blue', 'darkgrey'))  +
+  scale_fill_manual(values=c('#2ca25f','blue', 'darkgrey'),
+                    breaks=c("Shortterm", "Midterm", "Longterm"),
+                    labels=c("2015-2030", "2030-2040", "2040-2050"))  +
   
   theme(
         axis.text.x = element_text(angle = 45, size=14,  hjust=1),

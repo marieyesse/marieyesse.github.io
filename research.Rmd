@@ -2,11 +2,11 @@
 title: "Research"
 ---
 
-### [Data Dashboard: European industry decarbonization Strategies](IAM_dashboard.html)  
+### [Data Dashboard: European industry decarbonisation Strategies](IAM_dashboard.html)  
 
-> On this page I look at the change in industrial energy productivity (energy unit per value added [^1]) and industrial emissions intensity (emissions per unit of energy used). However, forward-looking projections of energy productivity are only reported in Förster et al. (2013). In the data I compare both the decades’ average annual reduction rate [linear rate] and the decades’ compound average annual reduction rate [exponential reduction]. Full report: [REINVENT Deliverable 4.1](https://static1.squarespace.com/static/59f0cb986957da5faf64971e/t/5a968cd7652deaeda0a2a62a/1519815901936/D4.1+Existing+visions+and+scenarios.pdf)
+> On this page I look at the change in industrial energy productivity (energy unit per value added) and industrial emissions intensity (emissions per unit of energy used). However, forward-looking projections of energy productivity are only reported in Förster et al. (2013). In the data I compare both the decades’ average annual reduction rate [linear rate] and the decades’ compound average annual reduction rate [exponential reduction]. Full report: [REINVENT Deliverable 4.1](https://static1.squarespace.com/static/59f0cb986957da5faf64971e/t/5a968cd7652deaeda0a2a62a/1519815901936/D4.1+Existing+visions+and+scenarios.pdf)
 
-###  [Interactive Poster: Industry decarbonization towards 2050](industry.html) 
+###  [Interactive Poster: Industry decarbonisation towards 2050](industry.html) 
 
-> On this page I present the data used on an earlier published poster on industry decarbonization by 2050 according to the global model [IMAGE](http://www.twitter.com/IMAGE_PBL) and the bottom-up energy model [WISEE](www.wuppertal.org/us). The page is a republication of [REINVENT deliverable 4.2](https://static1.squarespace.com/static/59f0cb986957da5faf64971e/t/5b3fdf266d2a73e319355e0c/1530912585721/D4.2+EU+decarbonisation+scenarios+for+industry.pdf)
+> On this page I present the data used on an earlier published poster on industry decarbonisation by 2050 according to the global model [IMAGE](http://www.twitter.com/IMAGE_PBL) and the bottom-up energy model [WISEE](www.wuppertal.org/us). The page is a republication of [REINVENT deliverable 4.2](https://static1.squarespace.com/static/59f0cb986957da5faf64971e/t/5b3fdf266d2a73e319355e0c/1530912585721/D4.2+EU+decarbonisation+scenarios+for+industry.pdf)
 

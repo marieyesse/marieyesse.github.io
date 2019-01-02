@@ -328,12 +328,9 @@ EMF28meltEUEmeffratecompoundminmaxBL=EMF28meltEUEmeffratecompound[!Model %in% c(
 EMF28meltEUEmeffratecompoundminmaxBY=EMF28meltEUEmeffratecompound[!Model %in% c("ADAM", "IEA"),list(ymax=max(ByBYc,na.rm = TRUE),ymin=min(ByBYc,na.rm = TRUE)),by=c("Scenario", "Year.y", "Group", "Indicator")]
 
 
-
-
-
 ```
 
-### Decarbonization strategies 
+### Decarbonisation strategies 
 
 Only a limited set of integrated assessment studies have assessed industrial decarbonisation strategies in Europe more explicitly (see Table). We use the data of these studies on this page.
 
@@ -477,6 +474,9 @@ ggplotly(BARCHARTby)
 
 - ByYeff: By Year, Energy efficiency
 - ByYdecarb: By year, Emission efficiency
+
+- EU9: Decarbonisation scenario ( < 2°C temperature increase)
+- EU11: Policy baseline (no climate policy)
 
 ```{r echo=FALSE}
 
