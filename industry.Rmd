@@ -505,7 +505,7 @@ D41PAPER$Variable <- "Pulp and Paper"
         strip.background = element_rect(colour="white", fill="#FFFFFF")
             ) 
   
-  print(INDTEELemisbyPoster)
+  ggplotly(INDTEELemisbyPoster)
 
 ```
 
