@@ -47,7 +47,7 @@ WISEECO2=WISEECO2[Sector=="Chemical", Sector:=c("Chemicals and Petrochemicals")]
 
 # IMAGE
 
-ALLVAR=read.csv("data/Compilation_IMAGE_REINENT_everything.csv", sep=";", dec=".")
+ALLVAR=read.csv("data/Compilation_IMAGE_REINENT_everything.csv", sep=",", dec=".")
 ALLVAR$value <- as.numeric(ALLVAR$value)
 ALLVAR$Year <- as.numeric(ALLVAR$Year)
 ALLVAR=data.table(ALLVAR)
@@ -297,14 +297,14 @@ WISEECO2share=data.table(WISEECO2share)
 
 # IMAGE
 
-ALLVAR=read.csv("data/Compilation_IMAGE_REINENT_everything.csv", sep=";", dec=".")
+ALLVAR=read.csv("data/Compilation_IMAGE_REINENT_everything.csv", sep=",", dec=".")
 ALLVAR$value <- as.numeric(ALLVAR$value)
 ALLVAR$Year <- as.numeric(ALLVAR$Year)
 ALLVAR=data.table(ALLVAR)
 
   
 CO2index=ALLVAR[Variable %in% c(  "Emissions|CO2|Iron and Steel|Direct emissions",
-                                    "Emissions|CO2|Pulp and Paper|Direct emissions",
+                                                                                                       "Emissions|CO2|Pulp and Paper|Direct emissions",
                                     "Emissions|CO2|Chemicals and Petrochemicals|Direct emissions",
                                     "Emissions|CO2|Food Processing|Direct emissions"
   )& Region %in% c("EU28") & Scenario %in% c("2 Degrees", "1.5 Degrees")]
@@ -747,41 +747,52 @@ D41PAPER$Variable <- "Pulp and Paper"
 
 Technical assets in several big industry clusters around Europe **are growing old**, creating a natural **window of opportunity** in the **next 1-2 decades**. Re-investing in Paris-proof processes and technologies will **need infrastructures** to supply **clean energy, technological innovation** and **risk taking investment decisions**. 
 
-```{r results=TRUE, message=FALSE, warning=FALSE, echo=FALSE,WISEECO2, fig.align="center", fig.width=8, fig.height=4, fig.cap="_**Figure**: Investments for the short-term (2015-2030), mid-term (2030-2040), and long-term (2040-2050)_"}
+```{r results=TRUE, message=FALSE, warning=FALSE, echo=FALSE,WISEECO2, fig.align="center", fig.width=8, fig.height=4, fig.cap="_**Figure**: Capacity changes (Mt/yr) for the short-term (2015-2030), mid-term (2030-2040), and long-term (2040-2050)_"}
 
 library(plotly)
 library(ggplot2)
 library(data.table)
 library(dplyr)
+### WISEE capacities Poster
 
-## WISEE Reinvestments
+WISEECAPACITYPOSTER=data.table(
+  Region=c(	"AT",	"BE",	"DE",	"FI",	"FR",	"IT",	"NL",	"PL",	"SE",	"SK",	"SP",	"UK",	"AT",	"BE",	"DE",	"FI",	"FR",	"IT",	"NL",	"PL",	"SE",	"SK",	"SP",	"UK"	),
+  Technology=c(	"Steam Cracker",	"Steam Cracker",	"Steam Cracker",	"Steam Cracker",	"Steam Cracker",	"Steam Cracker",	"Steam Cracker",	"Steam Cracker",	"Steam Cracker",	"Steam Cracker",	"Steam Cracker",	"Steam Cracker",	"Blast Furnace",	"Blast Furnace",	"Blast Furnace",	"Blast Furnace",	"Blast Furnace",	"Blast Furnace",	"Blast Furnace",	"Blast Furnace",	"Blast Furnace",	"Blast Furnace",	"Blast Furnace",	"Blast Furnace"	),
+  Shortterm=c(	"0",	"-1.08",	"-2.333",	"-0.33",	"-0.99",	"-1.18",	"-2.14",	"-0.7",	"0",	"-0.22",	"-0.25",	"-1.17",	"0",	"0",	"-2",	"-1",	"0",	"0",	"0",	"0",	"0",	"0",	"0",	"-3.5"	),
+  Midterm=c(	"0",	"-0.57",	"-3.075",	"0",	"-0.568",	"0",	"0",	"0",	"0",	"0",	"-1.18",	"-0.32",	"0",	"0",	"-15",	"-1",	"-6",	"-7",	"0",	"-7",	"-3",	"0",	"-5",	"-3.5"	),
+  Longterm=c(	"-0.5",	"0",	"-0.58",	"0",	"-0.945",	"-0.38",	"-1.165",	"0",	"0",	"0",	"0",	"-0.73",	"0",	"-4",	"-17",	"0",	"-5",	"-1",	"-6",	"0",	"0",	"-4",	"0",	"-3"	))
+  
+WISEECAPACITYPOSTER=gather(WISEECAPACITYPOSTER, Period, value, c(Shortterm, Midterm, Longterm))
+WISEECAPACITYPOSTER=data.table(WISEECAPACITYPOSTER)
+WISEECAPACITYPOSTER$value=as.numeric(WISEECAPACITYPOSTER$value)
 
-WISEECAPACITYPOSTERinvest=data.table(
-  Technology=c(	"Primary Steel",	"Primary Steel",	"Primary Steel",	"Primary Steel",	"Primary Steel",	"Primary Steel",	"Olefin capacity",	"Olefin capacity",	"Olefin capacity",	"Olefin capacity",	"Olefin capacity",	"Olefin capacity"	),
-  Region=c(	"CEE",	"SE",	"NE",	"NWE",	"SEE",	"UK",	"CEE",	"SE",	"NE",	"NWE",	"SEE",	"UK"	),
-  Shortterm=c(	14235.25,	450,	0,	29460,	0,	750,	1834,	1070,	330,	3380,	1032,	0	),
-  Midterm=c(	11265.5,	12900,	5642.85714285714,	24668.5,	3700,	3875,	0,	0,	0,	840,	0,	830	),
-  Longterm=c(	14235.25,	450,	0,	31460,	0,	3000,	0,	440,	0,	1080,	0,	0	)
-)
+### WISEE capacities (Aggregated regions) Poster
 
-WISEECAPACITYPOSTERinvest=gather(WISEECAPACITYPOSTERinvest, Period, value, c(Shortterm, Midterm, Longterm))
-WISEECAPACITYPOSTERinvest=data.table(WISEECAPACITYPOSTERinvest)
-WISEECAPACITYPOSTERinvest$value=WISEECAPACITYPOSTERinvest$value/1000
+WISEECAPACITYPOSTERaggr=data.table(
+  Region=c(	"CEE",	"SE",	"NE",	"NWE",	"SEE",	"UK",	"CEE",	"SE",	"NE",	"NWE",	"SEE",	"UK"		),
+  Technology=c(	"Steam Cracker",	"Steam Cracker",	"Steam Cracker",	"Steam Cracker",	"Steam Cracker",	"Steam Cracker",	"Blast Furnace",	"Blast Furnace",	"Blast Furnace",	"Blast Furnace",	"Blast Furnace",	"Blast Furnace"		),
+  Shortterm=c(	-1.58,	-1.43,	-0.33,	-6.543,	-0.2,	-1.17,	0,	0,	-1,	-2,	0,	-3.5		),
+  Midterm=c(	0,	-1.18,	0,	-4.213,	0,	-0.32,	-8,	-12,	-4,	-21,	-4,	-3.5		),
+  Longterm=c(	-0.5,	-0.38,	0,	-2.69,	0,	-0.73,	-4,	-1,	0,	-32,	0,	-3		)
+  
+  )
+  
+WISEECAPACITYPOSTERaggr=gather(WISEECAPACITYPOSTERaggr, Period, value, c(Shortterm, Midterm, Longterm))
+WISEECAPACITYPOSTERaggr=data.table(WISEECAPACITYPOSTERaggr)
+WISEECAPACITYPOSTERaggr$Period <- factor(WISEECAPACITYPOSTERaggr$Period, levels=c("Shortterm", "Midterm", "Longterm"), labels=c("2015-2030", "2030-2040", "2040-2050"))
+
 
 ## BAR chart
-INDUSCAPCHANGEinvest=ggplot() +
-  geom_bar(data=WISEECAPACITYPOSTERinvest, aes(x=Region, y=value,  fill=Period), colour='black', stat="identity", position="stack", width=.8)+
+INDUSCAPCHANGEaggr=ggplot() +
+  geom_bar(data=WISEECAPACITYPOSTERaggr, aes(x=Region, y=value,  fill=Period), colour='black', stat="identity", position="stack", width=.8)+
   
   facet_wrap(~Technology, scales="free_y") +
   theme_bw() +
   #coord_cartesian(ylim = c(0:12)) +
-  ggtitle("Reinvestments") +
-  labs(y="Investment change (Mt/yr)", x = "Year") +
+  ggtitle("Capacity changes") +
+  labs(y="Capacity change (Mt/yr)", x = "Year") +
   guides(fill=guide_legend("Sector"))+
-  scale_fill_manual(values=c('#2ca25f','blue', 'darkgrey'),
-                    breaks=c("Shortterm", "Midterm", "Longterm"),
-                    labels=c("2015-2030", "2030-2040", "2040-2050"))  +
-  
+  scale_fill_manual(values=c('#2ca25f','blue', 'darkgrey')) +
   theme(
         axis.text.x = element_text(angle = 45, size=14,  hjust=1),
         axis.title.y = element_text(size=13),
@@ -800,7 +811,7 @@ INDUSCAPCHANGEinvest=ggplot() +
         )
 
 
-ggplotly(INDUSCAPCHANGEinvest)
+ggplotly(INDUSCAPCHANGEaggr)
 
 ```
 
