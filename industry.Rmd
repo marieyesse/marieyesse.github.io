@@ -269,7 +269,7 @@ ggplotly(MINMAXCONC2050)  %>%
 ```
 
 
-Changing landscape towards 2050 {.tabset .tabset-fade}
+Changing landscape towards 2050 {.tabset .tabset-fade #pathways}
 -------------------------------------
 
 
