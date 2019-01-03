@@ -21,7 +21,7 @@ Our study shows that today‘s available technologies and **BAT energy efficienc
 
 
 
-```{r results=TRUE, message=FALSE, warning=FALSE, echo=FALSE, fig.align="center", fig.width=8, fig.height=4, fig.cap="_**Figure**: Expected and required change of decarbonisation, energy efficiency and sufficiency_"}
+```{r results=TRUE, message=FALSE, warning=FALSE, echo=FALSE, fig.align="center", fig.width=8, fig.height=4, fig.cap="_**Figure**: Expected and required change of decarbonisation, energy efficiency and sufficiency (in % change)_"}
 
 library(plotly)
 library(ggplot2)
@@ -198,7 +198,7 @@ ggplotly(MINMAX2050)
 The [REINVENT](http://www.reinvent-project.eu) quantitative models depict a variety of strategies to overcome technological lock-in while meeting the climate objective, including, **energy efficiency, biofuels, electrification** of processes or utilizing renewable power to produce feedstock or synthetic fuel (e.g. hydrogen) and **carbon capture & storage** (CCS). **End-use sectors** also contribute via recycling.
 
 
-```{r results=TRUE, message=FALSE, warning=FALSE, echo=FALSE, fig.align="center", fig.width=8, fig.height=4, fig.cap="_**Figure**: Available strategies to reach (full) decarbonisation in industry_"}
+```{r results=TRUE, message=FALSE, warning=FALSE, echo=FALSE, fig.align="center", fig.width=8, fig.height=4, fig.cap="_**Figure**: Available strategies to reach (full) decarbonisation in industry (in % application)_"}
 
 library(plotly)
 library(ggplot2)
@@ -260,7 +260,11 @@ MINMAXCONC2050=ggplot()+
     
         )
 
-ggplotly(MINMAXCONC2050)
+ggplotly(MINMAXCONC2050)  %>% 
+ layout( 
+ xaxis = list(automargin=TRUE), 
+ yaxis = list(automargin=TRUE)
+ )
 
 ```
 
@@ -464,7 +468,7 @@ D41PAPER$Variable <- "Pulp and Paper"
 
   
 ### Steel industry 
-```{r results=TRUE, message=FALSE, warning=FALSE, echo=FALSE}
+```{r results=TRUE, message=FALSE, warning=FALSE, echo=FALSE, fig.cap="_**Figure:** 'Other studies' refer to: ALL10: Allwood et al. (2010), MIL13: Milford et al. (2013), IEA17: OECD/IEA (2017a), IEA09: OECD/IEA (2009), RUJ16: Van Ruijven et al. (2016), BEL09: Bellevrat and Menanteau (2009), SEI09: Heaps et al. (2009), BCG13: Boston Consulting Group/VDEh (2013), JRC12: Pardo et al. (2012), ARE16: Arens et al. (2016), WSP15: WSP Parsons Brunckerhoff / DNV GL (2015c), ROO14: Rootzén and Johnsson (2015)_"}
   
   INDTEELemisbyPoster=ggplot() +
     geom_hline(yintercept=100, linetype=2) +
@@ -486,7 +490,7 @@ D41PAPER$Variable <- "Pulp and Paper"
                               Study=c("Others"),
                               Sector=c("Iron and Steel")), aes(x=Year.x, y=INDEX, group=Scenario, linetype=Scenario, colour=Study), size=1)+
     
-    facet_wrap(~Sector, ncol=1) +
+    #facet_wrap(~Sector, ncol=1) +
     coord_cartesian(xlim=c(2005:2050), ylim=c(0:150)) +
     theme_bw() +
     ggtitle(bquote(bold("Total"~CO[2]~"emissions"))) +
@@ -540,7 +544,7 @@ D41PAPER$Variable <- "Pulp and Paper"
     # WISEE
     geom_line(data=WISEECO2share[Sector=="Chemical" & Variable=="Emissions|CO2"], aes(x=Year.x, y=Index, group=Scenario, linetype=Scenario, colour=Study), size=1) +
     
-    facet_wrap(~Sector, ncol=1) +
+    #facet_wrap(~Sector, ncol=1) +
     coord_cartesian(xlim=c(2005:2050), ylim=c(0:150)) +
     theme_bw() +
     ggtitle(bquote(bold("Total"~CO[2]~"emissions"))) +
@@ -589,7 +593,7 @@ D41PAPER$Variable <- "Pulp and Paper"
     geom_line(data=WISEECO2share[Sector=="Pulp and Paper" & Variable=="Emissions|CO2"], aes(x=Year.x, y=Index, group=Scenario, linetype=Scenario, colour=Study), size=1) +
     
     
-    facet_wrap(~Sector, ncol=1) +
+    #facet_wrap(~Sector, ncol=1) +
     coord_cartesian(xlim=c(2005:2050), ylim=c(-50:120)) +
     theme_bw() +
     ggtitle(bquote(bold("Total"~CO[2]~"emissions"))) +
@@ -642,7 +646,7 @@ D41PAPER$Variable <- "Pulp and Paper"
                         breaks=c( "IMAGE")
     ) +
     
-    facet_wrap(~Sector, ncol=1) +
+    #facet_wrap(~Sector, ncol=1) +
     coord_cartesian(xlim=c(2005:2050), ylim=c(0:150)) +
     theme_bw() +
     ggtitle(bquote(bold("Total"~CO[2]~"emissions"))) +

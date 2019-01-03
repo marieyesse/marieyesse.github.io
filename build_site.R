@@ -5,4 +5,4 @@
 setwd(dirname(rstudioapi::getActiveDocumentContext()$path))
 
 #render your sweet site. 
-rmarkdown::render_site()
+rmarkdown::render_site(encoding = 'UTF-8')
