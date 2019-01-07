@@ -1,0 +1,250 @@
+---
+title: "Comparing model to expert projections"
+author: "A short-read to a long-read (work in progress)"
+---
+```{r results=TRUE, message=FALSE, warning=FALSE, echo=FALSE}
+
+library(plotly)
+library(ggplot2)
+library(data.table)
+library(dplyr)
+library(tidyr)
+library(gridExtra)
+
+```
+
+To test whether projections by IAMs diverge in systematic ways from projections made by technology experts we elicited expert opinion on prospective change for two indicators and compared these with the outcomes of IAM studies. We focused on solar, wind, biomass, nuclear, and carbon capture and storage or CCS technologies for the short (2030) to medium (2050) term. 
+
+> **The contents of this page have been published and can be cited as:** Mariësse A.E. van Sluisveld, Mathijs J.H.M. Harmsen, Detlef P. van Vuuren, Valentina Bosetti, Charlie Wilson, Bob van der Zwaan (2018) “Comparing future patterns of energy system change in 2°C scenarios to expert projections”, Global Environmental Change, Volume 50, Pages 201-211, https://www.sciencedirect.com/science/article/pii/S0959378017301413
+
+Methodological background info {.tabset .tabset-fade #methods}
+-------------------------------------
+
+### Selected model ensemble
+The ensemble of models included for study encompasses a set of **high resolution IAMs** that are widely used to assess systemic change over time and under various pressures, contributing over half the scenarios in the **IPCC’s AR5 Scenario Database** (IPCC, 2014; Krey et al., 2014b). As such, the results produced by the models in our ensemble can be considered representative in the field of IAM studies.
+
+Name^1 |	Time horizon	|	Model category |		Intertemporal Solution Methodology|		Tech diversity in low carbon supply |		Classification^2
+---- | -----|	----- |------|	-------|	-----
+AIM-Enduse |	2050	|	Partial equilibrium	|	Recursive dynamic	|	High	|	Medium response
+GCAM |		2100	|	Partial equilibrium	|	Recursive dynamic	|	High	|	High response
+IMAGE	|	2100	|	Partial equilibrium	|	Recursive dynamic	|	High	|	High response
+MESSAGE	|	2100	|	Partial equilibrium	|	Intertemporal optimisation 	|	High	|	High response
+REMIND	|	2100	|	General equilibrium	|	Intertemporal optimisation	|	High	|	High response
+TIAM-ECN	|	2100	|	Partial equilibrium	|	Intertemporal optimisation	|	High^3	|	High response^3
+WITCH	|	2100	|	General equilibrium	|	Intertemporal optimisation	|	Low	|	Low response
+
+<sub>
+1. Sources: AIM-Enduse (Kainuma et al., 2004); GCAM (Clarke et al., 2007); IMAGE (Stehfest et al., 2014); MESSAGE (Messner and Strubegger, 1995); REMIND (Bauer et al., 2013; Luderer et al., 2013); WITCH (Bosetti et al., 2006) and TIAM-ECN (Keppo and van der Zwaan, 2011)
+2. Classification represents a pattern of common model behaviour in response to a carbon tax in terms of cumulated carbon reduction, carbon over energy intensity reduction and structural changes in energy use (primary energy) (Kriegler et al., 2015).
+3. The TIAM-ECN model was not part of the Kriegler et al. (2015) evaluation study – based on the model characteristics for the TIAM-ECN model it is assumed that it behaves similarly to comparable models.
+</sub>
+
+### The expert ensemble
+
+To gain an alternative perspective on future change, we selected technology experts with a comprehensive view of all the various factors that may stimulate or inhibit the development of a specific technology (both technical aspects, as well as whole energy system dynamics). To identify relevant participants, we drew on the lead authors of technology-focused chapters of key assessment and synthesis products such as the *IPCC’s 4th Assessment Report* (Sims et al., 2007), the *Global Energy Assessment* (GEA, 2012), the *IPCC’s Special Report of Renewable Energy Sources and Climate Change Mitigation* (Edenhofer et al., 2011) and the *Global Status Report* (REN21, 2014). In total we have contacted 117 people, of which 39 responded. The participating experts formed a diverse group covering both theoretical and practical knowledge. 
+
+Table | Wind	| Solar	| Nuclear	| Biomass	| CCS
+----| ----| ----| ----| -----| ----
+Number of experts contacted	| 24	| 19	| 16	| 33	| 25
+Responses	| 7 (29%)	| 7 (37%)	| 6 (38%)	| 12(36%)	| 7 (28%)
+Year of elicitation	| 2014-2015	| 2014-2015	| 2014-2015	| 2014-2015	| 2015-2016
+Academia / research institutes	| 2	| 3	| 3	| 6	| 6
+Governmental agency	| 1	| 2	| 1	| 1	| 1
+Intergovernmental organisation | 0 | 0	| 2 | 0 | 0		
+Member-based organisations	| 3	| 1	|  0	| 4 | 0	
+Private organisations	| 1	| 1	| 0	| 1 | 0	
+TOTAL	| 7 	| 7	| 6	| 12	| 7
+
+
+
+-------------------------------------
+
+<br>
+<br>
+
+## Mapping technology bias
+
+The comparison revealed that the IAMs and experts are broadly in agreement about the role of different technologies under business-as-usual conditions in 2050. However, a noticeable difference emerges between IAMs and expert rankings under **2 Degrees** as data points move further away from the diagonal line representing consensus. Compared to experts, IAM simulations projected a greater reliance on nuclear power and CCS to meet a 2°C climate target. In contrast, experts projected a stronger growth in renewable energy technologies, particularly solar power.
+
+```{r results=TRUE, message=FALSE, warning=FALSE, echo=FALSE, fig.width=8, fig.height=4, fig.cap="**Figure:** I need to figure out how to hover over the min and max of the errorbars.."}
+
+Q45IAMmodexp2FULL=read.csv("data/Q45IAMmodexp2FULL.csv", sep=";", dec=".")
+
+##### Plot
+Q45IAM4 = ggplot() +
+  geom_point(data=Q45IAMmodexp2FULL, aes(x=IAMsAvg, y=OtherAvg, colour=Question), size=3) + 
+  geom_errorbarh(data=Q45IAMmodexp2FULL,aes(x=IAMsAvg, y=OtherAvg, xmin=IAMsMin, xmax=IAMsMax, colour=Question), height=0.2)+
+  geom_errorbar(data=Q45IAMmodexp2FULL,aes(x=IAMsAvg, y=OtherAvg,  ymin=OtherMin, ymax=OtherMax, colour=Question)) +
+  scale_colour_manual(values=c("green", "darkgreen","red3",   "black", "darkgrey", "purple",  "darkgoldenrod1","blue")) +
+  geom_abline(intercept=0, slope=1) +
+  geom_abline(intercept=0.5, slope=1, linetype=3, alpha=0.5) +
+  geom_abline(intercept=-0.5, slope=1, linetype=3, alpha=0.5) +
+  geom_abline(intercept=0.75, slope=1, linetype=3, alpha=0.5) +
+  geom_abline(intercept=-0.75, slope=1, linetype=3, alpha=0.5) +
+  geom_abline(intercept=0.25, slope=1, linetype=3, alpha=0.5) +
+  geom_abline(intercept=-0.25, slope=1, linetype=3, alpha=0.5) +
+  facet_wrap(~Scenario, ncol=2) +
+  # annotate("rect", xmin=0, xmax=4.5, ymin=0, ymax=4.5, alpha=0.1, fill="green") + 
+  # annotate("rect", xmin=4.5, xmax=8, ymin=4.5, ymax=8, alpha=0.1, fill="red") + 
+  # annotate("rect", xmin=4.5, xmax=8, ymin=0, ymax=4.5, alpha=0.1, fill="lightblue4") + 
+  # annotate("rect", xmin=0, xmax=4.5, ymin=4.5, ymax=8, alpha=0.1, fill="grey") + 
+  annotate("text", x=1, y=7.8, angle=0, label="Optimism \n IAMs", size=4, alpha=0.7, hjust=0) +
+  annotate("text", x=6.3, y=1.4, angle=0, label="Optimism \n Experts", size=4, alpha=0.7, hjust=0) +
+  #annotate("text", x=1, y=0.9, angle=0, label="Important", size=4, alpha=0.7, hjust=0) +
+  #annotate("text", x=5, y=8.2, angle=0, label="Less important", size=4, alpha=0.7, hjust=0) +
+  coord_cartesian(xlim=c(1,8), ylim=c(1,8.2)) +
+  geom_point(data=Q45IAMmodexp2FULL, aes(x=IAMsAvg, y=OtherAvg, colour=Question), size=3) + 
+  geom_errorbarh(data=Q45IAMmodexp2FULL,aes(x=IAMsAvg, y=OtherAvg, xmin=IAMsMin, xmax=IAMsMax, colour=Question), height=0.2)+
+  geom_errorbar(data=Q45IAMmodexp2FULL,aes(x=IAMsAvg, y=OtherAvg,  ymin=OtherMin, ymax=OtherMax, colour=Question)) +
+  theme_bw() +
+  theme(legend.text.align=0) +
+  ggtitle("Ranking of electricity supply technologies", subtitle="(Based on share in future electricity production in 2050)") +
+  labs(x="IAMs \n (1= important, 8 = not important)", y = "Expert\n (1= important, 8 = not important)") +
+  guides(colour=guide_legend("Technologies"))  +
+  theme(
+    axis.text.x = element_text(angle = 45, size=12, hjust=1),
+    axis.title.y = element_text(),
+    axis.text.y = element_text(size=12),
+    strip.text.x = element_text(size=12, face="bold"),
+    strip.text.y = element_text(size=12, face="bold"),
+    legend.text= element_text(size=12),
+    legend.title=element_text(size=12),
+    plot.title=element_text(hjust=0.5),
+    panel.border=element_rect(colour="black", size=1),
+    strip.background = element_rect(colour="white", fill="#FFFFFF"),
+    plot.subtitle=element_text(hjust=0.5),
+    title=element_text(size=14)) 
+
+
+ggplotly(Q45IAM4)
+
+```
+<br>
+
+Future technology projections {.tabset .tabset-fade #methods}
+-------------------------------------
+IAMs and experts were found to be in relatively high agreement on system change in a business-as-usual scenario, albeit with **significant differences** in the estimated **magnitude** of technology deployment over time. Under a **2 Degrees** scenario, we found that **the differences in estimated magnitudes became smaller** for some technologies and larger for others.  
+
+### Baseline
+
+```{r  results=TRUE, message=FALSE, warning=FALSE, echo=FALSE, fig.width=8, fig.height=4, fig.cap="**Figure:** It's impossible to plot this with plotly :("}
+
+INPUTnumericscen.Q6sub=read.csv("data/INPUTnumericscen.Q6sub.csv", sep=";", dec=".")
+INPUTnumericscen.Q6sub=data.table(INPUTnumericscen.Q6sub)
+PROJCAPboxplot=read.csv("data/PROJCAPboxplot.csv", sep=";", dec=".")
+PROJCAPboxplot=data.table(PROJCAPboxplot)
+ASSESSMENTSavgEVAL=read.csv("data/ASSESSMENTSavgEVAL.csv", sep=";", dec=".")
+ASSESSMENTSavgEVAL=data.table(ASSESSMENTSavgEVAL)
+
+Q6b_andCCS = ggplot(data=INPUTnumericscen.Q6sub[!value=="0" & Scenario=="Baseline"], aes(x=Route, y=value, fill=Range)) +
+  annotate("rect", xmin=-Inf, xmax=1.5, ymin=0, ymax=Inf, alpha=0.2, fill="grey") +
+  annotate("rect", xmin=5.5, xmax=Inf, ymin=0, ymax=Inf, alpha=0.2, fill="grey") +
+  annotate("segment", x=1.5,xend=1.5,y=0,yend=10^6, linetype=2, colour="lightgrey") +
+  annotate("text", x=1.3, y=10^4.5, label="MtCO[2]", size=3, angle=90, colour="dimgrey", parse=TRUE) +
+  annotate("segment", x=5.5,xend=5.5,y=0,yend=10^6, linetype=2, colour="lightgrey") +
+  annotate("text", x=5.7, y=10^4.5, label="MtCO[2]", size=3, angle=270, colour="dimgrey", parse=TRUE) +
+  annotate("text", x=1.7, y=10^4.5, label="GW", size=3, angle=270, colour="dimgrey") +
+  annotate("text", x=5.3, y=10^4.5, label="GW", size=3, angle=90, colour="dimgrey") +
+  geom_boxplot(data=PROJCAPboxplot[!value=="0" & Scenario=="Baseline"], aes(x=Route, y=value, colour=Group), na.rm=TRUE, fill="darkgrey", linetype=3, outlier.shape = 3, width=0.6, outlier.size = 1, position=position_dodge(width=0.7))+
+  geom_boxplot(data=INPUTnumericscen.Q6sub[value=="0" & Scenario=="Baseline"], aes(x=Route, y=2000000, fill=Range), colour="white", na.rm=TRUE, outlier.shape = 3, width=0.6, outlier.size = 1, position=position_dodge(width=0.7))+
+  geom_boxplot(data=INPUTnumericscen.Q6sub[!value=="0" & Scenario=="Baseline"], aes(x=Route, y=value, fill=Range), na.rm=TRUE, outlier.shape = 3, width=0.6, outlier.size = 1, position=position_dodge(width=0.7))+
+  geom_text(data=INPUTnumericscen.Q6sub[!value=="0" & Scenario=="Baseline"], aes(label=Routecount, y=200000), angle = 90, size=4, hjust=0, check_overlap = F, position=position_dodge(width=0.8))+
+  geom_text(data=ASSESSMENTSavgEVAL[Indicator=="Installed capacity" & Scenario=="Baseline"], aes(label=label, y=1), angle = 0, size=4, hjust=0.5)+
+  
+  facet_grid(Indicator~Year)+
+  theme_bw() +
+  scale_y_log10(
+    breaks = scales::trans_breaks("log10", function(x) 10^x),
+    labels = scales::trans_format("log10", scales::math_format(10^.x))) +
+  #coord_trans(y = 'log10', limy=c(1,50000)) +
+  scale_colour_manual(values = c("grey33"))+
+  theme(legend.text.align=0) +
+  ggtitle("Total installed capacity") +
+  labs(y=bquote(bold('GW (Mt'~CO[2]~')')), x = 'Technology') +
+  guides(fill=guide_legend("Experts"))  +
+  theme(
+    axis.text.x = element_text(angle = 45, size=12, hjust=1),
+    axis.title.y = element_text(size=12),
+    axis.text.y = element_text(size=12),
+    strip.text.x = element_text(size=12, face="bold"),
+    strip.text.y = element_text(size=12, face="bold"),
+    legend.text= element_text(size=12),
+    legend.title=element_text(size=12),
+    plot.title=element_text(hjust=0.5),
+    title=element_text(size=14)) + annotation_logticks(sides = "l", color="lightgrey")+
+  scale_x_discrete(limits=c("Bio+CCS", "Biomass", "PV", "Wind", "Nuclear", "Total CCS"))
+
+
+
+print(Q6b_andCCS)
+
+
+```
+
+
+
+### 2 Degrees
+
+```{r  results=TRUE, message=FALSE, warning=FALSE, echo=FALSE, fig.width=8, fig.height=4, fig.cap="**Figure:** It's impossible to plot this with plotly :( "}
+
+PROJCO2CCSplot=read.csv("data/PROJCO2CCSplot.csv", sep=";", dec=".")
+PROJCO2CCSplot=data.table(PROJCO2CCSplot)
+SURVCCSq1314rename=read.csv("data/SURVCCSq1314rename.csv", sep=";", dec=".")
+SURVCCSq1314rename=data.table(SURVCCSq1314rename)
+ASSESSMENTccsavgEVAL=read.csv("data/ASSESSMENTccsavgEVAL.csv", sep=";", dec=".")
+ASSESSMENTccsavgEVAL=data.table(ASSESSMENTccsavgEVAL)
+SCENCOUNTQ1314ccs.df=read.csv("data/SCENCOUNTQ1314ccs.df.csv", sep=";", dec=".")
+SCENCOUNTQ1314ccs.df=data.table(SCENCOUNTQ1314ccs.df)
+
+
+Q6m_andCCS = ggplot(data=INPUTnumericscen.Q6sub[!value=="0" & Scenario=="2 Degrees"], aes(x=Route, y=value, fill=Range)) +
+  annotate("rect", xmin=-Inf, xmax=1.5, ymin=0, ymax=Inf, alpha=0.2, fill="grey") +
+  annotate("rect", xmin=5.5, xmax=Inf, ymin=0, ymax=Inf, alpha=0.2, fill="grey") +
+  annotate("segment", x=1.5,xend=1.5,y=0,yend=10^6, linetype=2, colour="lightgrey") +
+  annotate("text", x=1.3, y=10^4.5, label="MtCO[2]", size=3, angle=90, colour="dimgrey", parse=TRUE) +
+  annotate("segment", x=5.5,xend=5.5,y=0,yend=10^6, linetype=2, colour="lightgrey") +
+  annotate("text", x=5.7, y=10^4.5, label="MtCO[2]", size=3, angle=270, colour="dimgrey", parse=TRUE) +
+  annotate("text", x=1.7, y=10^4.5, label="GW", size=3, angle=270, colour="dimgrey") +
+  annotate("text", x=5.3, y=10^4.5, label="GW", size=3, angle=90, colour="dimgrey") +
+  geom_boxplot(data=PROJCAPboxplot[!value=="0" & Scenario=="2 Degrees"], aes(x=Route, y=value, colour=Group), na.rm=TRUE, fill="darkgrey", linetype=3, outlier.shape = 3, width=0.6, outlier.size = 1, position=position_dodge(width=0.7))+
+  geom_boxplot(data=INPUTnumericscen.Q6sub[value=="0" & Scenario=="2 Degrees"], aes(x=Route, y=2000000, fill=Range), colour="white", na.rm=TRUE, outlier.shape = 3, width=0.6, outlier.size = 1, position=position_dodge(width=0.7))+
+  geom_boxplot(data=INPUTnumericscen.Q6sub[!value=="0" & Scenario=="2 Degrees"], aes(x=Route, y=value, fill=Range), na.rm=TRUE, outlier.shape = 3, width=0.6, outlier.size = 1, position=position_dodge(width=0.7))+
+  geom_text(data=INPUTnumericscen.Q6sub[!value=="0" & Scenario=="2 Degrees"], aes(label=Routecount, y=200000), angle = 90, size=4, hjust=0, check_overlap = F, position=position_dodge(width=0.8))+
+  geom_text(data=ASSESSMENTSavgEVAL[Indicator=="Installed capacity" & Scenario=="2 Degrees"], aes(label=label, y=1), angle = 0, size=4, hjust=0.5)+
+  #ccs
+  geom_boxplot(data=PROJCO2CCSplot, aes(x=Variable, y=value, colour=Route), na.rm=TRUE, fill="darkgrey", linetype=3, outlier.shape = 3, width=0.6, outlier.size = 1, position=position_dodge(width=0.7)) +
+  geom_boxplot(data=SURVCCSq1314rename[!value=="0"], aes(x=Route, y=value, fill=Range), na.rm=TRUE, outlier.shape = 3, width=0.6, outlier.size = 1, position=position_dodge(width=0.7)) +
+  geom_text(data=SCENCOUNTQ1314ccs.df[!value=="0"], aes(label=Routecount, group=Range, y=200000), angle = 90, size=4, hjust=0, check_overlap = F, position=position_dodge(width=0.8)) +
+  geom_text(data=ASSESSMENTccsavgEVAL[Indicator=="Installed capacity" & !Route %in% c("Fossil+CCS")], aes(label=label, y=1), angle = 0, size=4, hjust=0.5) +
+  
+  facet_grid(Indicator~Year)+
+  theme_bw() +
+  scale_y_log10(
+    breaks = scales::trans_breaks("log10", function(x) 10^x),
+    labels = scales::trans_format("log10", scales::math_format(10^.x))) +
+  #coord_trans(y = 'log10', limy=c(1,50000)) +
+  scale_colour_manual(values = c("grey33"))+
+  theme(legend.text.align=0) +
+  ggtitle("Total installed capacity") +
+  labs(y=bquote(bold('GW (Mt'~CO[2]~')')), x = 'Technology') +
+  guides(fill=guide_legend("Experts"))  +
+  theme(
+    axis.text.x = element_text(angle = 45, size=12, hjust=1),
+    axis.title.y = element_text(size=12),
+    axis.text.y = element_text(size=12),
+    strip.text.x = element_text(size=12, face="bold"),
+    strip.text.y = element_text(size=12, face="bold"),
+    legend.text= element_text(size=12),
+    legend.title=element_text(size=12),
+    plot.title=element_text(hjust=0.5),
+    title=element_text(size=14)) + annotation_logticks(sides = "l", color="lightgrey")+
+  scale_x_discrete(limits=c("Bio+CCS", "Biomass", "PV", "Wind", "Nuclear", "Total CCS")) 
+
+
+print(Q6m_andCCS)
+#ggplotly(Q6m_andCCS)
+
+
+
+```
+-------------------------------------

@@ -2,6 +2,10 @@
 title: "Research"
 ---
 
+### [Data Dashboard: Comparing model to expert projections](tech_survey.html)
+
+> To test whether projections by IAMs diverge in systematic ways from projections made by technology experts we elicited expert opinion on prospective change for two indicators and compared these with the outcomes of IAM studies. We focused on solar, wind, biomass, nuclear, and carbon capture and storage or CCS technologies for the short (2030) to medium (2050) term. 
+
 ### [Data Dashboard: European industry decarbonisation Strategies](IAM_dashboard.html)  
 
 > On this page I look at the change in industrial energy productivity (energy unit per value added) and industrial emissions intensity (emissions per unit of energy used). In the data I compare both the decades’ average annual reduction rate [linear rate] and the decades’ compound average annual reduction rate [exponential reduction]. Full report: [REINVENT Deliverable 4.1](https://static1.squarespace.com/static/59f0cb986957da5faf64971e/t/5a968cd7652deaeda0a2a62a/1519815901936/D4.1+Existing+visions+and+scenarios.pdf)

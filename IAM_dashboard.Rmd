@@ -1,5 +1,6 @@
 ---
-title: "Model intercomparison"
+title: "Comparison of industry scenarios"
+author: "A short-read out of a long-read (work in progress)"
 ---
 
 ```{r setup, include=FALSE}
@@ -329,6 +330,10 @@ EMF28meltEUEmeffratecompoundminmaxBY=EMF28meltEUEmeffratecompound[!Model %in% c(
 
 
 ```
+
+On this page I look at the change in industrial energy productivity (energy unit per value added) and industrial emissions intensity (emissions per unit of energy used). In the data I compare both the decades’ average annual reduction rate [linear rate] and the decades’ compound average annual reduction rate [exponential reduction]. 
+
+> **The contents of this page have been published and can be cited as:** Schneider, C., Friege, J., Samedi, S., Lechtenböhmer, S. , van Sluisveld, M.A.E., de Boer, H.S., Hof, A.H., van Vuuren, D.P., (2017) “Existing visions and scenarios for European industry decarbonisation”, H2020 REINVENT, [Deliverable 4.1](https://static1.squarespace.com/static/59f0cb986957da5faf64971e/t/5a968cd7652deaeda0a2a62a/1519815901936/D4.1+Existing+visions+and+scenarios.pdf)
 
 ### Decarbonisation strategies 
 
