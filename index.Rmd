@@ -12,3 +12,52 @@ knitr::opts_chunk$set(echo = TRUE)
 ---------------------- | ----------------------------------------
 ![](img/profile.jpg)            | Welcome to the webpage of Mariësse (_"Marie-yes-se"_) van Sluisveld (PhD). I am a scientific employee at PBL Netherlands Environmental Assessment Agency,  using and producing data on a daily base to advise and support decision making on long-term systemic change. My little corner of creation will mostly function as an archive of achievement and wrapper for various short reads, data showcasings and code storage.
 
+<br>
+<br>
+
+## (Might) find me at:
+
+```{r results=TRUE, message=FALSE, warning=FALSE, echo=FALSE,  fig.width=8, fig.height=4, }
+
+#devtools::install_github("jayjacobs/ggcal", lib="C:/Program Files/R/R-3.5.2/library")
+library(ggcal)
+library(ggplot2)
+library(dplyr)
+library(lubridate)
+library(plotly)
+
+calendar = read.csv("data/calendar.csv", sep=",", dec=".")
+calendar$Date <- as.Date(calendar$Date,  tryFormats = c("%d/%m/%Y"))
+
+#complete calendar
+
+last_day_in_file <- max(calendar$Date)
+end_this_month <- as.Date(cut(last_day_in_file, "month")) + months(1) - 1
+alldates <- data.frame(Date = seq.Date(min(calendar$Date), end_this_month, by ="1 day"))
+calendar <- left_join(alldates, calendar) 
+
+#ggcal plot ggcal(dates, fills)
+CALENDAR <-  ggcal(calendar$Date, calendar$Class) +
+  
+  scale_fill_manual(name ="Activity",
+    breaks=c(unique(calendar$Class)),
+    values = c(
+      "Conference" ="steelblue",
+      "Deadline" ="red",
+      "Stakeholder Workshop" = "orange",
+      "Summer School" = "forestgreen"
+      ),
+    na.value ="grey88"
+    ) +
+  theme(plot.title = element_text(hjust=0.5),
+        panel.margin = unit(2, "lines")) +
+  ggtitle("2019") 
+
+
+ggplotly(CALENDAR, tooltip=c("Date","Class", "What"))
+  
+# translate to numerical
+
+
+
+```
