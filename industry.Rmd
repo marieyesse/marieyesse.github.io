@@ -145,9 +145,9 @@ MINMAX2050=ggplot()+
   
   annotate("rect", xmin=-Inf,xmax=Inf,ymin=0,ymax=100, fill="lightgrey", alpha=0.6) +
   annotate("rect", xmin=-Inf,xmax=Inf,ymin=100,ymax=Inf, fill="lightblue", alpha=0.6) +
-  annotate("text", x=0.6,y=104, label="Net negative", size=3, angle=90, colour="dimgrey", hjust=0) +
-  annotate("text", x=0.6, y=35, label="Reductions", size=3, angle=90, colour="dimgrey",  hjust=0) +
-  annotate("text", x=0.6, y=-5, label="Increase", size=3, angle=90, colour="dimgrey",  hjust=1) +
+  annotate("text", x=1,y=104, label="Net negative", size=3, angle=90, colour="dimgrey", hjust=0) +
+  annotate("text", x=1, y=35, label="Reductions", size=3, angle=90, colour="dimgrey",  hjust=0) +
+  annotate("text", x=1, y=-5, label="Increase", size=3, angle=90, colour="dimgrey",  hjust=1) +
   geom_crossbar(data=CO2REDTABminmax[RED=="RED2050"], aes(x=Sector, ymin=ymin, ymax=ymax, y=ymax, fill=Model, colour=Model),  width=.7, position=position_dodge(width=0.7))+
   
   geom_crossbar(data=FINEREDTABminmax[RED=="RED2050"], aes(x=Sector, ymin=ymin, ymax=ymax, y=ymax, fill=Model, colour=Model),  width=.7, position=position_dodge(width=0.7))+
@@ -157,7 +157,7 @@ MINMAX2050=ggplot()+
   geom_hline(yintercept=0)+
   
    ggtitle(bquote("Indexed change in 2050 compared to 2015")) +
-  xlab("Industry sector") + ylab("% Reduction ")+
+  xlab("\n \n \n \n Industry sector") + ylab("% Reduction \n ")+
   facet_wrap(~Variable)+
   scale_fill_manual(
     breaks=c("IMAGE", "WISEE"),
@@ -224,15 +224,15 @@ MINMAXCONC2050=ggplot()+
   annotate("rect", xmin=-Inf,xmax=Inf,ymin=0,ymax=100, fill="lightgrey", alpha=0.6) +
 # annotate("rect", xmin=-Inf,xmax=Inf,ymin=100,ymax=Inf, fill="lightblue", alpha=0.6) +
 # annotate("text", x=0.6,y=109, label="Net negative", size=3, angle=90, colour="dimgrey", hjust=0) +
- annotate("text", x=0.6, y=95, label="High use", size=3, angle=90, colour="dimgrey",  hjust=1) + 
-  annotate("text", x=0.6, y=5, label="Low use", size=3, angle=90, colour="dimgrey",  hjust=0) + 
+ annotate("text", x=1, y=95, label="High use", size=3, angle=90, colour="dimgrey",  hjust=1) + 
+  annotate("text", x=1, y=5, label="Low use", size=3, angle=90, colour="dimgrey",  hjust=0) + 
   geom_crossbar(data=CONCLUSIONSminmax[!Indicator=="CCS"], aes(x=Sector, ymin=ymin, ymax=ymax, y=ymax, fill=Model, colour=Model), stat="identity",  width=.7, position=position_dodge(width=0.7))+
   
   geom_hline(yintercept=100)+
   geom_hline(yintercept=0)+
   
   ggtitle(bquote("Relative change in 2050 compared to 2015")) +
-  xlab("Industry sector") + ylab("% application ")+
+  xlab(" \n \n \n Industry sector") + ylab("% application \n ")+
   facet_wrap(~Indicator, nrow=1)+
   scale_fill_manual(
     breaks=c("IMAGE", "WISEE"),

@@ -12,7 +12,7 @@ library(gridExtra)
 
 ```
 
-I am a twitter enthusiast - mostly using my account for work related things. Messages that are closely related to what I am working on will be retweeted, and weets considered relevant but not on my priority list are liked. Here I structure some of my favorites.
+I am a twitter enthusiast - mostly using my account for work related things. Messages that are closely related to what I am working on will be retweeted, and tweets considered relevant but not on my priority list are liked. Here I structure some of my favorites to the topics that catch my interest.
 
 ## Model Evaluation
 
@@ -183,7 +183,7 @@ I am a twitter enthusiast - mostly using my account for work related things. Mes
 <script async src="https://platform.twitter.com/widgets.js" charset="utf-8"></script>
 
 
-## Paradigms
+## Paradigms & Shifts
 
 <blockquote class="twitter-tweet" data-lang="nl"><p lang="en" dir="ltr">Is least cost-modelling the best way to develop feasible scenarios? <br>We examined this question in a paper called The Socio-Political Merit-Order: <a href="https://t.co/BKD7o8isbs">https://t.co/BKD7o8isbs</a></p>&mdash; Kornelis Blok (@KornelisBlok) <a href="https://twitter.com/KornelisBlok/status/987236017743761408?ref_src=twsrc%5Etfw">20 april 2018</a></blockquote>
 <script async src="https://platform.twitter.com/widgets.js" charset="utf-8"></script>
