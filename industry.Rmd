@@ -193,6 +193,182 @@ ggplotly(MINMAX2050)
 ```
 
 
+```{r results=TRUE, message=FALSE, warning=FALSE, echo=FALSE, fig.align="center", fig.width=8, fig.height=4, fig.cap="_**Figure**: Speed of change visualized (represented in % change for each year)_"}
+
+library(plotly)
+library(ggplot2)
+library(data.table)
+library(dplyr)
+library(tidyr)
+
+
+WISEECO2_0= read.csv("data/WISEE_CO2_emissions_22_6_2018.csv", sep=";", dec=",")
+WISEECO2=melt(WISEECO2_0,  id.vars=c("Model", "Sector", "Variable","Scenario"), variable.name="Year")
+WISEECO2$Year = as.numeric(as.character(substr(WISEECO2$Year, 2, stop=100)))
+WISEECO2$value = as.numeric(WISEECO2$value)
+#WISEECO2 <- na.omit(WISEECO2)
+WISEECO2=data.table(WISEECO2)
+WISEECO2015=WISEECO2[Year=="2015"]
+WISEECO2=merge(WISEECO2,WISEECO2015, by=c("Model", "Sector", "Variable", "Scenario"), allow.cartesian=T)
+
+WISEECO2 = WISEECO2 %>% mutate(RED=(1-(value.x/value.y))*100)
+WISEECO2=data.table(WISEECO2)
+WISEECO2=WISEECO2[Sector=="Chemical", Sector:=c("Chemicals and Petrochemicals")]
+
+# IMAGE
+
+ALLVAR=read.csv("data/Compilation_IMAGE_REINENT_everything.csv", sep=",", dec=".")
+ALLVAR$value <- as.numeric(ALLVAR$value)
+ALLVAR$Year <- as.numeric(ALLVAR$Year)
+ALLVAR=data.table(ALLVAR)
+
+CO2TAB= ALLVAR[ Variable %in% c(
+                  "Emissions|CO2|Iron and Steel|Direct emissions",
+                  "Emissions|CO2|Pulp and Paper|Direct emissions", 
+                  "Emissions|CO2|Chemicals and Petrochemicals|Direct emissions",
+                  "Emissions|CO2|Food Processing|Direct emissions"
+                ) & Year %in% c("2015", "2030", "2050") & Region=="EU28"]
+CO2TAB$Variable <- gsub("|Direct emissions", "", CO2TAB$Variable, fixed=T )
+
+CO2TAB$Variable <- gsub("Emissions|CO2|", "", CO2TAB$Variable, fixed=T )
+CO2TAB2015=CO2TAB[Year=="2015"]
+CO2TAB=merge(CO2TAB, CO2TAB2015, by=c("Variable", "Scenario", "Unit", "Model", "Region"), allow.cartesian = T)
+
+CO2TAB=CO2TAB %>% mutate(RED=(1-(value.x/value.y))*100)
+setnames(CO2TAB, "Variable", "Sector")
+
+CO2REDTAB = rbind(WISEECO2[Variable=="Emissions|CO2", c("Model","Sector", "Scenario","Year.x", "RED")],CO2TAB[, c("Sector", "Scenario", "Model", "Year.x", "RED")] )
+
+#write.table(file="datatables/overview_table_indicators_CO2RED.csv", CO2REDTAB2, sep=",", dec=".", row.names=FALSE)
+CO2REDTAB2=rbind(CO2REDTAB, data.table(Model=c("WISEE", "WISEE"),
+                                                Sector=c("Food Processing","Food Processing"),
+                                                Scenario=c("CIRC", "CCS"),
+                                                 RED=c(0, 0),
+                                                Year.x=c(2015, 2015)))
+CO2REDTAB2=data.table(CO2REDTAB2)
+CO2REDTABminmax=CO2REDTAB2[!Scenario=="Baseline",list(ymax=max(RED,na.rm = TRUE),ymin=min(RED,na.rm = TRUE)),by=c("Model","Sector", "Year.x")]
+CO2REDTABminmax$Variable <- "CO2 Emissions"
+
+## FINAL ENERGY REDUCTIONS
+FINETABRED=ALLVAR[Variable %in% c("Final Energy|Industry|Pulp and Paper",
+                                  "Final Energy|Industry|Iron and Steel",
+                                  "Final Energy|Industry|Chemicals and Petrochemicals",
+                                  "Final Energy|Industry|Food Processing"
+) & Region=="EU28"]
+FINETABRED$Variable <- gsub("Final Energy|Industry|", "", FINETABRED$Variable, fixed=TRUE)
+setnames(FINETABRED,"Variable", "Sector")
+FINETABRED2015=FINETABRED[Year=="2015"]
+FINETABRED=merge(FINETABRED, FINETABRED2015, by=c("Sector", "Scenario", "Unit", "Model", "Region"), allow.cartesian = T)
+
+FINETABRED=FINETABRED %>% mutate(RED=(1-(value.x/value.y))*100)
+FINETABRED=data.table(FINETABRED)
+
+FINEREDTAB2 = rbind(WISEECO2[Variable=="Final Energy", c("Model","Sector", "Scenario","Year.x", "RED")],FINETABRED[, c("Sector", "Scenario", "Model", "Year.x", "RED")] )
+FINEREDTAB2=data.table(FINEREDTAB2)
+
+FINEREDTAB2=rbind(FINEREDTAB2, data.table(Model=c("WISEE", "WISEE"),
+                                        Sector=c("Food Processing","Food Processing"),
+                                        Scenario=c("CIRC", "CCS"),
+                                        RED=c(0, 0),
+                                                Year.x=c(2015, 2015)))
+
+FINEREDTABminmax=FINEREDTAB2[!Scenario=="Baseline",list(ymax=max(RED,na.rm = TRUE),ymin=min(RED,na.rm = TRUE)),by=c("Model","Sector", "Year.x")]
+FINEREDTABminmax$Variable <- "Energy Use"
+
+## PRODUCTVOLUME
+PRODVOLTAB=ALLVAR[Variable %in% c("Chemical|HVC|Total Demand",
+                                  "Pulp and Paper|Total",
+                                  "Iron and Steel|Crude Steel",
+                                  "Food Processing|Total"
+) & Year %in% c("2015", "2030","2050") & Region=="EU28"]
+#PRODVOLTAB$Variable <- gsub("Production|Industry|", "", PRODVOLTAB$Variable, fixed=TRUE)
+PRODVOLTAB$Variable <- gsub("|HVC|Total Demand", "", PRODVOLTAB$Variable, fixed=TRUE)
+PRODVOLTAB$Variable <- gsub("|Total", "", PRODVOLTAB$Variable, fixed=TRUE)
+PRODVOLTAB$Variable <- gsub("|Crude Steel", "", PRODVOLTAB$Variable, fixed=TRUE)
+
+setnames(PRODVOLTAB,"Variable", "Sector")
+
+PRODVOLTAB2015=PRODVOLTAB[Year=="2015"]
+PRODVOLTAB=merge(PRODVOLTAB, PRODVOLTAB2015, by=c("Sector", "Scenario", "Unit", "Model", "Region"), allow.cartesian = T)
+
+PRODVOLTABRED=PRODVOLTAB %>% mutate(RED=(1-(value.x/value.y))*100)
+
+PRODVOLTABRED = rbind(WISEECO2[Variable=="Production", c("Model","Sector", "Scenario", "Year.x", "RED")],PRODVOLTABRED[, c("Sector", "Scenario", "Model", "Year.x","RED")] )
+
+PRODVOLTABRED=PRODVOLTABRED[Sector=="Chemical", Sector:=c("Chemicals and Petrochemicals")]
+PRODVOLTABRED=data.table(PRODVOLTABRED)
+PRODVOLTABRED2=rbind(PRODVOLTABRED, data.table(Model=c("WISEE", "WISEE"),
+                                                Sector=c("Food Processing","Food Processing"),
+                                                Scenario=c("CIRC", "CCS"),
+                                                RED=c(0, 0),
+                                                Year.x=c(2015, 2015)))
+
+PRODVOLTABREDminmax=PRODVOLTABRED2[!Scenario=="Baseline",list(ymax=max(RED,na.rm = TRUE),ymin=min(RED,na.rm = TRUE)),by=c("Model","Sector", "Year.x")]
+PRODVOLTABREDminmax$Variable <- "Production volume"
+
+options(digits=0)
+###
+
+MINMAX=ggplot()+
+  # geom_crossbar(data=CO2REDTABminmax[Year.x %in% c(2015:2050)], aes(x=Sector, ymin=ymin, ymax=ymax, y=ymax, fill=Model, colour=Model), width=.7, position=position_dodge(width=0.7))+
+  # # 
+  # annotate("rect", xmin=-Inf,xmax=Inf,ymin=0,ymax=100, fill="lightgrey", alpha=0.6) +
+  # annotate("rect", xmin=-Inf,xmax=Inf,ymin=100,ymax=Inf, fill="lightblue", alpha=0.6) +
+  # annotate("text", x=1.3,y=104, label="Net negative", size=3, angle=90, colour="dimgrey", hjust=0) +
+  # annotate("text", x=1.3, y=35, label="Reductions", size=3, angle=90, colour="dimgrey",  hjust=0) +
+  # annotate("text", x=1.3, y=-5, label="Increase", size=3, angle=90, colour="dimgrey",  hjust=1) +
+  geom_crossbar(data=CO2REDTABminmax[Year.x %in% c(2015:2050)], aes(x=Sector, ymin=ymin, ymax=ymax, y=ymax, fill=Model, colour=Model),  width=.7, position=position_dodge(width=0.7))+
+  
+  geom_crossbar(data=FINEREDTABminmax[Year.x %in% c(2015:2050)], aes(x=Sector, ymin=ymin, ymax=ymax, y=ymax, fill=Model, colour=Model),  width=.7, position=position_dodge(width=0.7))+
+  geom_crossbar(data=PRODVOLTABREDminmax, aes(x=Sector, ymin=ymin, ymax=ymax, y=ymax, fill=Model, colour=Model),  width=.7, position=position_dodge(width=0.7))+
+
+  geom_hline(yintercept=100)+
+  geom_hline(yintercept=0)+
+  
+   ggtitle(bquote("Indexed change in 2050 compared to 2015")) +
+  xlab("\n \n \n \n Industry sector") + ylab("% Reduction \n ")+
+  facet_wrap(~Variable)+
+  scale_fill_manual(
+    breaks=c("IMAGE", "WISEE"),
+    values=c('blue', '#2ca25f'))+
+  scale_colour_manual(
+    breaks=c("IMAGE", "WISEE"),
+    values=c('blue', '#2ca25f')) +
+  guides(colour = element_blank()) +
+  scale_x_discrete(breaks=c("Iron and Steel", "Chemicals and Petrochemicals", "Pulp and Paper", "Food Processing"),
+                   labels=c("Steel",  "Chemicals","Paper", "Food")) +
+  
+  coord_cartesian(ylim=c(-40:150)) +
+  theme_bw() +
+
+  theme(
+        axis.text.x = element_text(angle = 45, size=12,  hjust=1),
+        axis.title.y = element_text(size=13),
+        axis.title.x = element_text(size=13),
+        axis.text.y = element_text(size=12),
+        strip.text.x = element_text(size=12, face="bold"),
+        strip.text.y = element_text(size=12, face="bold"),
+        legend.text= element_text(size=12),
+        legend.title=element_text(size=13,  face="bold"),
+        plot.title=element_text(size=16, hjust=0.5, face="bold"), 
+        plot.subtitle=element_text(size=14,hjust=0.5),
+        panel.border = element_rect(colour = "black", size=1),
+        legend.key =  element_rect(fill = 'white', size = 0.5),
+        strip.background = element_rect(colour="white", fill="#FFFFFF")
+    )
+
+
+library("gganimate")
+library("gifski")
+library("glue")
+
+MINMAXanimate <- MINMAX +
+                transition_components(Year.x) +
+                labs(title = 'Year: {frame_time}')
+MINMAXanimate
+
+```
+
 ## Electrification, Biofuels and CCS 
 
 The [REINVENT](http://www.reinvent-project.eu) quantitative models depict a variety of strategies to overcome technological lock-in while meeting the climate objective, including, **energy efficiency, biofuels, electrification** of processes or utilizing renewable power to produce feedstock or synthetic fuel (e.g. hydrogen) and **carbon capture & storage** (CCS). **End-use sectors** also contribute via recycling.
