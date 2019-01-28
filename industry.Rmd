@@ -107,10 +107,10 @@ FINEREDTABminmax=FINEREDTAB2[!Scenario=="Baseline",list(ymax=max(value,na.rm = T
 FINEREDTABminmax$Variable <- "Energy Use"
 
 ## PRODUCTVOLUME
-PRODVOLTAB=ALLVAR[Variable %in% c("Production|Industry|Chemical|HVC|Total Demand",
-                                  "Production|Industry|Pulp and Paper|Total",
-                                  "Production|Industry|Iron and Steel|Crude Steel",
-                                  "Production|Industry|Food Processing|Total"
+PRODVOLTAB=ALLVAR[Variable %in% c("Chemical|HVC|Total Demand",
+                                  "Pulp and Paper|Total",
+                                  "Iron and Steel|Crude Steel",
+                                  "Food Processing|Total"
 ) & Year %in% c("2015", "2030","2050") & Region=="EU28"]
 PRODVOLTAB$Variable <- gsub("Production|Industry|", "", PRODVOLTAB$Variable, fixed=TRUE)
 PRODVOLTAB$Variable <- gsub("|HVC|Total Demand", "", PRODVOLTAB$Variable, fixed=TRUE)
@@ -230,7 +230,7 @@ CO2TAB= ALLVAR[ Variable %in% c(
                   "Emissions|CO2|Pulp and Paper|Direct emissions", 
                   "Emissions|CO2|Chemicals and Petrochemicals|Direct emissions",
                   "Emissions|CO2|Food Processing|Direct emissions"
-                ) & Year %in% c("2015", "2030", "2050") & Region=="EU28"]
+                ) & Region=="EU28"]
 CO2TAB$Variable <- gsub("|Direct emissions", "", CO2TAB$Variable, fixed=T )
 
 CO2TAB$Variable <- gsub("Emissions|CO2|", "", CO2TAB$Variable, fixed=T )
@@ -279,11 +279,11 @@ FINEREDTABminmax=FINEREDTAB2[!Scenario=="Baseline",list(ymax=max(RED,na.rm = TRU
 FINEREDTABminmax$Variable <- "Energy Use"
 
 ## PRODUCTVOLUME
-PRODVOLTAB=ALLVAR[Variable %in% c("Production|Industry|Chemical|HVC|Total Demand",
-                                  "Production|Industry|Pulp and Paper|Total",
-                                  "Production|Industry|Iron and Steel|Crude Steel",
-                                  "Production|Industry|Food Processing|Total"
-) & Year %in% c("2015", "2030","2050") & Region=="EU28"]
+PRODVOLTAB=ALLVAR[Variable %in% c("Chemical|HVC|Total Demand",
+                                  "Pulp and Paper|Total",
+                                  "Iron and Steel|Crude Steel",
+                                  "Food Processing|Total"
+) &  Region=="EU28"]
 PRODVOLTAB$Variable <- gsub("Production|Industry|", "", PRODVOLTAB$Variable, fixed=TRUE)
 PRODVOLTAB$Variable <- gsub("|HVC|Total Demand", "", PRODVOLTAB$Variable, fixed=TRUE)
 PRODVOLTAB$Variable <- gsub("|Total", "", PRODVOLTAB$Variable, fixed=TRUE)
@@ -317,13 +317,13 @@ MINMAX=ggplot()+
   #
   annotate("rect", xmin=-Inf,xmax=Inf,ymin=0,ymax=100, fill="lightgrey", alpha=0.6) +
   annotate("rect", xmin=-Inf,xmax=Inf,ymin=100,ymax=Inf, fill="lightblue", alpha=0.6) +
-  annotate("text", x=0.5,y=104, label="Net negative", size=3, angle=90, colour="dimgrey", hjust=0) +
-  annotate("text", x=0.5, y=35, label="Reductions", size=3, angle=90, colour="dimgrey",  hjust=0) +
-  annotate("text", x=0.5, y=-5, label="Increase", size=3, angle=90, colour="dimgrey",  hjust=1) +
+  annotate("text", x=0.7,y=104, label="Net negative", size=3, angle=90, colour="dimgrey", hjust=0) +
+  annotate("text", x=0.7, y=35, label="Reductions", size=3, angle=90, colour="dimgrey",  hjust=0) +
+  annotate("text", x=0.7, y=-5, label="Increase", size=3, angle=90, colour="dimgrey",  hjust=1) +
   geom_crossbar(data=CO2REDTABminmax[Year.x %in% c(2015:2050)], aes(x=Sector, ymin=ymin, ymax=ymax, y=ymax, fill=Model, colour=Model),  width=.7, position=position_dodge(width=0.7))+
   
   geom_crossbar(data=FINEREDTABminmax[Year.x %in% c(2015:2050)], aes(x=Sector, ymin=ymin, ymax=ymax, y=ymax, fill=Model, colour=Model),  width=.7, position=position_dodge(width=0.7))+
-  geom_crossbar(data=PRODVOLTABREDminmax, aes(x=Sector, ymin=ymin, ymax=ymax, y=ymax, fill=Model, colour=Model),  width=.7, position=position_dodge(width=0.7))+
+  geom_crossbar(data=PRODVOLTABREDminmax[Year.x %in% c(2015:2050)], aes(x=Sector, ymin=ymin, ymax=ymax, y=ymax, fill=Model, colour=Model),  width=.7, position=position_dodge(width=0.7))+
 
   geom_hline(yintercept=100)+
   geom_hline(yintercept=0)+
@@ -388,6 +388,16 @@ library(forcats)
 ALLVAR=read.csv("data/Compilation_IMAGE_REINENT_everything.csv", sep=";", dec=".")
 ALLVAR=data.table(ALLVAR)
 
+INDICATORSPROD=ALLVAR[Variable %in% c("Chemical|HVC|Total Demand",
+                                      "Pulp and Paper|Total",
+                                      "Iron and Steel|Crude Steel",
+                                      "Food Processing|Total")]
+INDICATORSPROD$Indicator <- "Production"
+INDICATORSPROD$Variable <- gsub("|Total", "", INDICATORSPROD$Variable, fixed=T )
+INDICATORSPROD$Variable <- gsub("|Crude Steel", "", INDICATORSPROD$Variable, fixed=T )
+INDICATORSPROD$Variable <- gsub("|HVC Demand", "", INDICATORSPROD$Variable, fixed=T )
+
+
 INDICATORS= ALLVAR[ Variable %in% c(
                   "Emissions|CO2|Iron and Steel|Direct emissions",
                   "Emissions|CO2|Pulp and Paper|Direct emissions", 
@@ -396,11 +406,7 @@ INDICATORS= ALLVAR[ Variable %in% c(
                   "Final Energy|Industry|Pulp and Paper",
                                   "Final Energy|Industry|Iron and Steel",
                                   "Final Energy|Industry|Chemicals and Petrochemicals",
-                                  "Final Energy|Industry|Food Processing",
-                  "Production|Industry|Chemical|HVC|Total Demand",
-                                  "Production|Industry|Pulp and Paper|Total",
-                                  "Production|Industry|Iron and Steel|Crude Steel",
-                                  "Production|Industry|Food Processing|Total"
+                                  "Final Energy|Industry|Food Processing"
                 ) ]
 INDICATORS$Variable <- gsub("|Direct emissions", "", INDICATORS$Variable, fixed=T )
 INDICATORS$Variable <- gsub("CO2|", "", INDICATORS$Variable, fixed=T )
@@ -411,6 +417,8 @@ INDICATORS=cbind(INDICATORS,INDICATORSsplit$X1, INDICATORSsplit$X2)
 INDICATORS$Variable <- NULL
 setnames(INDICATORS, "V2", "Indicator")
 setnames(INDICATORS, "V3", "Variable")
+
+INDICATORS = rbind(INDICATORS, INDICATORSPROD)
 
 INDICATORS2015=INDICATORS[Year=="2015"]
 INDICATORS=merge(INDICATORS, INDICATORS2015, by=c("Variable", "Indicator","Scenario", "Unit", "Model", "Region"), allow.cartesian = T)
@@ -424,21 +432,21 @@ INDICATORSminmax=INDICATORSminmax[Sector=="Chemical", Sector:=c("Chemicals and P
 
 INDICATORSminmax = INDICATORSminmax %>% mutate(
                           Sector=
-                            fct_relevel(Sector, "Iron and Steel", "Chemicals and Petrochemicals", "Pulp and Paper", "Food Processing")
+                            fct_relevel(Sector, "Iron and Steel",  "Pulp and Paper", "Chemicals and Petrochemicals","Food Processing")
                             )
 INDICATORSminmax=data.table(INDICATORSminmax)
 options(digits=0)
 ###
 
 MINMAXreg=ggplot()+
-  geom_crossbar(data=INDICATORSminmax[Year.x %in% c(2015:2100)], aes(x=Sector, ymin=ymin, ymax=ymax, y=ymax, fill=Region, colour=Region), width=.7, position=position_dodge(width=0.7))+
+  geom_crossbar(data=INDICATORSminmax[Year.x %in% c(2015:2050)], aes(x=Sector, ymin=ymin, ymax=ymax, y=ymax, fill=Region, colour=Region), width=.7, position=position_dodge(width=0.7))+
   #
   annotate("rect", xmin=-Inf,xmax=Inf,ymin=0,ymax=100, fill="lightgrey", alpha=0.6) +
   annotate("rect", xmin=-Inf,xmax=Inf,ymin=100,ymax=Inf, fill="lightblue", alpha=0.6) +
-  annotate("text", x=0.5,y=104, label="Net negative", size=3, angle=90, colour="dimgrey", hjust=0) +
-  annotate("text", x=0.5, y=35, label="Reductions", size=3, angle=90, colour="dimgrey",  hjust=0) +
-  annotate("text", x=0.5, y=-5, label="Increase", size=3, angle=90, colour="dimgrey",  hjust=1) +
-  geom_crossbar(data=INDICATORSminmax[Year.x %in% c(2015:2100)], aes(x=Sector, ymin=ymin, ymax=ymax, y=ymax, fill=Region, colour=Region), width=.7, position=position_dodge(width=0.7))+
+  annotate("text", x=0.7,y=104, label="Net negative", size=3, angle=90, colour="dimgrey", hjust=0) +
+  annotate("text", x=0.7, y=35, label="Reductions", size=3, angle=90, colour="dimgrey",  hjust=0) +
+  annotate("text", x=0.7, y=-5, label="Increase", size=3, angle=90, colour="dimgrey",  hjust=1) +
+  geom_crossbar(data=INDICATORSminmax[Year.x %in% c(2015:2050)], aes(x=Sector, ymin=ymin, ymax=ymax, y=ymax, fill=Region, colour=Region), width=.7, position=position_dodge(width=0.7))+
    
  
   geom_hline(yintercept=100)+
@@ -562,6 +570,162 @@ ggplotly(MINMAXCONC2050)  %>%
  xaxis = list(automargin=TRUE), 
  yaxis = list(automargin=TRUE)
  )
+
+```
+
+Animate!
+
+
+```{r results=TRUE, message=FALSE, warning=FALSE, echo=FALSE, fig.align="center", fig.width=10, fig.height=5, fig.cap="_**Figure**: Speed of change visualized for industry for the major economies (representing the application of certain strategy in % for each year) (IMAGE only)_"}
+
+library(plotly)
+library(ggplot2)
+library(data.table)
+library(dplyr)
+library(tidyr)
+library(forcats)
+
+# IMAGE
+
+ALLVAR=read.csv("data/Compilation_IMAGE_REINENT_everything.csv", sep=";", dec=".", fileEncoding="latin1")
+ALLVAR=data.table(ALLVAR)
+
+####### IMAGE ONLY
+FINETOTTAB=ALLVAR[Variable %in% c("Final Energy|Industry"
+                                        ) & Year %in% c("2030", "2050") & Region=="EU28"]
+FINETAB=ALLVAR[Variable %in% c("Final Energy|Industry|Pulp and Paper",
+                               "Final Energy|Industry|Iron and Steel",
+                               "Final Energy|Industry|Chemicals and Petrochemicals",
+                               "Final Energy|Industry|Food Processing"
+                              ) ]
+FINETAB$Variable<- gsub("Final Energy|Industry|", "", FINETAB$Variable, fixed=T)
+setnames(FINETAB, "Variable", "Sector")
+
+ELECTRIFTAB=ALLVAR[Variable %in% c("Final Energy|Industry|Pulp and Paper|Electricity",
+                                   "Final Energy|Industry|Iron and Steel|Electricity",
+                                   "Final Energy|Industry|Chemicals and Petrochemicals|Electricity",
+                                   "Final Energy|Industry|Food Processing|Electricity"
+                                   ) ]
+ELECTRIFTAB$Indicator<-"Electrification"
+
+BIOTAB=ALLVAR[Variable %in% c("Final Energy|Industry|Pulp and Paper|Modern Biofuel",
+                                   "Final Energy|Industry|Pulp and Paper|Secondary Heat",
+                                   "Final Energy|Industry|Iron and Steel|Modern Biofuel",
+                                   "Final Energy|Industry|Iron and Steel|Traditional Biofuel",
+                                   "Final Energy|Industry|Chemicals and Petrochemicals|Modern Biofuel",
+                                   "Final Energy|Industry|Chemicals and Petrochemicals|Traditional Biofuel",
+                                   "Final Energy|Industry|Food Processing|Modern Biofuel",
+                                   "Final Energy|Industry|Food Processing|Traditional Biofuel"
+                                   
+                                ) ]
+BIOTAB$Indicator <- "Biofuels"
+FOSSILTAB= ALLVAR[ Variable %in% c(
+                        "Final Energy|Industry|Chemicals and Petrochemicals|Coal",
+                        "Final Energy|Industry|Chemicals and Petrochemicals|Liquid Fuel",
+                        "Final Energy|Industry|Chemicals and Petrochemicals|Gaseous Fuel",
+                        "Final Energy|Industry|Pulp and Paper|Coal",
+                        "Final Energy|Industry|Pulp and Paper|Liquid Fuel",
+                        "Final Energy|Industry|Pulp and Paper|Gaseous Fuel",
+                        "Final Energy|Industry|Food Processing|Coal",
+                        "Final Energy|Industry|Food Processing|Liquid Fuel",
+                        "Final Energy|Industry|Food Processing|Gaseous Fuel",
+                        "Final Energy|Industry|Iron and Steel|Coal",
+                        "Final Energy|Industry|Iron and Steel|Liquid Fuel",
+                        "Final Energy|Industry|Iron and Steel|Gaseous Fuel"
+                        
+                        ) ]
+
+FOSSILTAB$Indicator <- "Fossil fuel"
+
+ENERGYTABOVERVIEW <- rbind(ELECTRIFTAB,BIOTAB, FOSSILTAB)
+ENERGYTABOVERVIEW$Variable <- gsub("Final Energy|Industry|","", ENERGYTABOVERVIEW$Variable, fixed=TRUE)
+
+ENERGYTABOVERVIEWsplit= data.frame(do.call('rbind', strsplit(as.character(ENERGYTABOVERVIEW$Variable),'|',fixed=TRUE)))
+ENERGYTABOVERVIEWnew=cbind(ENERGYTABOVERVIEW,ENERGYTABOVERVIEWsplit$X1, ENERGYTABOVERVIEWsplit$X2)
+setnames(ENERGYTABOVERVIEWnew, "V2", "Sector")
+setnames(ENERGYTABOVERVIEWnew, "V3", "Carrier")
+
+ENERGYTABOVERVIEWnewsum=ENERGYTABOVERVIEWnew[, sum(value, na.rm=T), by=c("Scenario", "Year", "Region", "Sector","Indicator")]
+ENERGYTABOVERVIEWnewsumcalc= merge(ENERGYTABOVERVIEWnewsum,FINETAB, by=c("Scenario", "Year", "Region", "Sector"))
+ENERGYTABOVERVIEWnewsumcalc = ENERGYTABOVERVIEWnewsumcalc %>% mutate(Share=(V1/value)*100)
+
+ENERGYTABOVERVIEWnewsumcalc$V1 <- NULL
+ENERGYTABOVERVIEWnewsumcalc$value <- NULL
+
+## Hijack
+ENERGYTABOVERVIEWnewsumcalcplot=ENERGYTABOVERVIEWnewsumcalc
+#/Hijack
+
+#Hijack, taken from Row 4500 or something
+ENERGYTABOVERVIEWnewsumcalcplot=data.table(ENERGYTABOVERVIEWnewsumcalcplot)
+ENERGYTABOVERVIEWnewsumcalcplot2=ENERGYTABOVERVIEWnewsumcalcplot[!Scenario=="Baseline"]
+ENERGYTABOVERVIEWnewsumcalcplot2minmax=ENERGYTABOVERVIEWnewsumcalcplot2[,list(ymax=max(Share,na.rm = TRUE),ymin=min(Share,na.rm = TRUE)),by=c("Model","Sector", "Indicator", "Year", "Region")]
+
+ENERGYTABOVERVIEWnewsumcalcplot2minmax =ENERGYTABOVERVIEWnewsumcalcplot2minmax %>% mutate(Sector =
+                                                                                  fct_relevel(Sector, 
+                                                                                              "Iron and Steel",  
+                                                                                              "Pulp and Paper", 
+                                                                                              "Chemicals and Petrochemicals",
+                                                                                              "Food Processing"))
+ENERGYTABOVERVIEWnewsumcalcplot2minmax=data.table(ENERGYTABOVERVIEWnewsumcalcplot2minmax)
+###
+
+STRATMINMAXreg=ggplot()+
+  geom_crossbar(data=ENERGYTABOVERVIEWnewsumcalcplot2minmax[Year %in% c(2015:2050)], aes(x=Sector, ymin=ymin, ymax=ymax, y=ymax, fill=Region, colour=Region), width=.7, position=position_dodge(width=0.7))+
+  #
+    annotate("rect", xmin=-Inf,xmax=Inf,ymin=0,ymax=100, fill="lightgrey", alpha=0.6) +
+# annotate("rect", xmin=-Inf,xmax=Inf,ymin=100,ymax=Inf, fill="lightblue", alpha=0.6) +
+# annotate("text", x=0.6,y=109, label="Net negative", size=3, angle=90, colour="dimgrey", hjust=0) +
+ annotate("text", x=0.6, y=95, label="High use", size=3, angle=90, colour="dimgrey",  hjust=1) + 
+  annotate("text", x=0.6, y=5, label="Low use", size=3, angle=90, colour="dimgrey",  hjust=0) + 
+  geom_crossbar(data=ENERGYTABOVERVIEWnewsumcalcplot2minmax[Year %in% c(2015:2050)], aes(x=Sector, ymin=ymin, ymax=ymax, y=ymax, fill=Region, colour=Region), width=.7, position=position_dodge(width=0.7))+
+   
+ 
+  geom_hline(yintercept=100)+
+  geom_hline(yintercept=0)+
+  
+   ggtitle(bquote("Indexed change in 2050 compared to 2015")) +
+  xlab("\n \n \n \n Industry sector") + ylab("% Application in total FE \n ")+
+   facet_wrap(~Indicator)+
+  scale_fill_manual(
+    breaks=c("BRA", "CHN", "EU28", "INDIA", "USA", "World"),
+    values=c('#d7191c','#fdae61','#2ca25f','#abd9e9','#2c7bb6', 'black'))+
+  scale_colour_manual(
+    breaks=c("BRA", "CHN", "EU28", "INDIA", "USA", "World"),
+    values=c('#d7191c','#fdae61','#2ca25f','#abd9e9','#2c7bb6', 'black')) +
+  guides(colour = element_blank()) +
+  scale_x_discrete(breaks=c("Iron and Steel", "Chemicals and Petrochemicals", "Pulp and Paper", "Food Processing"),
+                   labels=c("Steel",  "Chemicals","Paper", "Food")) +
+  
+  coord_cartesian(ylim=c(0:100)) +
+  theme_bw() +
+
+  theme(
+        axis.text.x = element_text(angle = 45, size=12,  hjust=1),
+        axis.title.y = element_text(size=13),
+        axis.title.x = element_text(size=13),
+        axis.text.y = element_text(size=12),
+        strip.text.x = element_text(size=12, face="bold"),
+        strip.text.y = element_text(size=12, face="bold"),
+        legend.text= element_text(size=12),
+        legend.title=element_text(size=13,  face="bold"),
+        plot.title=element_text(size=16, hjust=0.5, face="bold"), 
+        plot.subtitle=element_text(size=14,hjust=0.5),
+        panel.border = element_rect(colour = "black", size=1),
+        legend.key =  element_rect(fill = 'white', size = 0.5),
+        strip.background = element_rect(colour="white", fill="#FFFFFF")
+    )
+
+#print(STRATMINMAXreg)
+
+library("gganimate")
+library("gifski")
+library("glue")
+
+STRATMINMAXreg.animate <- STRATMINMAXreg +
+                transition_time(Year) +
+                labs(title = 'Year: {frame_time}')
+STRATMINMAXreg.animate
 
 ```
 
@@ -970,77 +1134,7 @@ D41PAPER$Variable <- "Pulp and Paper"
   
   ggplotly(INDFOODemisbyPoster)                      
                         
-  # ###
-  # get_legend<-function(myggplot){
-  #   tmp <- ggplot_gtable(ggplot_build(myggplot))
-  #   leg <- which(sapply(tmp$grobs, function(x) x$name) == "guide-box")
-  #   legend <- tmp$grobs[[leg]]
-  #   return(legend)
-  # }
-  # legend.overviewpost <- get_legend(INDTEELemisbyPoster)
-  # 
-  # 
-  # # a grob in a grob in a grob 
-  # LITREVIEWPOSTER <-arrangeGrob(arrangeGrob(arrangeGrob(
-  #                         INDTEELemisbyPoster 
-  #                         + theme(
-  #                           legend.position="none",
-  #                           plot.title = element_blank(),
-  #                           plot.subtitle= element_blank(),
-  #                           strip.text.x = element_text(size=18, face="bold"),
-  #                           strip.text.y = element_text(size=18, face="bold"),
-  #                           axis.text.x = element_text(angle = 45, size=16,  hjust=1),
-  #                           axis.text.y = element_text(size=18,  hjust=1),
-  #                           axis.title.y = element_text(size=16)),
-  #                         INDCHEMemisbyPoster + theme(
-  #                           legend.position="none",
-  #                           plot.title = element_blank(),
-  #                           plot.subtitle= element_blank(),
-  #                           strip.text.x = element_text(size=18, face="bold"),
-  #                           strip.text.y = element_text(size=18, face="bold"),
-  #                           axis.text.x = element_text(angle = 45, size=16,  hjust=1),
-  #                           axis.text.y = element_text(size=18,  hjust=1),
-  #                           axis.title.y = element_text(size=16)),
-  #                         nrow=1, widths=c(3,3))
-  #                         ,
-  #                         
-  #                         arrangeGrob(
-  #                           INDPPIemisbyPoster + theme(
-  #                             legend.position="none",
-  #                             plot.title = element_blank(),
-  #                             plot.subtitle= element_blank(),
-  #                             strip.text.x = element_text(size=18, face="bold"),
-  #                             strip.text.y = element_text(size=18, face="bold"),
-  #                             axis.text.x = element_text(angle = 45, size=16,  hjust=1),
-  #                             axis.text.y = element_text(size=18,  hjust=1),
-  #                             axis.title.y = element_text(size=16)), 
-  #                           
-  #                           
-  #                           INDFOODemisbyPoster + theme(
-  #                             legend.position="none",
-  #                             plot.title = element_blank(),
-  #                             plot.subtitle= element_blank(),
-  #                             strip.text.x = element_text(size=18, face="bold"),
-  #                             strip.text.y = element_text(size=18, face="bold"),
-  #                             axis.text.x = element_text(angle = 45, size=16,  hjust=1),
-  #                             axis.text.y = element_text(size=18,  hjust=1),
-  #                             axis.title.y = element_text(size=16)
-  #                             ), 
-  #                           nrow=1, widths=c(3,3)), 
-  #                         
-  #   
-  #   ncol=1,
-  #   bottom=NULL,
-  #   #top=textGrob("Indexed CO2 emissions", vjust = 0.5, rot=0, gp=gpar(fontsize=26, fontface="bold")) ,
-  #   heights=c(4,4)),
-  #   nrow=1,
-  #   legend.overviewpost,
-  #   widths=c(4,1))
-  # 
-  # 
-  # grid.newpage()
-  # grid.draw(LITREVIEWPOSTER)
-  # 
+ 
   
 ```
 
