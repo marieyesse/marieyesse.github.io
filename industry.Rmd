@@ -196,7 +196,7 @@ ggplotly(MINMAX2050)
 
 Sometimes it is difficult to present transitions in a 2D environment. Visualizing the speed of time, and how different models respond cannot be displayed in a static visualization. So below the same image as above, just with the timescale as a running element in the animation:
 
-```{r results=TRUE, message=FALSE, warning=FALSE, echo=FALSE, fig.align="center", fig.width=8, fig.height=4, fig.cap="_**Figure**: Speed of change visualized for EU industry(represented in % change for each year)_"}
+```{r results=TRUE, message=FALSE, warning=FALSE, echo=FALSE, fig.align="center", fig.width=10, fig.height=5, fig.cap="_**Figure**: Speed of change visualized for EU industry(represented in % change for each year)_"}
 
 library(plotly)
 library(ggplot2)
@@ -317,9 +317,9 @@ MINMAX=ggplot()+
   #
   annotate("rect", xmin=-Inf,xmax=Inf,ymin=0,ymax=100, fill="lightgrey", alpha=0.6) +
   annotate("rect", xmin=-Inf,xmax=Inf,ymin=100,ymax=Inf, fill="lightblue", alpha=0.6) +
-  annotate("text", x=1.3,y=104, label="Net negative", size=3, angle=90, colour="dimgrey", hjust=0) +
-  annotate("text", x=1.3, y=35, label="Reductions", size=3, angle=90, colour="dimgrey",  hjust=0) +
-  annotate("text", x=1.3, y=-5, label="Increase", size=3, angle=90, colour="dimgrey",  hjust=1) +
+  annotate("text", x=0.5,y=104, label="Net negative", size=3, angle=90, colour="dimgrey", hjust=0) +
+  annotate("text", x=0.5, y=35, label="Reductions", size=3, angle=90, colour="dimgrey",  hjust=0) +
+  annotate("text", x=0.5, y=-5, label="Increase", size=3, angle=90, colour="dimgrey",  hjust=1) +
   geom_crossbar(data=CO2REDTABminmax[Year.x %in% c(2015:2050)], aes(x=Sector, ymin=ymin, ymax=ymax, y=ymax, fill=Model, colour=Model),  width=.7, position=position_dodge(width=0.7))+
   
   geom_crossbar(data=FINEREDTABminmax[Year.x %in% c(2015:2050)], aes(x=Sector, ymin=ymin, ymax=ymax, y=ymax, fill=Model, colour=Model),  width=.7, position=position_dodge(width=0.7))+
@@ -372,7 +372,7 @@ MINMAXanimate
 
 ```
 
-Here is the same result (IMAGE only) presenting the speed of industrial change across various major economies. It shows which regions fall through the floor (increase), or which of them could accelerate through the roof (deep decarbonization). The length of the bars represent the 'drag' between 2C or 1.5C - the longer the bar, the more efforts are requered to bridge the gap between the 2C or 1.5C climate ambition.
+Here is the same result (IMAGE only) presenting the speed of industrial change across various major economies. It shows which regions fall through the floor (increase), or which of them could accelerate through the roof (deep decarbonization). The length of the bars represent the 'drag' between 2C or 1.5C - the longer the bar, the more efforts are required to bridge the gap between the 2C or 1.5C climate ambition.
 
 ```{r results=TRUE, message=FALSE, warning=FALSE, echo=FALSE, fig.align="center", fig.width=10, fig.height=5, fig.cap="_**Figure**: Speed of change visualized for industry for the major economies (represented in % change for each year)_"}
 
@@ -381,6 +381,7 @@ library(ggplot2)
 library(data.table)
 library(dplyr)
 library(tidyr)
+library(forcats)
 
 # IMAGE
 
@@ -419,8 +420,13 @@ setnames(INDICATORS, "Variable", "Sector")
 
 INDICATORS=data.table(INDICATORS)
 INDICATORSminmax=INDICATORS[!Scenario=="Baseline",list(ymax=max(RED,na.rm = TRUE),ymin=min(RED,na.rm = TRUE)),by=c("Model", "Sector","Indicator", "Region", "Unit", "Year.x")]
-INDICATORSminmax=INDICATORSminmax[Sector=="Chemicals", Sector:=c("Chemicals and Petrochemicals")]
+INDICATORSminmax=INDICATORSminmax[Sector=="Chemical", Sector:=c("Chemicals and Petrochemicals")]
 
+INDICATORSminmax = INDICATORSminmax %>% mutate(
+                          Sector=
+                            fct_relevel(Sector, "Iron and Steel", "Chemicals and Petrochemicals", "Pulp and Paper", "Food Processing")
+                            )
+INDICATORSminmax=data.table(INDICATORSminmax)
 options(digits=0)
 ###
 
@@ -443,10 +449,10 @@ MINMAXreg=ggplot()+
    facet_wrap(~Indicator)+
   scale_fill_manual(
     breaks=c("BRA", "CHN", "EU28", "INDIA", "USA", "World"),
-    values=c('#d7191c','#fdae61','#ffffbf','#abd9e9','#2c7bb6', 'black'))+
+    values=c('#d7191c','#fdae61','#2ca25f','#abd9e9','#2c7bb6', 'black'))+
   scale_colour_manual(
     breaks=c("BRA", "CHN", "EU28", "INDIA", "USA", "World"),
-    values=c('#d7191c','#fdae61','#ffffbf','#abd9e9','#2c7bb6', 'black')) +
+    values=c('#d7191c','#fdae61','#2ca25f','#abd9e9','#2c7bb6', 'black')) +
   guides(colour = element_blank()) +
   scale_x_discrete(breaks=c("Iron and Steel", "Chemicals and Petrochemicals", "Pulp and Paper", "Food Processing"),
                    labels=c("Steel",  "Chemicals","Paper", "Food")) +
@@ -592,7 +598,7 @@ WISEECO2share=data.table(WISEECO2share)
 
 # IMAGE
 
-ALLVAR=read.csv("data/Compilation_IMAGE_REINENT_everything.csv", sep=";", dec=".")
+ALLVAR=read.csv("data/Compilation_IMAGE_REINENT_everything.csv", sep=";", dec=".", fileEncoding="latin1")
 ALLVAR$value <- as.numeric(ALLVAR$value)
 ALLVAR$Year <- as.numeric(ALLVAR$Year)
 ALLVAR=data.table(ALLVAR)
@@ -711,7 +717,7 @@ CO2index=ALLVAR[Variable %in% c(  "Emissions|CO2|Iron and Steel|Direct emissions
  WSP.emis=data.table(WSP.emis)
   
 # #D4.1 versions Steel and paper Clemens
-D41STEEL=read.csv("data/D4_1_steel.csv", sep=";", dec=".")
+D41STEEL=read.csv("data/D4_1_steel.csv", sep=";", dec=".", fileEncoding="latin1")
 D41STEEL=data.table(D41STEEL)
 D41STEEL = D41STEEL %>% mutate(index=(value2/value1)*100)
 D41STEEL=data.table(D41STEEL)
@@ -768,8 +774,9 @@ D41PAPER$Variable <- "Pulp and Paper"
     geom_line(data=D41STEEL[Indicator=="GHG Emissions"], aes(x=Target, y=index, group=Scenario), colour='darkgrey')+
     
     geom_hline(yintercept = 0, linetype=1, alpha=0.4) +
-    #IMAGE
-    geom_line(data=CO2indexcalc[Variable %in% c("Iron and Steel") & Region %in% c("EU28") & Scenario %in% c("2 Degrees", "1.5 Degrees") ], aes(x=Year.x, y=INDEX, group=Scenario, linetype=Scenario, colour=Study), size=1)+
+    
+  #IMAGE
+     geom_line(data=CO2indexcalc[Variable %in% c("Iron and Steel") & Region %in% c("EU28") & Scenario %in% c("2 Degrees", "1.5 Degrees") ], aes(x=Year.x, y=INDEX, group=Scenario, linetype=Scenario, colour=Study), size=1)+
     
     # WISEE
     geom_line(data=WISEECO2share[Sector=="Iron and Steel" & Variable=="Emissions|CO2"], aes(x=Year.x, y=Index, group=Scenario, linetype=Scenario, colour=Study), size=1) +
@@ -806,6 +813,7 @@ D41PAPER$Variable <- "Pulp and Paper"
         strip.background = element_rect(colour="white", fill="#FFFFFF")
             ) 
   
+#print(INDTEELemisbyPoster)
   ggplotly(INDTEELemisbyPoster)
 
 ```
