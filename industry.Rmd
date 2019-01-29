@@ -19,8 +19,6 @@ This is a republication of a poster presented on 28 November 2018 in Brussels.
 Our study shows that today‘s available technologies and **BAT energy efficiency** options are **not** sufficient to reach full industry decarbonization.  All industries need novel low-carbon technologies, processes & materials. 
 
 
-
-
 ```{r results=TRUE, message=FALSE, warning=FALSE, echo=FALSE, fig.align="center", fig.width=8, fig.height=4, fig.cap="_**Figure**: Expected and required change of decarbonisation, energy efficiency and sufficiency (in % change)_"}
 
 library(plotly)
