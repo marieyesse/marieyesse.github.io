@@ -365,7 +365,7 @@ library("glue")
 
 MINMAXanimate <- MINMAX +
                 transition_components(Year.x) +
-                labs(title = 'Year: {frame_time}')
+                labs(title = 'Year: {substr(frame_time, 1,4)}')
 MINMAXanimate
 
 ```
@@ -715,6 +715,8 @@ STRATMINMAXreg=ggplot()+
     )
 
 #print(STRATMINMAXreg)
+
+
 
 library("gganimate")
 library("gifski")

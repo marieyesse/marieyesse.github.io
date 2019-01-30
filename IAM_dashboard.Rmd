@@ -404,6 +404,61 @@ CROSSSECTIONby=ggplot() +
 
 ggplotly(CROSSSECTIONby) 
 
+library("gganimate")
+library("gifski")
+library("glue")
+
+
+
+## Animate
+
+# By base year (2010)
+CROSSSECTIONby2=ggplot() +
+  geom_point(data=EMF28carbeneffplot[Scenario=="EU9"], aes(y=ByYeff, x=ByYdecarb, group=Model, colour=Scenario, shape=Model), alpha=0.8, size=5) +   # scatter plot geometric 
+ 
+  geom_point(data=EMF28carbeneffplot[Scenario=="EU11"], aes(y=ByYeff, x=ByYdecarb, group=Model, colour=Scenario, shape=Model), alpha=0.8, size=5) +   # scatter plot geometric 
+
+  geom_abline(intercept = 0, slope = 1, linetype="dotted")       +                                       # dividing line
+  geom_abline(intercept = 0, slope = 0, linetype="dotted")    +                                          # Y=0 line
+  geom_vline(xintercept=c(0,0), linetype="dotted")   +                                 # hit ?linetype for variations
+  #facet_wrap(~Variable, ncol=1) +
+  coord_cartesian(xlim=c(0:100), ylim=c(0:140)) +
+  theme_bw() +
+  ggtitle("Decarbonisation strategies", subtitle="Compared to base year (2010)") +
+  labs(y="Change in energy productivity (E/GVA) ", x = "Change in emission intensity (GHG/E)") +
+  guides(fill=guide_legend("Sector"))+
+  scale_colour_manual(values=c("#4bbff2","#a5ae64"),
+                      breaks=c("EU11", "EU9"),
+                      labels = c("Baseline",
+                                 "Decarbonisation")) +
+  theme_bw()     +
+        theme(
+        axis.text.x = element_text(angle = 45, size=14,  hjust=1),
+        axis.title.y = element_text(size=13),
+        axis.title.x = element_text(size=13),
+        axis.text.y = element_text(size=12),
+        strip.text.x = element_text(size=12, face="bold"),
+        strip.text.y = element_text(size=12, face="bold"),
+        legend.text= element_text(size=12),
+        legend.title=element_text(size=13,  face="bold"),
+        plot.title=element_text(size=16, hjust=0.5, face="bold"), 
+        plot.subtitle=element_text(size=14,hjust=0.5),
+        panel.border = element_rect(colour = "black", size=1),
+        legend.key =  element_rect(fill = 'white', size = 0.5),
+        strip.background = element_rect(colour="white", fill="#FFFFFF")
+            ) 
+
+
+
+
+
+CROSSSECTIONby.animate <- CROSSSECTIONby2 +
+                 transition_components(Year) +
+                shadow_wake(wake_length = 0.7, alpha=FALSE) +
+                  exit_reset() +
+                labs(title = 'EU decarbonization strategies \n Year: {substr(frame_time, 1,4)}')
+
+CROSSSECTIONby.animate
 
 ```
 
