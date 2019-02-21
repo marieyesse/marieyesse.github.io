@@ -2,6 +2,10 @@
 title: "Research"
 ---
 
+### [Twitter Talks: What are EU industry business associations talking about?](twitter_talk.html)
+
+> In an attempt to get more acquainted with the talking points of industry stakeholders, I have ran some scripts over their twitter timelines and did a webcrawl on tweets talking about them. On this page you will find the answers for CEFIC, CEMBUREAU, EUROFER_EU and CEPI_Paper.
+
 ### [Data Dashboard: Comparing model to expert projections](tech_survey.html)
 
 > To test whether projections by IAMs diverge in systematic ways from projections made by technology experts we elicited expert opinion on prospective change for two indicators and compared these with the outcomes of IAM studies. We focused on solar, wind, biomass, nuclear, and carbon capture and storage or CCS technologies for the short (2030) to medium (2050) term. 
