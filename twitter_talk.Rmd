@@ -3,16 +3,7 @@ title: "Twitter Talk Analysis"
 author: "Mariesse van Sluisveld"
 ---
 
-```{r results=TRUE, message=FALSE, warning=FALSE, echo=TRUE}
 
-########################################################################################
-## Your analysis input
-########################################################################################
-
-TopicSearch <- c("CEFIC", "CEPI_Paper", "CEMBUREAU", "EUROFER_eu")
-GreenTweet <- c("EII", "EULTS", "ClimateNeutralEU")
-
-```
 
 ```{r results=TRUE, message=FALSE, warning=FALSE, echo=FALSE, fig.align="center", fig.width=8, fig.height=5, fig.cap="_**Figure**: number of tweets talking about European business associations"}
 
@@ -48,18 +39,23 @@ library(tidytext)
 library(tm)   
 
 # coupled words analysis
-library(widyr)
+# library(widyr)
 
 theme_set(
   theme_bw()
             )
+```
+
+
+```{r results=TRUE, message=FALSE, warning=FALSE, echo=FALSE}
+
 
 ########################################################################################
 ## API set-up (Fill in yourself)
 ########################################################################################
 
 token <- create_token(
-  app = "RtweetStudies",
+  app = "",
   consumer_key = "XsUTxqZNWovUgkNsFctSasLb7", 
   consumer_secret = "XKg0X52FKVEPMBh4lvMIJZaD0qVuj56vaaPLhsWsJ03xLiZnpD",
   access_token = '3092191180-6hcwjXBiyE7SVoHmCUVHOrr5kdi0pgYxIKq0YM6',
@@ -74,6 +70,11 @@ Date <-Sys.Date()
 
 TopicSearch <- c("CEFIC", "CEPI_Paper", "CEMBUREAU", "EUROFER_eu")
 GreenTweet <- c("EII", "EULTS", "ClimateNeutralEU")
+
+
+stop_words_nl=tibble(word=stopwords("dutch"))
+stop_words_du=tibble(word=stopwords("german"))
+
 
 ########################################################################################
 
@@ -92,7 +93,7 @@ Pull_tweets_list <- rbindlist(Pull_tweets)
 
 
 ## Save to csv
-save_as_csv(Pull_tweets_list, paste("Pull_tweets_list_", Date, " .csv", sep=""), prepend_ids = TRUE, na = "", fileEncoding = "UTF-8")
+#save_as_csv(Pull_tweets_list, paste("Pull_tweets_list_", Date, " .csv", sep=""), prepend_ids = TRUE, na = "", fileEncoding = "UTF-8")
 
 ##########################################################################
 ### Show timeline
@@ -348,3 +349,72 @@ print(FOLLOWERS)
 
 
 ```
+
+## Word Network: Are there sector-specific or shared topics?
+
+```{r results=TRUE, message=FALSE, warning=FALSE, echo=FALSE, fig.align="center", fig.width=12, fig.height=9, fig.cap="**Figure**: Are certain topics sector-specific or are they also shared?"}
+
+
+################################
+### PLUCKING TIMELINES
+## Pull Twitter timelines
+
+Pluck_tweets  <- lapply(TopicSearch, function(i) {
+  List <- get_timeline(i, n = 2000, parse=T)
+  List$Keyword <- i
+  List = data.table(List)
+})
+
+Pluck_tweets_list <- do_call_rbind(Pluck_tweets)
+Pluck_tweets_list$plain <- plain_tweets(Pluck_tweets_list$text)
+
+
+################################
+
+######### Network analysis
+
+NETWORK_TML = Pluck_tweets_list %>%
+  
+  mutate(Year=as.numeric(substr(created_at, 1,4))) %>%
+  
+  # find paired words
+  group_by(Keyword) %>%
+  select(Keyword, plain, followers_count, Year) %>%
+  unnest_tokens(paired_words, plain, token="ngrams", n=2) %>%
+  
+  #count
+  count(paired_words, sort=TRUE) %>%
+  
+  # split
+  separate(paired_words, c("word1", "word2"), sep = " ") %>%
+  filter(!word1 %in% c(stop_words$word, stop_words_nl$word, stop_words_du$word,"https", "t.co")) %>%
+  filter(!word2 %in% c(stop_words$word, "https", "t.co")) 
+
+# new count: dont know why you would do this???
+#count(word1, word2, sort = TRUE) 
+
+# plot
+NETWORKPLOT2 = NETWORK_TML %>%  
+  group_by(Keyword) %>%
+  filter(n >= 10) %>%
+  graph_from_data_frame() %>%
+  ggraph(layout = "fr") +
+  geom_edge_link(aes(edge_alpha = n, edge_width = n), colour="lightblue") +
+  geom_node_point(colour="blue", size = 3) +
+  geom_node_text(aes(label = name), vjust = 1.8, size = 3) +
+  labs(title = "Word Network of Timeline Tweets",
+       subtitle = "Text mining twitter data ",
+       x = "", y = "", caption = "\nSource: Data collected from Twitter's REST API via rtweet") + 
+  theme_bw() 
+  #ggsave(paste("Word_Network_Timeline_tweets_Industry_", Date,".png", sep=""), width = 10, height = 7, units = c("in"), dpi=300) 
+
+
+print(NETWORKPLOT2)
+
+
+
+
+
+```
+
+
