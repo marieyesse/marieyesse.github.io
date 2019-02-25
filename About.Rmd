@@ -5,7 +5,7 @@ author: "Mariësse van Sluisveld"
 
   | 
 ---------------------- | ----------------------------------------
-![](img/profile.jpg)            | Hello, My name is Mariësse van Sluisveld, and I have been working in Academia/ Policy assessment since 2012 (interchangeably at Utrecht University and PBL Netherlands Environmental Assessment Agency). I have specialised in applying model validation techniques to integrated assessment modelling and my work has contributed to a new and emerging field on assessing the robustness of integrated assessment models. On this page I showcase my experience base and the directions of research that I am pursueing.
+![](img/profile.jpg)            | Hello, My name is Mariësse van Sluisveld, and I have been working in Academia/ Policy assessment since 2012 (interchangeably at Utrecht University and PBL Netherlands Environmental Assessment Agency). I have specialised in applying model validation techniques to integrated assessment modelling and my work has contributed to a new and emerging field on assessing the robustness of integrated assessment models. As a result I have developed skills in defining and testing relevant scenarios and metrics on systems change and performing (alpha)numerical data analysis (using mixed methods on databases, surveys, twitter); On this page I showcase my experience base and the directions of research that I am pursueing.
 <br>
 
 # PhD Dissertation
