@@ -1,0 +1,140 @@
+---
+title: "Industry transitions in the IEA World Energy Outlook"
+author: "Mariësse van Sluisveld"
+
+---
+
+## Change in industrial CO2 emission
+
+
+```{r WEO_emissions, results=TRUE, message=FALSE, warning=FALSE, echo=FALSE, fig.width=8, fig.height=6, fig.cap="**Figure:** Change of CO2 emissions in the industry sector per World Energy Outlook scenario over time  (2005-2040)"}
+
+
+library("ggplot2")
+library("gganimate")
+library("gifski")
+library("glue")
+library("data.table")
+
+
+WEO_TFCCO2.indexminmax=read.csv(file="data/Compilation_WEOTFCshareminmax_2014-2018.csv", dec=".", sep=";")
+WEO_TFCCO2.indexminmax=data.table(WEO_TFCCO2.indexminmax)
+
+WEO_TFC_CO2_MINMAXreg=ggplot()+
+  geom_crossbar(data=WEO_TFCCO2.indexminmax[Year.x %in% c(2005:2040) & Region %in% c("World", "CHINA", "INDIA", "OECD") & Carrier=="Total" & Indicator=="TFC"], aes(x=Region, ymin=ymin, ymax=ymax, y=ymax, fill=Scenario, colour=Scenario), width=.7, position=position_dodge(width=0.7))+
+  #
+  annotate("rect", xmin=-Inf,xmax=Inf,ymin=0,ymax=100, fill="lightgrey", alpha=0.6) +
+  # annotate("rect", xmin=-Inf,xmax=Inf,ymin=100,ymax=Inf, fill="lightblue", alpha=0.6) +
+  # annotate("text", x=0.6,y=109, label="Net negative", size=3, angle=90, colour="dimgrey", hjust=0) +
+  annotate("text", x=0.6, y=45, label="Reduction", size=3, angle=90, colour="dimgrey",  hjust=1) + 
+  annotate("text", x=0.6, y=120, label="Increase", size=3, angle=90, colour="dimgrey",  hjust=0) + 
+  geom_crossbar(data=WEO_TFCCO2.indexminmax[Year.x %in% c(2005:2050) & Region %in% c("World", "CHINA", "INDIA", "EU") & Carrier=="Total" & Indicator=="TFC"], aes(x=Region, ymin=ymin, ymax=ymax, y=ymax, fill=Scenario, colour=Scenario), width=.7, position=position_dodge(width=0.7))+
+  
+  geom_hline(data=WEO_TFCCO2.indexminmax[Year.x %in% c(2005:2050) & Region %in% c( "EU") & Carrier=="Total" & Indicator=="Industry" & Scenario=="2DS"], aes(yintercept=ymin), colour="black", linetype=2)+
+  geom_text(data=WEO_TFCCO2.indexminmax[Year.x %in% c(2005:2050) & Region %in% c( "EU") & Carrier=="Total" & Indicator=="Industry" & Scenario=="2DS"], aes(y=ymin+5, x=Region), label="EU Industry emissions for 2DS scenario [WEO 2018]", colour="black", size=5)+
+
+  geom_hline(yintercept=100)+
+  geom_hline(yintercept=0)+
+  
+  ggtitle(bquote("CO2 emissions for TFC")) +
+  xlab(" \n Regions") + ylab("Index (2010=100) \n ")+
+  #facet_wrap(~Region, nrow=1)+
+  scale_fill_manual(
+    
+    values=c('#d7191c','#fdae61','#2ca25f','#abd9e9','#2c7bb6', 'black'))+
+  scale_colour_manual(
+    
+    values=c('#d7191c','#fdae61','#2ca25f','#abd9e9','#2c7bb6', 'black')) +
+  guides(colour = element_blank()) +
+  
+  
+  coord_cartesian(ylim=c(0:150)) +
+  theme_bw() +
+  
+  theme(
+    axis.text.x = element_text(angle = 45, size=12,  hjust=1),
+    axis.title.y = element_text(size=13),
+    axis.title.x = element_text(size=13),
+    axis.text.y = element_text(size=12),
+    strip.text.x = element_text(size=12, face="bold"),
+    strip.text.y = element_text(size=12, face="bold"),
+    legend.text= element_text(size=12),
+    legend.title=element_text(size=13,  face="bold"),
+    plot.title=element_text(size=16, hjust=0.5, face="bold"), 
+    plot.subtitle=element_text(size=14,hjust=0.5),
+    panel.border = element_rect(colour = "black", size=1),
+    legend.key =  element_rect(fill = 'white', size = 0.5),
+    strip.background = element_rect(colour="white", fill="#FFFFFF")
+  )
+
+
+WEO_TFC_CO2_MINMAXreg.animate <- WEO_TFC_CO2_MINMAXreg +
+  transition_time(Year.x) + ease_aes('linear') +
+  labs(title = 'Year: {frame_time} \n World Energy Outlook 2014-2018 (length of bars)  \n Indexed CO2 emissions for TFC (2010=100) \n')
+
+# animate in a two step process:
+animate(WEO_TFC_CO2_MINMAXreg.animate, height = 600, width = 700)
+
+```
+
+## Change in industrial final energy demand
+
+```{r WEO_figures, results=TRUE, message=FALSE, warning=FALSE, echo=FALSE, fig.width=10, fig.height=4, fig.cap="**Figure:** Change of final energy consumption in the industry sector per World Energy Outlook scenario over time  (2005-2040)"}
+
+WEO_industrynew.shareminmax=read.csv(file="data/Compilation_WEOshareminmax_2014-2018.csv", dec=".", sep=";")
+WEO_industrynew.shareminmax=data.table(WEO_industrynew.shareminmax)
+
+WEO_INDUS_MINMAXreg=ggplot()+
+  geom_crossbar(data=WEO_industrynew.shareminmax[Year %in% c(2005:2040) & Region %in% c("World", "CHINA", "INDIA", "EU")], aes(x=Carrier.x, ymin=ymin, ymax=ymax, y=ymax, fill=Scenario, colour=Scenario), width=.7, position=position_dodge(width=0.7))+
+  #
+  annotate("rect", xmin=-Inf,xmax=Inf,ymin=0,ymax=100, fill="lightgrey", alpha=0.6) +
+  # annotate("rect", xmin=-Inf,xmax=Inf,ymin=100,ymax=Inf, fill="lightblue", alpha=0.6) +
+  # annotate("text", x=0.6,y=109, label="Net negative", size=3, angle=90, colour="dimgrey", hjust=0) +
+  annotate("text", x=0.6, y=95, label="High use", size=3, angle=90, colour="dimgrey",  hjust=1) + 
+  annotate("text", x=0.6, y=5, label="Low use", size=3, angle=90, colour="dimgrey",  hjust=0) + 
+  geom_crossbar(data=WEO_industrynew.shareminmax[Year %in% c(2005:2050) & Region %in% c("World", "CHINA", "INDIA", "EU")], aes(x=Carrier.x, ymin=ymin, ymax=ymax, y=ymax, fill=Scenario, colour=Scenario), width=.7, position=position_dodge(width=0.7))+
+  
+  
+  geom_hline(yintercept=100)+
+  geom_hline(yintercept=0)+
+  
+  ggtitle(bquote("Share in total Industry FE")) +
+  xlab(" \n Energy Carrier") + ylab("% Application in total Industry FE \n ")+
+  facet_wrap(~Region, nrow=1)+
+  scale_fill_manual(
+   
+    values=c('#d7191c','#fdae61','#2ca25f','#abd9e9','#2c7bb6', 'black'))+
+  scale_colour_manual(
+   
+    values=c('#d7191c','#fdae61','#2ca25f','#abd9e9','#2c7bb6', 'black')) +
+  guides(colour = element_blank()) +
+ 
+  
+  coord_cartesian(ylim=c(0:100)) +
+  theme_bw() +
+  
+  theme(
+    axis.text.x = element_text(angle = 45, size=12,  hjust=1),
+    axis.title.y = element_text(size=13),
+    axis.title.x = element_text(size=13),
+    axis.text.y = element_text(size=12),
+    strip.text.x = element_text(size=12, face="bold"),
+    strip.text.y = element_text(size=12, face="bold"),
+    legend.text= element_text(size=12),
+    legend.title=element_text(size=13,  face="bold"),
+    plot.title=element_text(size=16, hjust=0.5, face="bold"), 
+    plot.subtitle=element_text(size=14,hjust=0.5),
+    panel.border = element_rect(colour = "black", size=1),
+    legend.key =  element_rect(fill = 'white', size = 0.5),
+    strip.background = element_rect(colour="white", fill="#FFFFFF")
+  )
+
+
+WEO_INDUS_MINMAXreg.animate <- WEO_INDUS_MINMAXreg +
+  transition_time(Year) +
+  labs(title = 'Year: {frame_time} \n World Energy Outlook 2014-2018 (length of bars)  \n %  Application in total Industry FE \n')
+
+
+animate(WEO_INDUS_MINMAXreg.animate, height = 400, width = 1000)
+```
+
