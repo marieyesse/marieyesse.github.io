@@ -104,7 +104,7 @@ print(TIMELINEpretty_Focus)
 
 Of course there can be some bias in the selection and I have not been super strict in my "hauls" of new literature either (not all are model-based scenarios for example, not all are EU-focused, not all are looking at a 2050 objective, etc). Nonetheless, the overview remains interesting.
 
-```{r roadmaps_field, results=TRUE, message=FALSE, warning=FALSE, echo=FALSE, fig.align="center", fig.width=12, fig.height=5, fig.cap="_**Figure**: Timeline of published roadmaps and scenario studies on industry decarbonization per pusblishing field"}
+```{r roadmaps_field, results=TRUE, message=FALSE, warning=FALSE, echo=FALSE, fig.align="center", fig.width=12, fig.height=7, fig.cap="_**Figure**: Timeline of published roadmaps and scenario studies on industry decarbonization per pusblishing field"}
 
 ROADMAPSdat = read.csv("data/REINVENT_meta.csv", sep=",", dec=".")
 ## Per Field
@@ -163,7 +163,7 @@ print(TIMELINEpretty_Field)
 
 Analysing the meta-data of studies, it's the first step up towards full qualitative Corpus analysis. I learned that extracting all text of all multi-k worded reports is pushing my system to its limits, so I am just going to put the image to the outcome of my word network analysis here. One take-away here is that most sectors appear to apply their own language in most cases - with only a few overlapping semantics (limited to europe, technology, carbon, emissions, etc). Surprising? No, perhaps not, but interesting nonetheless. 
 
-[](img/Word_Network_PDFCorpus_roadmaps_.png) 
+[](https://github.com/marieyesse/marieyesse.github.io/blob/master/img/Word_Network_PDFCorpus_roadmaps_.png?raw=true) 
 *(If it's too small to read, you might want to right click > view image)*
 
 
