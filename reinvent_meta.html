@@ -9,9 +9,10 @@
 <meta name="generator" content="pandoc" />
 
 
+<meta name="author" content="Mariësse van Sluisveld" />
 
 
-<title>Research</title>
+<title>REINVENT meta data</title>
 
 <script src="site_libs/jquery-1.11.3/jquery.min.js"></script>
 <meta name="viewport" content="width=device-width, initial-scale=1" />
@@ -402,46 +403,43 @@ div.tocify {
 
 
 
-<h1 class="title toc-ignore">Research</h1>
+<h1 class="title toc-ignore">REINVENT meta data</h1>
+<h4 class="author"><em>Mariësse van Sluisveld</em></h4>
+<h4 class="date"><em>3/15/2019</em></h4>
 
 </div>
 
 
-<div id="data-study-reinvent-meta-data-overview" class="section level3">
-<h3><a href="reinvent_meta.html">Data study: REINVENT meta-data overview</a></h3>
-<blockquote>
-<p>In this page I sort out the information from the <a href="https://www.reinvent-project.eu">REINVENT project</a>, analysing the object of study from a higher meta level. I show a mapping of roadmap/scenario studies to different classifications, a word network analysis, and do the same thing for the <a href="https://zenodo.org/record/1284945#.XIwmhdpKiUn">REINVENT Innovations DB</a>.</p>
-</blockquote>
+<p>During the <a href="http://www.reinvent-project.eu">REINVENT</a> project various studies have been done, looking either at broader transition narratives and specific innovations. On this page I zoom out of the material for a bit, to provide an overview of all the things that have been looked at.</p>
+<div id="roadmaps-and-scenario-studies" class="section level2">
+<h2>Roadmaps and scenario studies</h2>
+<p>In our first <a href="https://static1.squarespace.com/static/59f0cb986957da5faf64971e/t/5a968cd7652deaeda0a2a62a/1519815901936/D4.1+Existing+visions+and+scenarios.pdf">deliverable (D4.1)</a> we took stock of the available forward looking literature on industry decarbonization. I have also quickly scraped together some of the data processing work that I had done for this report <a href="https://marieyesse.github.io/IAM_dashboard.html">(see the other github page here)</a>. We have been so busy with scraping the docs that it never came to me to take a step back and look at it from a more meta perspective. Well. Here we are now! In belows figures I categorize the analysed corpus to (1) industry and (2) field of publishing. The timeline is also supplemented with new publications released after completing our deliverable (&gt;2016)</p>
+<div class="figure" style="text-align: center">
+<img src="reinvent_meta_files/figure-html/roadmaps-1.png" alt="_**Figure**: Timeline of published roadmaps and scenario studies on industry decarbonization per industry" width="960" />
+<p class="caption">
+_<strong>Figure</strong>: Timeline of published roadmaps and scenario studies on industry decarbonization per industry
+</p>
 </div>
-<div id="data-study-what-have-the-iea-world-energy-outlooks-been-saying-about-industry" class="section level3">
-<h3><a href="WEO_Industry.html">Data study: What have the IEA World Energy Outlooks been saying about industry?</a></h3>
-<blockquote>
-<p>I had a little curiosity about the change of outcome of IEA-WEM scenarios with progressing knowledge and time - hence I have extracted all the data of all World Energy Outlooks from 2014 till now for all the common indicators (aggregated for the sector as a whole). Only the 2018 publication has detail on basic industries, did you know that?</p>
-</blockquote>
+<p>Of course there can be some bias in the selection and I have not been super strict in my “hauls” of new literature either (not all are model-based scenarios for example, not all are EU-focused, not all are looking at a 2050 objective, etc). Nonetheless, the overview remains interesting.</p>
+<div class="figure" style="text-align: center">
+<img src="reinvent_meta_files/figure-html/roadmaps_field-1.png" alt="_**Figure**: Timeline of published roadmaps and scenario studies on industry decarbonization per pusblishing field" width="1152" />
+<p class="caption">
+_<strong>Figure</strong>: Timeline of published roadmaps and scenario studies on industry decarbonization per pusblishing field
+</p>
 </div>
-<div id="data-study-analysing-industry-trade-and-business-associations" class="section level3">
-<h3><a href="twitter_talk.html">Data study: Analysing Industry Trade and Business Associations</a></h3>
-<blockquote>
-<p>In this page I sort out the information from the <a href="http://ec.europa.eu/transparencyregister/public/consultation/search.do?locale=en&amp;reset=">EU Transparancy Register</a> for the <a href="http://www.reinvent-project.eu">REINVENT</a> industry sectors to get an idea about the role of business and trade associations. Subsequently, I have ran some twittercrawl scripts over the CEFIC, PlasticsEurope, CEMBUREAU, EUROFER_EU, CEPI_Paper, EDA_Dairy and FIL_IDF twitter timelines to see what their current points of discussion are.</p>
-</blockquote>
+<p>Analysing the meta-data of studies, it’s the first step up towards full qualitative Corpus analysis. I learned that extracting all text of all multi-k worded reports is pushing my system to its limits, so I am just going to put the image to the outcome of my word network analysis here. One take-away here is that most sectors appear to apply their own language in most cases - with only a few overlapping semantics (limited to europe, technology, carbon, emissions, etc). Surprising? No, perhaps not, but interesting nonetheless.</p>
+<p><a href="img/Word_Network_PDFCorpus_roadmaps_.png"></a> <em>(If it’s too small to read, you might want to right click &gt; view image)</em></p>
 </div>
-<div id="data-study-comparing-model-to-expert-projections" class="section level3">
-<h3><a href="tech_survey.html">Data study: Comparing model to expert projections</a></h3>
-<blockquote>
-<p>To test whether projections by IAMs diverge in systematic ways from projections made by technology experts we elicited expert opinion on prospective change for two indicators and compared these with the outcomes of IAM studies. We focused on solar, wind, biomass, nuclear, and carbon capture and storage or CCS technologies for the short (2030) to medium (2050) term.</p>
+<div id="innovations-studied" class="section level2">
+<h2>Innovations studied</h2>
+<p>The REINVENT project also looked at various social and technological innovations from a more social science perspective. The dataset is quite extensive and I found myself rather overwhelmed by all the information coming at me that was not easily structured. As I needed a practice dataset for a new R skill, I fiddled around with this dataset to create the following overview. What I figured out by doing so is that our Innovations database had quite a large portion of technology-oriented innovations. Surprised? No, perhaps not, but I somehow expected a bigger focus on social innovations! (which seems only the case in the Meat/Dairy sector)</p>
+<blockquote class="twitter-tweet" data-lang="nl">
+<p lang="en" dir="ltr">
+🆙Curious about which <a href="https://twitter.com/hashtag/lowcarbon?src=hash&amp;ref_src=twsrc%5Etfw">#lowcarbon</a> <a href="https://twitter.com/hashtag/innovations?src=hash&amp;ref_src=twsrc%5Etfw">#innovations</a> have been studied in the <a href="https://twitter.com/REINVENT_EU?ref_src=twsrc%5Etfw"><span class="citation">@REINVENT_EU</span></a> <a href="https://twitter.com/hashtag/industry?src=hash&amp;ref_src=twsrc%5Etfw">#industry</a> <a href="https://twitter.com/hashtag/sectors?src=hash&amp;ref_src=twsrc%5Etfw">#sectors</a>? I used the <a href="https://twitter.com/REINVENT_EU?ref_src=twsrc%5Etfw"><span class="citation">@REINVENT_EU</span></a> innovations database (<a href="https://t.co/WLpVCbC7ay">https://t.co/WLpVCbC7ay</a>) as a test case for further live <a href="https://twitter.com/hashtag/data?src=hash&amp;ref_src=twsrc%5Etfw">#data</a> exploration: <a href="https://t.co/l1RwCiBoYm">https://t.co/l1RwCiBoYm</a>
+</p>
+— Mariësse van Sluisveld (<span class="citation">@marieyesse</span>) <a href="https://twitter.com/marieyesse/status/1105027480086347777?ref_src=twsrc%5Etfw">11 maart 2019</a>
 </blockquote>
-</div>
-<div id="data-study-european-industry-decarbonisation-strategies" class="section level3">
-<h3><a href="IAM_dashboard.html">Data study: European industry decarbonisation Strategies</a></h3>
-<blockquote>
-<p>On this page I look at the change in industrial energy productivity (energy unit per value added) and industrial emissions intensity (emissions per unit of energy used). In the data I compare both the decades’ average annual reduction rate [linear rate] and the decades’ compound average annual reduction rate [exponential reduction]. Full report: <a href="https://static1.squarespace.com/static/59f0cb986957da5faf64971e/t/5a968cd7652deaeda0a2a62a/1519815901936/D4.1+Existing+visions+and+scenarios.pdf">REINVENT Deliverable 4.1</a></p>
-</blockquote>
-</div>
-<div id="interactive-poster-industry-decarbonisation-towards-2050" class="section level3">
-<h3><a href="industry.html">Interactive Poster: Industry decarbonisation towards 2050</a></h3>
-<blockquote>
-<p>On this page I present the data used on an earlier published poster on industry decarbonisation by 2050 according to the global model <a href="http://www.twitter.com/IMAGE_PBL">IMAGE</a> and the bottom-up energy model <a href="www.wuppertal.org/us">WISEE</a>. The page is a republication of <a href="https://static1.squarespace.com/static/59f0cb986957da5faf64971e/t/5b3fdf266d2a73e319355e0c/1530912585721/D4.2+EU+decarbonisation+scenarios+for+industry.pdf">REINVENT deliverable 4.2</a></p>
-</blockquote>
+<script async src="https://platform.twitter.com/widgets.js" charset="utf-8"></script>
 </div>
 
 &nbsp;
