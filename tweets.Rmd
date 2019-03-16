@@ -29,6 +29,10 @@ I am a twitter enthusiast - mostly using my account for work related things. Mes
 
 ## R tricks / Methods
 
+<blockquote class="twitter-tweet" data-lang="nl"><p lang="en" dir="ltr">Just built my first <a href="https://twitter.com/hashtag/rstats?src=hash&amp;ref_src=twsrc%5Etfw">#rstats</a> package for internal company use. Why didn&#39;t I start doing this sooner? Takes approximately 1 hour to put a few functions in a package that all can share.<br><br>Thanks to <a href="https://twitter.com/hspter?ref_src=twsrc%5Etfw">@hspter</a> for the guide: <a href="https://t.co/vAavmvnA5o">https://t.co/vAavmvnA5o</a></p>&mdash; Evan Kaeding (@EvanKaeding) <a href="https://twitter.com/EvanKaeding/status/1100196463634608128?ref_src=twsrc%5Etfw">26 februari 2019</a></blockquote>
+<script async src="https://platform.twitter.com/widgets.js" charset="utf-8"></script>
+
+
 <blockquote class="twitter-tweet" data-lang="nl"><p lang="en" dir="ltr">Learning Data Science: Modelling Basics <a href="https://t.co/lfbVofdxIZ">https://t.co/lfbVofdxIZ</a> <a href="https://twitter.com/hashtag/rstats?src=hash&amp;ref_src=twsrc%5Etfw">#rstats</a> <a href="https://twitter.com/hashtag/DataScience?src=hash&amp;ref_src=twsrc%5Etfw">#DataScience</a></p>&mdash; R-bloggers (@Rbloggers) <a href="https://twitter.com/Rbloggers/status/1092801342047956993?ref_src=twsrc%5Etfw">5 februari 2019</a></blockquote>
 <script async src="https://platform.twitter.com/widgets.js" charset="utf-8"></script>
 
@@ -40,6 +44,14 @@ I am a twitter enthusiast - mostly using my account for work related things. Mes
 
 
 ## Tools / Practices
+
+<blockquote class="twitter-tweet" data-lang="nl"><p lang="en" dir="ltr">11Officially a contributor to broom (<a href="https://t.co/FzNYgDsTDi">https://t.co/FzNYgDsTDi</a>)! Massive kudos to <a href="https://twitter.com/alexpghayes?ref_src=twsrc%5Etfw">@alexpghayes</a> for guiding us through this <a href="https://twitter.com/hashtag/chirunconf?src=hash&amp;ref_src=twsrc%5Etfw">#chirunconf</a> <a href="https://twitter.com/hashtag/rstats?src=hash&amp;ref_src=twsrc%5Etfw">#rstats</a></p>&mdash; Wei Yang Tham🔎 (@wytham88) <a href="https://twitter.com/wytham88/status/1104498035168559114?ref_src=twsrc%5Etfw">9 maart 2019</a></blockquote>
+<script async src="https://platform.twitter.com/widgets.js" charset="utf-8"></script>
+
+
+<blockquote class="twitter-tweet" data-lang="nl"><p lang="en" dir="ltr">5 links (so far) to tipsheets, tools, presentations and data sources from the <a href="https://twitter.com/hashtag/NICAR19?src=hash&amp;ref_src=twsrc%5Etfw">#NICAR19</a> data journalism conference: <a href="https://t.co/J2WymrrOU9">https://t.co/J2WymrrOU9</a> <a href="https://t.co/3aGWZqhz3n">pic.twitter.com/3aGWZqhz3n</a></p>&mdash; Sharon Machlis (@sharon000) <a href="https://twitter.com/sharon000/status/1104225780719149056?ref_src=twsrc%5Etfw">9 maart 2019</a></blockquote>
+<script async src="https://platform.twitter.com/widgets.js" charset="utf-8"></script>
+
 
 <blockquote class="twitter-tweet" data-lang="nl"><p lang="en" dir="ltr">Tidyverse style guide (<a href="https://t.co/Hrel7FdgkH">https://t.co/Hrel7FdgkH</a>) now has PDF (<a href="https://t.co/extmejTDNd">https://t.co/extmejTDNd</a>) and EPUB (<a href="https://t.co/YDncMo2k8I">https://t.co/YDncMo2k8I</a>) versions for your reading pleasure <a href="https://twitter.com/hashtag/rstats?src=hash&amp;ref_src=twsrc%5Etfw">#rstats</a></p>&mdash; Hadley Wickham (@hadleywickham) <a href="https://twitter.com/hadleywickham/status/1091774173758795776?ref_src=twsrc%5Etfw">2 februari 2019</a></blockquote>
 <script async src="https://platform.twitter.com/widgets.js" charset="utf-8"></script>
@@ -64,6 +76,9 @@ I am a twitter enthusiast - mostly using my account for work related things. Mes
 
 
 ## (Data) Visualisation
+<blockquote class="twitter-tweet" data-lang="nl"><p lang="en" dir="ltr">🤯 Welp, <a href="https://twitter.com/Datatitian?ref_src=twsrc%5Etfw">@Datatitian</a> just blew my mind (it even works in link preview)!<br>&quot;How to Turn Your ggplot2 Visualization into an Interactive Tweet&quot;  <a href="https://t.co/MArL4PPBYJ">https://t.co/MArL4PPBYJ</a> ht <a href="https://twitter.com/blaine_bateman?ref_src=twsrc%5Etfw">@blaine_bateman</a> <a href="https://twitter.com/hashtag/rstats?src=hash&amp;ref_src=twsrc%5Etfw">#rstats</a> <a href="https://twitter.com/hashtag/dataviz?src=hash&amp;ref_src=twsrc%5Etfw">#dataviz</a> <a href="https://t.co/MzTlXz0to6">pic.twitter.com/MzTlXz0to6</a></p>&mdash; Mara Averick (@dataandme) <a href="https://twitter.com/dataandme/status/1101995679981944832?ref_src=twsrc%5Etfw">3 maart 2019</a></blockquote>
+<script async src="https://platform.twitter.com/widgets.js" charset="utf-8"></script>
+
 
 <blockquote class="twitter-tweet" data-lang="nl"><p lang="en" dir="ltr">🎉 paletteer version 0.2.1 hit CRAN!<br>With the addition of palettes from 3 more packages we got past 1000 palettes 😮 <a href="https://twitter.com/hashtag/rstats?src=hash&amp;ref_src=twsrc%5Etfw">#rstats</a><a href="https://t.co/XKUNqwdvOZ">https://t.co/XKUNqwdvOZ</a> <a href="https://t.co/8XsIypQMEG">pic.twitter.com/8XsIypQMEG</a></p>&mdash; Emil Hvitfeldt (@Emil_Hvitfeldt) <a href="https://twitter.com/Emil_Hvitfeldt/status/1095915915491725312?ref_src=twsrc%5Etfw">14 februari 2019</a></blockquote>
 <script async src="https://platform.twitter.com/widgets.js" charset="utf-8"></script>
@@ -79,6 +94,10 @@ I am a twitter enthusiast - mostly using my account for work related things. Mes
 
 ## Maps / Spatial Data visualization
 
+<blockquote class="twitter-tweet" data-lang="nl"><p lang="en" dir="ltr">😻 A treasure trove of resources by <a href="https://twitter.com/spatialanalysis?ref_src=twsrc%5Etfw">@spatialanalysis</a><br>🗺 &quot;Maps and Data Visualisations with R&quot; <a href="https://t.co/Vn3fr2Yqor">https://t.co/Vn3fr2Yqor</a> <a href="https://twitter.com/hashtag/rstats?src=hash&amp;ref_src=twsrc%5Etfw">#rstats</a> <a href="https://twitter.com/hashtag/dataviz?src=hash&amp;ref_src=twsrc%5Etfw">#dataviz</a> <a href="https://twitter.com/hashtag/rspatial?src=hash&amp;ref_src=twsrc%5Etfw">#rspatial</a> <a href="https://t.co/7unGBFAYYh">pic.twitter.com/7unGBFAYYh</a></p>&mdash; Mara Averick (@dataandme) <a href="https://twitter.com/dataandme/status/1101905522557702145?ref_src=twsrc%5Etfw">2 maart 2019</a></blockquote>
+<script async src="https://platform.twitter.com/widgets.js" charset="utf-8"></script>
+
+
 <blockquote class="twitter-tweet" data-lang="nl"><p lang="en" dir="ltr">🗺 A tour through some R map-making 📦s...<br>&quot;Introduction to mapping with {sf} &amp; co.&quot;  📐 <a href="https://twitter.com/StatnMap?ref_src=twsrc%5Etfw">@StatnMap</a> <a href="https://t.co/DOTYUedX62">https://t.co/DOTYUedX62</a> <a href="https://twitter.com/hashtag/rstats?src=hash&amp;ref_src=twsrc%5Etfw">#rstats</a> <a href="https://twitter.com/hashtag/maps?src=hash&amp;ref_src=twsrc%5Etfw">#maps</a> <a href="https://twitter.com/hashtag/dataviz?src=hash&amp;ref_src=twsrc%5Etfw">#dataviz</a><a href="https://twitter.com/hashtag/repeatTweet?src=hash&amp;ref_src=twsrc%5Etfw">#repeatTweet</a> <a href="https://t.co/Y6JUZORLMe">pic.twitter.com/Y6JUZORLMe</a></p>&mdash; Mara Averick (@dataandme) <a href="https://twitter.com/dataandme/status/1089359600384688128?ref_src=twsrc%5Etfw">27 januari 2019</a></blockquote>
 <script async src="https://platform.twitter.com/widgets.js" charset="utf-8"></script>
 
@@ -89,6 +108,12 @@ I am a twitter enthusiast - mostly using my account for work related things. Mes
 ##  Webscraping and API's
 
 <blockquote class="twitter-tweet" data-lang="nl"><p lang="en" dir="ltr">Lecture 7: Webscraping: (2) Client-side and APIs. <a href="https://t.co/eeAc7dezbW">https://t.co/eeAc7dezbW</a><br><br>Including an eccentric mix of applications from NYC trees... to US GNP data... to World Rugby rankings (most importantly obvs). <a href="https://t.co/8D4V2xGXLP">pic.twitter.com/8D4V2xGXLP</a></p>&mdash; Grant McDermott (@grant_mcdermott) <a href="https://twitter.com/grant_mcdermott/status/1091139456180973568?ref_src=twsrc%5Etfw">1 februari 2019</a></blockquote>
+<script async src="https://platform.twitter.com/widgets.js" charset="utf-8"></script>
+
+
+## Useless but funny
+
+<blockquote class="twitter-tweet" data-lang="nl"><p lang="en" dir="ltr">i like to use the beepr package to make it sound like finished a level on Super Mario every time I run a line of code</p>&mdash; Matt Crayne (@mattcrayne) <a href="https://twitter.com/mattcrayne/status/1100924286385209344?ref_src=twsrc%5Etfw">28 februari 2019</a></blockquote>
 <script async src="https://platform.twitter.com/widgets.js" charset="utf-8"></script>
 
 

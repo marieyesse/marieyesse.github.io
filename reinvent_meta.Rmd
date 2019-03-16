@@ -7,6 +7,16 @@ output: html_document
 
 During the [REINVENT](http://www.reinvent-project.eu) project various studies have been done, looking either at broader transition narratives and specific innovations. On this page I zoom out of the material for a bit, to provide an overview of all the things that have been looked at.
 
+## REINVENT as EU project
+
+[REINVENT](http://www.reinvent-project.eu) is a European Union funded research project. It's part of the H2020 Environment and Resources programme, which is a relative small one compared to some other EU funded programmes. Of the 6737 projects listed in the [EASME DB](https://sc5.easme-web.eu/), only 379 have some connection to the [REINVENT](http://www.reinvent-project.eu) themes (basic manufacturing, transitions, industry). Interestingly from my analysis of the [EASME DB](https://sc5.easme-web.eu/), the majority of the projects with an manufacturing industry connection are dedicated to food related themes. Second runner up is the chemical/plastics theme. Of these, it are mostly SME's who get projects funded (via the EIT SME fund),  although most euro's go to assumingly Engineering/R&D projects in the H2020 Advanced Materials Manufacturing Processing and Biotechnology. 
+
+
+![](img/EASME_EU_programmes_count_funding.gif) 
+
+**Figure:** Overview of funded research projects (numbers and funding)
+
+
 ## Roadmaps and scenario studies
 In our first [deliverable (D4.1)](https://static1.squarespace.com/static/59f0cb986957da5faf64971e/t/5a968cd7652deaeda0a2a62a/1519815901936/D4.1+Existing+visions+and+scenarios.pdf) we took stock of the available forward looking literature on industry decarbonization. I have also quickly scraped together some of the data processing work that I had done for this report [(see the other github page here)](https://marieyesse.github.io/IAM_dashboard.html). We have been so busy with scraping the docs that it never came to me to take a step back and look at it from a more meta perspective. Well. Here we are now! In belows figures I categorize the analysed corpus to (1) industry and (2) field of publishing. The timeline is also supplemented with new publications released after completing our deliverable (>2016)
 
