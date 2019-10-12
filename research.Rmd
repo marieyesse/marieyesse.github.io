@@ -2,18 +2,19 @@
 title: "Research"
 ---
 
-### [Data study: REINVENT meta-data overview](reinvent_meta.html)
+# **Blogs**
+### [REINVENT meta-data overview](reinvent_meta.html)
 
 > In this page I sort out the information from the [REINVENT project](https://www.reinvent-project.eu), analysing the object of study from a higher meta level. I show a mapping of roadmap/scenario studies to different classifications, a word network analysis, and do the same thing for the [REINVENT Innovations DB](https://zenodo.org/record/1284945#.XIwmhdpKiUn).
 
 
 
-### [Data study: Analysing Industry Trade and Business Associations](twitter_talk.html)
+### [Analysing Industry Trade and Business Associations](twitter_talk.html)
 
 > In this page I sort out the information from the [EU Transparancy Register](http://ec.europa.eu/transparencyregister/public/consultation/search.do?locale=en&reset=) for the [REINVENT](http://www.reinvent-project.eu) industry sectors to get an idea about the role of business and trade associations. Subsequently, I have ran some twittercrawl scripts over the CEFIC, PlasticsEurope, CEMBUREAU, EUROFER_EU, CEPI_Paper, EDA_Dairy and FIL_IDF twitter timelines to see what their current points of discussion are. 
 
-
-###  [Interactive Poster: Industry decarbonisation towards 2050](industry.html) 
+# **Interactives**
+###  [Industry decarbonisation towards 2050](industry.html) 
 
 > On this page I present the data used on an earlier published poster on industry decarbonisation by 2050 according to the global model [IMAGE](http://www.twitter.com/IMAGE_PBL) and the bottom-up energy model [WISEE](www.wuppertal.org/us). The page is a republication of [REINVENT deliverable 4.2](https://static1.squarespace.com/static/59f0cb986957da5faf64971e/t/5b3fdf266d2a73e319355e0c/1530912585721/D4.2+EU+decarbonisation+scenarios+for+industry.pdf)
 
