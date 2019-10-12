@@ -7,6 +7,7 @@
 <meta charset="utf-8" />
 <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
 <meta name="generator" content="pandoc" />
+<meta http-equiv="X-UA-Compatible" content="IE=EDGE" />
 
 
 
@@ -73,9 +74,7 @@ h6 {
 
 <link rel="stylesheet" href="style.css" type="text/css" />
 
-</head>
 
-<body>
 
 <style type = "text/css">
 .main-container {
@@ -194,8 +193,6 @@ $(document).ready(function () {
 });
 </script>
 
-<div class="container-fluid main-container">
-
 <!-- tabsets -->
 
 <style type="text/css">
@@ -252,48 +249,9 @@ $(document).ready(function () {
 }
 </style>
 
-<script>
-$(document).ready(function () {
-  window.buildTabsets("TOC");
-});
-
-$(document).ready(function () {
-  $('.tabset-dropdown > .nav-tabs > li').click(function () {
-    $(this).parent().toggleClass('nav-tabs-open')
-  });
-});
-</script>
-
 <!-- code folding -->
 
 
-
-<script>
-$(document).ready(function ()  {
-
-    // move toc-ignore selectors from section div to header
-    $('div.section.toc-ignore')
-        .removeClass('toc-ignore')
-        .children('h1,h2,h3,h4,h5').addClass('toc-ignore');
-
-    // establish options
-    var options = {
-      selectors: "h1,h2,h3",
-      theme: "bootstrap3",
-      context: '.toc-content',
-      hashGenerator: function (text) {
-        return text.replace(/[.\\/?&!#<>]/g, '').replace(/\s/g, '_').toLowerCase();
-      },
-      ignoreSelector: ".toc-ignore",
-      scrollTo: 0
-    };
-    options.showAndHide = true;
-    options.smoothScroll = true;
-
-    // tocify
-    var toc = $("#TOC").tocify(options).data("toc-tocify");
-});
-</script>
 
 <style type="text/css">
 
@@ -342,8 +300,6 @@ div.tocify {
 
 .tocify-subheader .tocify-item {
   font-size: 0.90em;
-  padding-left: 25px;
-  text-indent: 0;
 }
 
 .tocify .list-group-item {
@@ -352,6 +308,16 @@ div.tocify {
 
 
 </style>
+
+
+
+</head>
+
+<body>
+
+
+<div class="container-fluid main-container">
+
 
 <!-- setup 3col/9col grid for toc_float and main content  -->
 <div class="row-fluid">
@@ -381,7 +347,7 @@ div.tocify {
   <a href="index.html">Home</a>
 </li>
 <li>
-  <a href="About.html">About</a>
+  <a href="cv.html">My CV</a>
 </li>
 <li>
   <a href="research.html">Research</a>
@@ -434,6 +400,13 @@ Looking for EU energy &amp; climate statistics? <a href="https://twitter.com/has
 <h2>R tricks / Methods</h2>
 <blockquote class="twitter-tweet" data-lang="nl">
 <p lang="en" dir="ltr">
+Just built my first <a href="https://twitter.com/hashtag/rstats?src=hash&amp;ref_src=twsrc%5Etfw">#rstats</a> package for internal company use. Why didn't I start doing this sooner? Takes approximately 1 hour to put a few functions in a package that all can share.<br><br>Thanks to <a href="https://twitter.com/hspter?ref_src=twsrc%5Etfw"><span class="citation">@hspter</span></a> for the guide: <a href="https://t.co/vAavmvnA5o">https://t.co/vAavmvnA5o</a>
+</p>
+— Evan Kaeding (<span class="citation">@EvanKaeding</span>) <a href="https://twitter.com/EvanKaeding/status/1100196463634608128?ref_src=twsrc%5Etfw">26 februari 2019</a>
+</blockquote>
+<script async src="https://platform.twitter.com/widgets.js" charset="utf-8"></script>
+<blockquote class="twitter-tweet" data-lang="nl">
+<p lang="en" dir="ltr">
 Learning Data Science: Modelling Basics <a href="https://t.co/lfbVofdxIZ">https://t.co/lfbVofdxIZ</a> <a href="https://twitter.com/hashtag/rstats?src=hash&amp;ref_src=twsrc%5Etfw">#rstats</a> <a href="https://twitter.com/hashtag/DataScience?src=hash&amp;ref_src=twsrc%5Etfw">#DataScience</a>
 </p>
 — R-bloggers (<span class="citation">@Rbloggers</span>) <a href="https://twitter.com/Rbloggers/status/1092801342047956993?ref_src=twsrc%5Etfw">5 februari 2019</a>
@@ -456,6 +429,20 @@ Here's my rough thoughts about multi-gather() and multi-spread(). Hope this cont
 </div>
 <div id="tools-practices" class="section level2">
 <h2>Tools / Practices</h2>
+<blockquote class="twitter-tweet" data-lang="nl">
+<p lang="en" dir="ltr">
+11Officially a contributor to broom (<a href="https://t.co/FzNYgDsTDi">https://t.co/FzNYgDsTDi</a>)! Massive kudos to <a href="https://twitter.com/alexpghayes?ref_src=twsrc%5Etfw"><span class="citation">@alexpghayes</span></a> for guiding us through this <a href="https://twitter.com/hashtag/chirunconf?src=hash&amp;ref_src=twsrc%5Etfw">#chirunconf</a> <a href="https://twitter.com/hashtag/rstats?src=hash&amp;ref_src=twsrc%5Etfw">#rstats</a>
+</p>
+— Wei Yang Tham🔎 (<span class="citation">@wytham88</span>) <a href="https://twitter.com/wytham88/status/1104498035168559114?ref_src=twsrc%5Etfw">9 maart 2019</a>
+</blockquote>
+<script async src="https://platform.twitter.com/widgets.js" charset="utf-8"></script>
+<blockquote class="twitter-tweet" data-lang="nl">
+<p lang="en" dir="ltr">
+5 links (so far) to tipsheets, tools, presentations and data sources from the <a href="https://twitter.com/hashtag/NICAR19?src=hash&amp;ref_src=twsrc%5Etfw">#NICAR19</a> data journalism conference: <a href="https://t.co/J2WymrrOU9">https://t.co/J2WymrrOU9</a> <a href="https://t.co/3aGWZqhz3n">pic.twitter.com/3aGWZqhz3n</a>
+</p>
+— Sharon Machlis (<span class="citation">@sharon000</span>) <a href="https://twitter.com/sharon000/status/1104225780719149056?ref_src=twsrc%5Etfw">9 maart 2019</a>
+</blockquote>
+<script async src="https://platform.twitter.com/widgets.js" charset="utf-8"></script>
 <blockquote class="twitter-tweet" data-lang="nl">
 <p lang="en" dir="ltr">
 Tidyverse style guide (<a href="https://t.co/Hrel7FdgkH">https://t.co/Hrel7FdgkH</a>) now has PDF (<a href="https://t.co/extmejTDNd">https://t.co/extmejTDNd</a>) and EPUB (<a href="https://t.co/YDncMo2k8I">https://t.co/YDncMo2k8I</a>) versions for your reading pleasure <a href="https://twitter.com/hashtag/rstats?src=hash&amp;ref_src=twsrc%5Etfw">#rstats</a>
@@ -506,6 +493,13 @@ Software authors deserve being cited too! <br>For <a href="https://twitter.com/h
 <h2>(Data) Visualisation</h2>
 <blockquote class="twitter-tweet" data-lang="nl">
 <p lang="en" dir="ltr">
+🤯 Welp, <a href="https://twitter.com/Datatitian?ref_src=twsrc%5Etfw"><span class="citation">@Datatitian</span></a> just blew my mind (it even works in link preview)!<br>“How to Turn Your ggplot2 Visualization into an Interactive Tweet” <a href="https://t.co/MArL4PPBYJ">https://t.co/MArL4PPBYJ</a> ht <a href="https://twitter.com/blaine_bateman?ref_src=twsrc%5Etfw"><span class="citation">@blaine_bateman</span></a> <a href="https://twitter.com/hashtag/rstats?src=hash&amp;ref_src=twsrc%5Etfw">#rstats</a> <a href="https://twitter.com/hashtag/dataviz?src=hash&amp;ref_src=twsrc%5Etfw">#dataviz</a> <a href="https://t.co/MzTlXz0to6">pic.twitter.com/MzTlXz0to6</a>
+</p>
+— Mara Averick (<span class="citation">@dataandme</span>) <a href="https://twitter.com/dataandme/status/1101995679981944832?ref_src=twsrc%5Etfw">3 maart 2019</a>
+</blockquote>
+<script async src="https://platform.twitter.com/widgets.js" charset="utf-8"></script>
+<blockquote class="twitter-tweet" data-lang="nl">
+<p lang="en" dir="ltr">
 🎉 paletteer version 0.2.1 hit CRAN!<br>With the addition of palettes from 3 more packages we got past 1000 palettes 😮 <a href="https://twitter.com/hashtag/rstats?src=hash&amp;ref_src=twsrc%5Etfw">#rstats</a><a href="https://t.co/XKUNqwdvOZ">https://t.co/XKUNqwdvOZ</a> <a href="https://t.co/8XsIypQMEG">pic.twitter.com/8XsIypQMEG</a>
 </p>
 — Emil Hvitfeldt (<span class="citation">@Emil_Hvitfeldt</span>) <a href="https://twitter.com/Emil_Hvitfeldt/status/1095915915491725312?ref_src=twsrc%5Etfw">14 februari 2019</a>
@@ -537,6 +531,13 @@ I'm in a little over my head on this one, but this looked really cool so I cooke
 <h2>Maps / Spatial Data visualization</h2>
 <blockquote class="twitter-tweet" data-lang="nl">
 <p lang="en" dir="ltr">
+😻 A treasure trove of resources by <a href="https://twitter.com/spatialanalysis?ref_src=twsrc%5Etfw"><span class="citation">@spatialanalysis</span></a><br>🗺 “Maps and Data Visualisations with R” <a href="https://t.co/Vn3fr2Yqor">https://t.co/Vn3fr2Yqor</a> <a href="https://twitter.com/hashtag/rstats?src=hash&amp;ref_src=twsrc%5Etfw">#rstats</a> <a href="https://twitter.com/hashtag/dataviz?src=hash&amp;ref_src=twsrc%5Etfw">#dataviz</a> <a href="https://twitter.com/hashtag/rspatial?src=hash&amp;ref_src=twsrc%5Etfw">#rspatial</a> <a href="https://t.co/7unGBFAYYh">pic.twitter.com/7unGBFAYYh</a>
+</p>
+— Mara Averick (<span class="citation">@dataandme</span>) <a href="https://twitter.com/dataandme/status/1101905522557702145?ref_src=twsrc%5Etfw">2 maart 2019</a>
+</blockquote>
+<script async src="https://platform.twitter.com/widgets.js" charset="utf-8"></script>
+<blockquote class="twitter-tweet" data-lang="nl">
+<p lang="en" dir="ltr">
 🗺 A tour through some R map-making 📦s…<br>“Introduction to mapping with {sf} &amp; co.” 📐 <a href="https://twitter.com/StatnMap?ref_src=twsrc%5Etfw"><span class="citation">@StatnMap</span></a> <a href="https://t.co/DOTYUedX62">https://t.co/DOTYUedX62</a> <a href="https://twitter.com/hashtag/rstats?src=hash&amp;ref_src=twsrc%5Etfw">#rstats</a> <a href="https://twitter.com/hashtag/maps?src=hash&amp;ref_src=twsrc%5Etfw">#maps</a> <a href="https://twitter.com/hashtag/dataviz?src=hash&amp;ref_src=twsrc%5Etfw">#dataviz</a><a href="https://twitter.com/hashtag/repeatTweet?src=hash&amp;ref_src=twsrc%5Etfw">#repeatTweet</a> <a href="https://t.co/Y6JUZORLMe">pic.twitter.com/Y6JUZORLMe</a>
 </p>
 — Mara Averick (<span class="citation">@dataandme</span>) <a href="https://twitter.com/dataandme/status/1089359600384688128?ref_src=twsrc%5Etfw">27 januari 2019</a>
@@ -557,6 +558,16 @@ I'm in a little over my head on this one, but this looked really cool so I cooke
 Lecture 7: Webscraping: (2) Client-side and APIs. <a href="https://t.co/eeAc7dezbW">https://t.co/eeAc7dezbW</a><br><br>Including an eccentric mix of applications from NYC trees… to US GNP data… to World Rugby rankings (most importantly obvs). <a href="https://t.co/8D4V2xGXLP">pic.twitter.com/8D4V2xGXLP</a>
 </p>
 — Grant McDermott (<span class="citation">@grant_mcdermott</span>) <a href="https://twitter.com/grant_mcdermott/status/1091139456180973568?ref_src=twsrc%5Etfw">1 februari 2019</a>
+</blockquote>
+<script async src="https://platform.twitter.com/widgets.js" charset="utf-8"></script>
+</div>
+<div id="useless-but-funny" class="section level2">
+<h2>Useless but funny</h2>
+<blockquote class="twitter-tweet" data-lang="nl">
+<p lang="en" dir="ltr">
+i like to use the beepr package to make it sound like finished a level on Super Mario every time I run a line of code
+</p>
+— Matt Crayne (<span class="citation">@mattcrayne</span>) <a href="https://twitter.com/mattcrayne/status/1100924286385209344?ref_src=twsrc%5Etfw">28 februari 2019</a>
 </blockquote>
 <script async src="https://platform.twitter.com/widgets.js" charset="utf-8"></script>
 </div>
@@ -619,7 +630,7 @@ with 13 papers in the Special Issue, by <a href="https://twitter.com/josephrkasp
 <script async src="https://platform.twitter.com/widgets.js" charset="utf-8"></script>
 <blockquote class="twitter-tweet" data-lang="nl">
 <p lang="en" dir="ltr">
-New <a href="https://twitter.com/IPCC_CH?ref_src=twsrc%5Etfw"><span class="citation">@IPCC_CH</span></a> expert meeting report on <a href="https://twitter.com/hashtag/climate?src=hash&amp;ref_src=twsrc%5Etfw">#climate</a> stabilization scenarios, incl. a brief discussion on ‘feasibility’ <a href="https://t.co/Af7VtEbmxE">https://t.co/Af7VtEbmxE</a> <a href="https://t.co/f5nntwyUcK">pic.twitter.com/f5nntwyUcK</a>
+New <a href="https://twitter.com/IPCC_CH?ref_src=twsrc%5Etfw"><span class="citation">@IPCC_CH</span></a> expert meeting report on <a href="https://twitter.com/hashtag/climate?src=hash&amp;ref_src=twsrc%5Etfw">#climate</a> stabilization scenarios, incl. a brief discussion on ‘feasibility’ <a href="https://t.co/Af7VtEbmxE">https://t.co/Af7VtEbmxE</a> <a href="https://t.co/f5nntwyUcK">pic.twitter.com/f5nntwyUcK</a>
 </p>
 — Oliver Geden (<span class="citation">@Oliver_Geden</span>) <a href="https://twitter.com/Oliver_Geden/status/892045272649535488?ref_src=twsrc%5Etfw">31 juli 2017</a>
 </blockquote>
@@ -671,14 +682,14 @@ Cheers to this cognitive bias cheat sheet! <a href="https://t.co/gDLMfHYxnd">htt
 <script async src="https://platform.twitter.com/widgets.js" charset="utf-8"></script>
 <blockquote class="twitter-tweet" data-lang="nl">
 <p lang="en" dir="ltr">
-Interesting read: Darkow et al. (2013) “<a href="https://twitter.com/hashtag/Scenarios?src=hash&amp;ref_src=twsrc%5Etfw">#Scenarios</a> for the future of the <a href="https://twitter.com/hashtag/European?src=hash&amp;ref_src=twsrc%5Etfw">#European</a> process industry - the case of the <a href="https://twitter.com/hashtag/chemical?src=hash&amp;ref_src=twsrc%5Etfw">#chemical</a> industry”, <a href="https://twitter.com/hashtag/expert?src=hash&amp;ref_src=twsrc%5Etfw">#expert</a>-based <a href="https://twitter.com/hashtag/scenarios?src=hash&amp;ref_src=twsrc%5Etfw">#scenarios</a> for future change in chemical industry by 2030 <a href="https://t.co/D7cZCmbq2f">https://t.co/D7cZCmbq2f</a> <a href="https://t.co/Hrr0gVLiEo">pic.twitter.com/Hrr0gVLiEo</a>
+Interesting read: Darkow et al. (2013) “<a href="https://twitter.com/hashtag/Scenarios?src=hash&amp;ref_src=twsrc%5Etfw">#Scenarios</a> for the future of the <a href="https://twitter.com/hashtag/European?src=hash&amp;ref_src=twsrc%5Etfw">#European</a> process industry - the case of the <a href="https://twitter.com/hashtag/chemical?src=hash&amp;ref_src=twsrc%5Etfw">#chemical</a> industry”, <a href="https://twitter.com/hashtag/expert?src=hash&amp;ref_src=twsrc%5Etfw">#expert</a>-based <a href="https://twitter.com/hashtag/scenarios?src=hash&amp;ref_src=twsrc%5Etfw">#scenarios</a> for future change in chemical industry by 2030 <a href="https://t.co/D7cZCmbq2f">https://t.co/D7cZCmbq2f</a> <a href="https://t.co/Hrr0gVLiEo">pic.twitter.com/Hrr0gVLiEo</a>
 </p>
 — Mariësse van Sluisveld (<span class="citation">@marieyesse</span>) <a href="https://twitter.com/marieyesse/status/958042022362992641?ref_src=twsrc%5Etfw">29 januari 2018</a>
 </blockquote>
 <script async src="https://platform.twitter.com/widgets.js" charset="utf-8"></script>
 <blockquote class="twitter-tweet" data-lang="nl">
 <p lang="en" dir="ltr">
-Interesting read: Toppinen et al. (2017) “The <a href="https://twitter.com/hashtag/European?src=hash&amp;ref_src=twsrc%5Etfw">#European</a> <a href="https://twitter.com/hashtag/pulp?src=hash&amp;ref_src=twsrc%5Etfw">#pulp</a> and <a href="https://twitter.com/hashtag/paper?src=hash&amp;ref_src=twsrc%5Etfw">#paper</a> industry in <a href="https://twitter.com/hashtag/transition?src=hash&amp;ref_src=twsrc%5Etfw">#transition</a> to a bio-economy: A <a href="https://twitter.com/hashtag/Delphi?src=hash&amp;ref_src=twsrc%5Etfw">#Delphi</a> study”, featuring a bottom-up <a href="https://twitter.com/hashtag/future?src=hash&amp;ref_src=twsrc%5Etfw">#future</a> <a href="https://twitter.com/hashtag/scenario?src=hash&amp;ref_src=twsrc%5Etfw">#scenario</a> towards 2030 for the paper industry <a href="https://t.co/UetL7Tzbyr">https://t.co/UetL7Tzbyr</a> <a href="https://t.co/u7KIBVsnum">pic.twitter.com/u7KIBVsnum</a>
+Interesting read: Toppinen et al. (2017) “The <a href="https://twitter.com/hashtag/European?src=hash&amp;ref_src=twsrc%5Etfw">#European</a> <a href="https://twitter.com/hashtag/pulp?src=hash&amp;ref_src=twsrc%5Etfw">#pulp</a> and <a href="https://twitter.com/hashtag/paper?src=hash&amp;ref_src=twsrc%5Etfw">#paper</a> industry in <a href="https://twitter.com/hashtag/transition?src=hash&amp;ref_src=twsrc%5Etfw">#transition</a> to a bio-economy: A <a href="https://twitter.com/hashtag/Delphi?src=hash&amp;ref_src=twsrc%5Etfw">#Delphi</a> study”, featuring a bottom-up <a href="https://twitter.com/hashtag/future?src=hash&amp;ref_src=twsrc%5Etfw">#future</a> <a href="https://twitter.com/hashtag/scenario?src=hash&amp;ref_src=twsrc%5Etfw">#scenario</a> towards 2030 for the paper industry <a href="https://t.co/UetL7Tzbyr">https://t.co/UetL7Tzbyr</a> <a href="https://t.co/u7KIBVsnum">pic.twitter.com/u7KIBVsnum</a>
 </p>
 — Mariësse van Sluisveld (<span class="citation">@marieyesse</span>) <a href="https://twitter.com/marieyesse/status/958037597309284358?ref_src=twsrc%5Etfw">29 januari 2018</a>
 </blockquote>
@@ -1375,7 +1386,7 @@ Who in the EU is best at reducing household carbon footprint? Great maps in this
  <a href="https://scholar.google.nl/citations?user=kZoVZGYAAAAJ&hl=en&authuser=1" class="fab fa-google"></a>
     <a href="https://www.linkedin.com/in/mariessevansluisveld/" class="fab fa-linkedin"></a>
     <a href="https://github.com/marieyesse/" class="fab fa-github"></a>
-    <a href="https://models.pbl.nl/image/index.php/Welcome_to_IMAGE_3.0_Documentation" class="fas fa-globe-europe"></a>
+    <a href="https://models.pbl.nl/image/index.php" class="fas fa-globe-europe"></a>
 </p>
 
 &nbsp;
@@ -1397,6 +1408,49 @@ $(document).ready(function () {
 });
 
 
+</script>
+
+<!-- tabsets -->
+
+<script>
+$(document).ready(function () {
+  window.buildTabsets("TOC");
+});
+
+$(document).ready(function () {
+  $('.tabset-dropdown > .nav-tabs > li').click(function () {
+    $(this).parent().toggleClass('nav-tabs-open')
+  });
+});
+</script>
+
+<!-- code folding -->
+
+<script>
+$(document).ready(function ()  {
+
+    // move toc-ignore selectors from section div to header
+    $('div.section.toc-ignore')
+        .removeClass('toc-ignore')
+        .children('h1,h2,h3,h4,h5').addClass('toc-ignore');
+
+    // establish options
+    var options = {
+      selectors: "h1,h2,h3",
+      theme: "bootstrap3",
+      context: '.toc-content',
+      hashGenerator: function (text) {
+        return text.replace(/[.\\/?&!#<>]/g, '').replace(/\s/g, '_').toLowerCase();
+      },
+      ignoreSelector: ".toc-ignore",
+      scrollTo: 0
+    };
+    options.showAndHide = true;
+    options.smoothScroll = true;
+
+    // tocify
+    var toc = $("#TOC").tocify(options).data("toc-tocify");
+});
 </script>
 
 <!-- dynamically load mathjax for compatibility with self-contained -->

@@ -793,20 +793,21 @@ CO2index=ALLVAR[Variable %in% c(  "Emissions|CO2|Iron and Steel|Direct emissions
   CEFICchem.emis=data.table(
     Year=c(2010,2020,2030,2050,2010,2020,2030,2050),
     Scenario=c("BL","BL","BL", "BL","n2DS","n2DS","n2DS","n2DS"),
-    Chemical =c(240,375,330,440, 240, 180, 160,25) # MtCO2e /yr
+    value =c(240,375,330,440, 240, 180, 160,25) # MtCO2e /yr
   )
   
-  CEFICchem.emis=gather(CEFICchem.emis, Sector, value, by=c("Chemical"))
+  #CEFICchem.emis=gather(CEFICchem.emis, Sector, value, by=c("Chemical"))
   CEFICchem.emis$Variable <- "Final Energy|Industry"
   CEFICchem.emis$Study <- "CEFIC/Ecofys (2013)"
+  CEFICchem.emis$Sector <- "Chemical"
   CEFICchem.emis=data.table(CEFICchem.emis)
   
   #Y2010 
   CEFICchem.emis=merge(CEFICchem.emis,CEFICchem.emis[Scenario=="BL", -c("Scenario")], by=c("Year", "Sector", "Study", "Variable"))
-  setnames(CEFICchem.emis, "value.y", "BL")
+  setnames(CEFICchem.emis, "value.x", "BL")
   CEFICchem.emis=merge(CEFICchem.emis, CEFICchem.emis[Year=="2010", -c("Year", "BL")], by=c("Scenario", "Sector", "Study", "Variable"))
-  setnames(CEFICchem.emis, "value.x.x", "value")
-  setnames(CEFICchem.emis, "value.x.y", "Y2010")
+  setnames(CEFICchem.emis, "value.y.x", "value")
+  setnames(CEFICchem.emis, "value.y.y", "Y2010")
   # Replaced Y2005 with Y2015(IEA)
   CEFICchem.emis = CEFICchem.emis %>% mutate(ByBL=(value/BL)*100, ByY=(value/Y2010)*100, ByX=(BL/Y2010)*100)
   CEFICchem.emis=data.table(CEFICchem.emis)
@@ -816,12 +817,13 @@ CO2index=ALLVAR[Variable %in% c(  "Emissions|CO2|Iron and Steel|Direct emissions
   Broerenchem.emis=data.table(
     Year=c(2010,2030,2010,2030),
     Scenario=c("BL", "BL","n2DS","n2DS"),
-    Chemical =c(0.75, 1.1, 0.75, 0.87) # GtCO2e /yr
+    value =c(0.75, 1.1, 0.75, 0.87) # GtCO2e /yr
   )
   
-  Broerenchem.emis=gather(Broerenchem.emis, Sector, value, by=c("Chemical"))
+  #Broerenchem.emis=gather(Broerenchem.emis, Sector, value)
   Broerenchem.emis$Variable <- "Emissions|CO2"
   Broerenchem.emis$Study <- "Broeren et al. (2014)"
+  Broerenchem.emis$Sector <- "Chemical"
   Broerenchem.emis=data.table(Broerenchem.emis)
   
   #Y2010 
@@ -839,19 +841,20 @@ CO2index=ALLVAR[Variable %in% c(  "Emissions|CO2|Iron and Steel|Direct emissions
   DECHEMA.emis= data.table(
                     Year=c(rep(c(2015,	2030,	2050), 2)),	
                     Scenario=c("BL","BL","BL", "n2DS","n2DS","n2DS"),
-                    Olefins=c(29,	33,	38,	29,	8,	-52)) #MtCO2
+                    value=c(29,	33,	38,	29,	8,	-52)) #MtCO2
   
-  DECHEMA.emis=gather(DECHEMA.emis, Sector, value, by=c("Olefins"))
+  #DECHEMA.emis=gather(DECHEMA.emis, Sector, value, by=c("Olefins"))
   DECHEMA.emis$Variable <- "Emissions|CO2"
   DECHEMA.emis$Study <- "DECHEMA (2017)"
+  DECHEMA.emis$Sector <- "Olefins"
   DECHEMA.emis=data.table(DECHEMA.emis)
   
   #Y2010 
   DECHEMA.emis=merge(DECHEMA.emis,DECHEMA.emis[Scenario=="BL", -c("Scenario")], by=c("Year", "Sector", "Study", "Variable"))
-  setnames(DECHEMA.emis, "value.y", "BL")
+  setnames(DECHEMA.emis, "value.x", "BL")
   DECHEMA.emis=merge(DECHEMA.emis, DECHEMA.emis[Year=="2015", -c("Year", "BL")], by=c("Scenario", "Sector", "Study", "Variable"))
-  setnames(DECHEMA.emis, "value.x.x", "value")
-  setnames(DECHEMA.emis, "value.x.y", "Y2015")
+  setnames(DECHEMA.emis, "value.y.x", "value")
+  setnames(DECHEMA.emis, "value.y.y", "Y2015")
   # Replaced Y2005 with Y2015(IEA)
   DECHEMA.emis = DECHEMA.emis %>% mutate(ByBL=(value/BL)*100, ByY=(value/Y2015)*100, ByX=(BL/Y2015)*100)
   DECHEMA.emis=data.table(DECHEMA.emis)
@@ -860,13 +863,14 @@ CO2index=ALLVAR[Variable %in% c(  "Emissions|CO2|Iron and Steel|Direct emissions
  WSP.emis= data.table(
     Year=c(rep(c(2010, 2020,	2030, 2040,	2050), 3)),	
     Scenario=c("BL","BL","BL", "BL","BL","n2DS","n2DS","n2DS","n2DS","n2DS","n2DSnb","n2DSnb","n2DSnb","n2DSnb","n2DSnb"),
-    Chemical=c(100,	82,	81,	85,	90,
+    value=c(100,	82,	81,	85,	90,
                100, 73,45, 18,12,
                100, 78, 64, 21, 20)) 
 
- WSP.emis=gather(WSP.emis, Sector, value, by=c("Chemical"))
+ #WSP.emis=gather(WSP.emis, Sector, value, by=c("Chemical"))
  WSP.emis$Variable <- "Emissions|CO2"
  WSP.emis$Study <- "WSP/DNV-GL (2015)"
+ WSP.emis$Sector <- "Chemical" 
  WSP.emis=data.table(WSP.emis)
  
  #Y2010 
@@ -903,13 +907,14 @@ D41PAPER$Variable <- "Pulp and Paper"
   
   WSP.foodemis=data.table(Year=c(rep(c(2010,2020,2030,2040,2050),3)),
                           Scenario=c(rep("BL", 5), rep("n2DS2noelec",5), rep("n2DS1", 5)),
-                          Food=c(100,75,70,68,70,
+                          value=c(100,75,70,68,70,
                                       100, 67,56,45,35,
                                       100, 67, 53,37,25))
   
-  WSP.foodemis=gather(WSP.foodemis, Sector, value, by=c("Food"))
+  #WSP.foodemis=gather(WSP.foodemis, Sector, value, by=c("Food"))
   WSP.foodemis$Variable <- "Emissions|CO2"
   WSP.foodemis$Study <- "WSP/DNV-GL (2015b)"
+  WSP.foodemis$Sector <- "Food"
   WSP.foodemis=data.table(WSP.foodemis)
   
   #Y2010 
