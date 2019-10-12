@@ -6,11 +6,12 @@ navbar:
   
     - text: "Home"
       href: index.html
-    - text: "About"
-      href: About.html
+
+    - text: "My CV"
+      href: cv.html
     - text: "Research"
       href: research.html
-    - text: Tweetsheet
+    - text: "Tweetsheet"
       href: tweets.html
 
 

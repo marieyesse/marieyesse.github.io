@@ -7,6 +7,7 @@
 <meta charset="utf-8" />
 <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
 <meta name="generator" content="pandoc" />
+<meta http-equiv="X-UA-Compatible" content="IE=EDGE" />
 
 
 
@@ -73,9 +74,7 @@ h6 {
 
 <link rel="stylesheet" href="style.css" type="text/css" />
 
-</head>
 
-<body>
 
 <style type = "text/css">
 .main-container {
@@ -194,8 +193,6 @@ $(document).ready(function () {
 });
 </script>
 
-<div class="container-fluid main-container">
-
 <!-- tabsets -->
 
 <style type="text/css">
@@ -252,48 +249,9 @@ $(document).ready(function () {
 }
 </style>
 
-<script>
-$(document).ready(function () {
-  window.buildTabsets("TOC");
-});
-
-$(document).ready(function () {
-  $('.tabset-dropdown > .nav-tabs > li').click(function () {
-    $(this).parent().toggleClass('nav-tabs-open')
-  });
-});
-</script>
-
 <!-- code folding -->
 
 
-
-<script>
-$(document).ready(function ()  {
-
-    // move toc-ignore selectors from section div to header
-    $('div.section.toc-ignore')
-        .removeClass('toc-ignore')
-        .children('h1,h2,h3,h4,h5').addClass('toc-ignore');
-
-    // establish options
-    var options = {
-      selectors: "h1,h2,h3",
-      theme: "bootstrap3",
-      context: '.toc-content',
-      hashGenerator: function (text) {
-        return text.replace(/[.\\/?&!#<>]/g, '').replace(/\s/g, '_').toLowerCase();
-      },
-      ignoreSelector: ".toc-ignore",
-      scrollTo: 0
-    };
-    options.showAndHide = true;
-    options.smoothScroll = true;
-
-    // tocify
-    var toc = $("#TOC").tocify(options).data("toc-tocify");
-});
-</script>
 
 <style type="text/css">
 
@@ -342,8 +300,6 @@ div.tocify {
 
 .tocify-subheader .tocify-item {
   font-size: 0.90em;
-  padding-left: 25px;
-  text-indent: 0;
 }
 
 .tocify .list-group-item {
@@ -352,6 +308,16 @@ div.tocify {
 
 
 </style>
+
+
+
+</head>
+
+<body>
+
+
+<div class="container-fluid main-container">
+
 
 <!-- setup 3col/9col grid for toc_float and main content  -->
 <div class="row-fluid">
@@ -381,7 +347,7 @@ div.tocify {
   <a href="index.html">Home</a>
 </li>
 <li>
-  <a href="About.html">About</a>
+  <a href="cv.html">My CV</a>
 </li>
 <li>
   <a href="research.html">Research</a>
@@ -424,18 +390,10 @@ div.tocify {
 <blockquote>
 <p>In this page I sort out the information from the <a href="http://ec.europa.eu/transparencyregister/public/consultation/search.do?locale=en&amp;reset=">EU Transparancy Register</a> for the <a href="http://www.reinvent-project.eu">REINVENT</a> industry sectors to get an idea about the role of business and trade associations. Subsequently, I have ran some twittercrawl scripts over the CEFIC, PlasticsEurope, CEMBUREAU, EUROFER_EU, CEPI_Paper, EDA_Dairy and FIL_IDF twitter timelines to see what their current points of discussion are.</p>
 </blockquote>
-</div>
-<div id="data-study-comparing-model-to-expert-projections" class="section level3">
-<h3><a href="tech_survey.html">Data study: Comparing model to expert projections</a></h3>
-<blockquote>
-<p>To test whether projections by IAMs diverge in systematic ways from projections made by technology experts we elicited expert opinion on prospective change for two indicators and compared these with the outcomes of IAM studies. We focused on solar, wind, biomass, nuclear, and carbon capture and storage or CCS technologies for the short (2030) to medium (2050) term.</p>
-</blockquote>
-</div>
-<div id="data-study-european-industry-decarbonisation-strategies" class="section level3">
-<h3><a href="IAM_dashboard.html">Data study: European industry decarbonisation Strategies</a></h3>
-<blockquote>
-<p>On this page I look at the change in industrial energy productivity (energy unit per value added) and industrial emissions intensity (emissions per unit of energy used). In the data I compare both the decades’ average annual reduction rate [linear rate] and the decades’ compound average annual reduction rate [exponential reduction]. Full report: <a href="https://static1.squarespace.com/static/59f0cb986957da5faf64971e/t/5a968cd7652deaeda0a2a62a/1519815901936/D4.1+Existing+visions+and+scenarios.pdf">REINVENT Deliverable 4.1</a></p>
-</blockquote>
+<!-- ### [Data study: Comparing model to expert projections](tech_survey.html) -->
+<!-- > To test whether projections by IAMs diverge in systematic ways from projections made by technology experts we elicited expert opinion on prospective change for two indicators and compared these with the outcomes of IAM studies. We focused on solar, wind, biomass, nuclear, and carbon capture and storage or CCS technologies for the short (2030) to medium (2050) term.  -->
+<!-- ### [Data study: European industry decarbonisation Strategies](IAM_dashboard.html)   -->
+<!-- > On this page I look at the change in industrial energy productivity (energy unit per value added) and industrial emissions intensity (emissions per unit of energy used). In the data I compare both the decades’ average annual reduction rate [linear rate] and the decades’ compound average annual reduction rate [exponential reduction]. Full report: [REINVENT Deliverable 4.1](https://static1.squarespace.com/static/59f0cb986957da5faf64971e/t/5a968cd7652deaeda0a2a62a/1519815901936/D4.1+Existing+visions+and+scenarios.pdf) -->
 </div>
 <div id="interactive-poster-industry-decarbonisation-towards-2050" class="section level3">
 <h3><a href="industry.html">Interactive Poster: Industry decarbonisation towards 2050</a></h3>
@@ -457,7 +415,7 @@ div.tocify {
  <a href="https://scholar.google.nl/citations?user=kZoVZGYAAAAJ&hl=en&authuser=1" class="fab fa-google"></a>
     <a href="https://www.linkedin.com/in/mariessevansluisveld/" class="fab fa-linkedin"></a>
     <a href="https://github.com/marieyesse/" class="fab fa-github"></a>
-    <a href="https://models.pbl.nl/image/index.php/Welcome_to_IMAGE_3.0_Documentation" class="fas fa-globe-europe"></a>
+    <a href="https://models.pbl.nl/image/index.php" class="fas fa-globe-europe"></a>
 </p>
 
 &nbsp;
@@ -479,6 +437,49 @@ $(document).ready(function () {
 });
 
 
+</script>
+
+<!-- tabsets -->
+
+<script>
+$(document).ready(function () {
+  window.buildTabsets("TOC");
+});
+
+$(document).ready(function () {
+  $('.tabset-dropdown > .nav-tabs > li').click(function () {
+    $(this).parent().toggleClass('nav-tabs-open')
+  });
+});
+</script>
+
+<!-- code folding -->
+
+<script>
+$(document).ready(function ()  {
+
+    // move toc-ignore selectors from section div to header
+    $('div.section.toc-ignore')
+        .removeClass('toc-ignore')
+        .children('h1,h2,h3,h4,h5').addClass('toc-ignore');
+
+    // establish options
+    var options = {
+      selectors: "h1,h2,h3",
+      theme: "bootstrap3",
+      context: '.toc-content',
+      hashGenerator: function (text) {
+        return text.replace(/[.\\/?&!#<>]/g, '').replace(/\s/g, '_').toLowerCase();
+      },
+      ignoreSelector: ".toc-ignore",
+      scrollTo: 0
+    };
+    options.showAndHide = true;
+    options.smoothScroll = true;
+
+    // tocify
+    var toc = $("#TOC").tocify(options).data("toc-tocify");
+});
 </script>
 
 <!-- dynamically load mathjax for compatibility with self-contained -->
