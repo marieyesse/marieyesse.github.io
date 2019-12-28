@@ -3,6 +3,7 @@ title: "Research"
 ---
 
 # **Blogs**
+
 ### [REINVENT meta-data overview](reinvent_meta.html)
 
 > In this page I sort out the information from the [REINVENT project](https://www.reinvent-project.eu), analysing the object of study from a higher meta level. I show a mapping of roadmap/scenario studies to different classifications, a word network analysis, and do the same thing for the [REINVENT Innovations DB](https://zenodo.org/record/1284945#.XIwmhdpKiUn).
