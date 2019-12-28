@@ -87,7 +87,7 @@ ggplot(t2, aes(dow, y, fill=fill, alpha=as.factor(alpha))) +
 ```
 
 
-```{r results=TRUE, message=FALSE, warning=FALSE, echo=FALSE, fig.width=8, fig.height=9}
+```{r results=TRUE, message=FALSE, warning=FALSE, echo=FALSE, fig.width=8, fig.height=5}
 
 calendar = read.csv("data/calendar.csv", sep=",", dec=".")
 calendar$Date <- as.Date(calendar$Date,  tryFormats = c("%d/%m/%Y"))
@@ -114,7 +114,7 @@ CALENDAR <-  ggcal(calendar$Date, calendar$Class, calendar$What) +
     ) +
   theme(plot.title = element_text(hjust=0.5),
         panel.spacing = unit(2, "lines")) +
-  ggtitle("2019") 
+  ggtitle("2020") 
 
 
 hide_legend(ggplotly(CALENDAR, tooltip=c("Date","Class", "What")))  %>% config(displayModeBar = F)
