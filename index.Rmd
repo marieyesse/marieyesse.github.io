@@ -10,7 +10,7 @@ knitr::opts_chunk$set(echo = TRUE)
 
   | 
 ---------------------- | ----------------------------------------
-![](img/profile.jpg)            | Welcome to the webpage of Mariësse (_"Marie-yes-se"_) van Sluisveld (PhD). A trained researcher that uses and produces data on a daily base to advise and support decision making on long-term systemic change. My little corner of creation will mostly function as an archive of achievement and wrapper for various short reads, data showcasings and code storage.
+![](img/profile_white.jpg)            | Welcome to the webpage of Mariësse (_"Marie-yes-se"_) van Sluisveld (PhD). A trained researcher that uses and produces data on a daily base to advise and support decision making on long-term systemic change. My little corner of creation will mostly function as an archive of achievement and wrapper for various short reads, data showcasings and code storage.
 
 <br>
 <br>
