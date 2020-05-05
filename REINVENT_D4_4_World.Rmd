@@ -1,0 +1,557 @@
+---
+title: "REINVENT D4.4 Preliminary results"
+author: "  TIMER_3_11, World results " 
+output: html_document
+---
+
+```{r setup, include=FALSE}
+
+#######################################################################################################################
+# THIS FILE: Analyses all the REINVENT narrative scenarios
+# DATE: May 2020
+#######################################################################################################################
+
+# # Clear memory
+# rm(list=ls()) # clear memory
+# 
+# # Working directory
+# setwd(dirname(rstudioapi::getActiveDocumentContext()$path))
+# 
+setwd("/mnt/y/Kennisbasis/IMAGE/model/users/mariesse/R/GitHub/marieyesse.github.io-master/marieyesse.github.io")
+#######################################################################################################################
+### Install and/or load required packages / dependencies
+#######################################################################################################################
+
+# Easy scripting packages
+if(!require(dplyr)){install.packages("dplyr");   library(dplyr)}
+if(!require(forcats)){install.packages("forcats");  library(forcats)}
+if(!require(data.table)){install.packages("data.table");  library(data.table)}
+if(!require(tidyr)){install.packages("tidyr");  library(tidyr)}
+if(!require(fuzzyjoin)){install.packages("fuzzyjoin");  library(fuzzyjoin)}
+if(!require(stringr)){install.packages("stringr");  library(stringr)}
+if(!require(rlang)){install.packages("rlang");  library(rlang)}
+if(!require(readr)){install.packages("readr");  library(readr)}
+
+# text mining packages
+if(!require(tidytext)){install.packages("tidytext");  library(tidytext)}
+if(!require(tm)){install.packages("tm");  library(tm)}
+if(!require(readxl)){install.packages("readxl");  library(readxl)}
+if(!require(tabulizer)){install.packages("tabulizer");  library(tabulizer)}
+
+# maps
+if(!require(grid)){install.packages("grid"); library(grid)}
+if(!require(rworldmap)){install.packages("rworldmap");  library(rworldmap)}
+if(!require(geosphere)){install.packages("geosphere"); library(geosphere)}
+if(!require(gpclib)){install.packages("gpclib"); library(gpclib)}
+
+# data visualisation packages
+if(!require(ggplot2)){install.packages("ggplot2");  library(ggplot2)}
+if(!require(ggforce)){install.packages("ggforce");  library(ggforce)}
+if(!require(plotly)){install.packages("plotly");  library(plotly)}
+if(!require(paletteer)){install.packages("paletteer");  library(paletteer)}
+if(!require(ggrepel)){install.packages("ggrepel");  library(ggrepel)}
+if(!require(igraph)){install.packages("igraph");  library(igraph)}
+if(!require(ggraph)){install.packages("ggraph");  library(ggraph)}
+if(!require(ggforce)){install.packages("ggforce");  library(ggforce)}
+if(!require(shadowtext)){install.packages("shadowtext");  library(shadowtext)}
+#if(!require(animation)){install.packages("animation");  library(animation)}
+
+
+# MyM cnversion packages
+#if(!require(mym2r)){install_github("marieyesse/mym2r");  library(mym2r)}
+```
+
+```{r data, include=FALSE}
+
+SCEN_xlsx <-list.files(path = "../../../../../harmensytze/Projects/REINVENT/7_Reporting_Tool/outxlsx/")
+
+
+SCENSdat_list <- lapply(SCEN_xlsx, function(x){ 
+    dat <- read_xlsx(path=paste("../../../../../harmensytze/Projects/REINVENT/7_Reporting_Tool/outxlsx/", x, sep=""))
+    dat$Scenario <- x
+    dat=data.table(dat)
+    })
+
+SCENdat <- rbindlist(SCENSdat_list, fill=TRUE) %>%
+    drop_na(Model) %>%
+    gather(Year, value, -c(Model, Scenario, Region, Variable, Unit)) %>%
+    mutate(Year=as.numeric(Year), value=as.numeric(value)) %>%
+    mutate(Scenario=gsub(".xlsx", "", Scenario, fixed=T)) %>%
+    drop_na(Year) %>%
+        bind_rows({.} %>% filter(Region %in% c("WEU", "CEU")) %>% 
+                    group_by(Model, Scenario, Variable, Unit, Year) %>% 
+                    summarise(value=sum(value)) %>%
+                    mutate(Region="EU")) %>%
+  filter(!Region == "World") %>%
+    bind_rows({.} %>% filter(!Region %in% c( "EU")) %>% 
+              group_by(Model, Scenario, Variable, Unit, Year) %>% 
+              summarise(value=sum(value)) %>%
+              mutate(Region="World"))
+
+SCENINDUS <- SCENdat %>%
+    filter(grepl("industry", tolower(Variable), fixed=T))
+
+``` 
+
+Produced on: `r format(Sys.time(), '%B %Y')`
+
+
+## Steel
+
+### Material Demand
+
+
+```{r steel-material, echo=FALSE, results=TRUE, message=FALSE, warning=FALSE, fig.width=9, fig.height=7}
+
+SCENSTEEL<- SCENdat %>%
+    filter(grepl("steel", tolower(Variable), fixed=T)) 
+
+SCENSTEELProd <-   SCENSTEEL %>%
+    filter(grepl("production", tolower(Variable), fixed=T)) %>%
+    separate(Variable, c("X", "Y", "Industry", "Material"), sep = "[|]") %>%
+  
+    filter(Region=="World" ) %>%
+    ggplot()+
+    geom_area(aes(x=Year, y=value, fill=Material), position="stack", colour="black") +
+     labs(title="Production",
+        x="Year",
+        y="Mt/Yr") +
+    facet_wrap(~ Scenario, ncol=2) +
+         theme(axis.text.x = element_text(angle=45, hjust=1),
+               text = element_text(size=14))
+
+ ggplotly(SCENSTEELProd)
+
+```
+
+### Capacity / Feedstock
+
+```{r Steel, include=TRUE, results=TRUE, message=FALSE, warning=FALSE, echo=FALSE, fig.width=9, fig.height=7}
+
+##############################################################################################################################
+## Read input data
+##############################################################################################################################
+
+
+
+SCENSTEEL <- SCENdat %>%
+    filter(grepl("steel", tolower(Variable), fixed=T)) 
+
+ SCENSTEELCAP <-   SCENSTEEL %>%
+    filter(grepl("capacity", tolower(Variable), fixed=T)) %>%
+    separate(Variable, c("X", "Y", "Industry", "Technology"), sep = "[|]") %>%
+    filter(Region=="World" ) %>%
+    ggplot()+
+    geom_area(aes(x=Year, y=value, fill=Technology), position="stack", colour="black") +
+   labs(title="Capacity",
+        x="Year",
+        y="Mt/yr") +
+    facet_wrap(~ Scenario, ncol=2) +
+         theme(axis.text.x = element_text(angle=45, hjust=1),
+               text = element_text(size=14))
+
+ ggplotly(SCENSTEELCAP)
+
+```
+
+### Final Energy
+
+```{r steel-energy, echo=FALSE, results=TRUE, message=FALSE, warning=FALSE, fig.width=9, fig.height=7}
+
+SCENSTEEL <- SCENdat %>%
+    filter(grepl("steel", tolower(Variable), fixed=T)) 
+
+SCENSTEELFINE <-   SCENSTEEL %>%
+    filter(grepl("final energy", tolower(Variable), fixed=T)) %>%
+    separate(Variable, c("X", "Y", "Industry", "Carrier"), sep = "[|]") %>%
+  filter(!is.na(Carrier)==T) %>%
+  
+    filter(Region=="World" ) %>%
+    ggplot()+
+    geom_area(aes(x=Year, y=value, fill=Carrier), position="stack", colour="black") +
+     labs(title="Final Energy Use",
+        x="Year",
+        y="EJ/yr") +
+    facet_wrap(~ Scenario, ncol=2) +
+         theme(axis.text.x = element_text(angle=45, hjust=1),
+               text = element_text(size=14))
+
+ ggplotly(SCENSTEELFINE)
+
+```
+
+### CO2 Emissions
+
+```{r steel-emis, echo=FALSE, results=TRUE, message=FALSE, warning=FALSE, fig.width=9, fig.height=5}
+
+SCENSTEEL <- SCENdat %>%
+    filter(grepl("steel", tolower(Variable), fixed=T)) 
+
+SCENSTEELEMIS <-   SCENSTEEL %>%
+    filter(grepl("emissions", tolower(Variable), fixed=T)) %>%
+    filter(!grepl("cokes", tolower(Variable), fixed=T)) %>%
+    separate(Variable, c("X", "Y", "Industry", "Type"), sep = "[|]") %>%
+    filter(Region=="World" ) %>%
+    ggplot()+
+    geom_line(aes(x=Year, y=value, colour=Scenario, group=Scenario)) +
+     labs(title="CO2 Emissions",
+        x="Year",
+        y="MtCO2/yr") +
+    facet_wrap(~ Type, ncol=2) +
+         theme(axis.text.x = element_text(angle=45, hjust=1),
+               text = element_text(size=14))
+
+ ggplotly(SCENSTEELEMIS)
+
+```
+
+
+## Cement
+
+### Material Demand
+
+
+
+```{r ce-material, echo=FALSE, results=TRUE, message=FALSE, warning=FALSE, fig.width=9, fig.height=7}
+
+SCENCE<- SCENdat %>%
+    filter(grepl("non metallic", tolower(Variable), fixed=T)) 
+
+SCENCEProd <-   SCENCE %>%
+    filter(grepl("production", tolower(Variable), fixed=T)) %>%
+    separate(Variable, c("X", "Y", "Industry", "Material"), sep = "[|]") %>%
+  
+    filter(Region=="World" ) %>%
+    ggplot()+
+    geom_area(aes(x=Year, y=value, fill=Material), position="stack", colour="black") +
+     labs(title="Production",
+        x="Year",
+        y="Mt/Yr") +
+    facet_wrap(~ Scenario, ncol=2) +
+         theme(axis.text.x = element_text(angle=45, hjust=1),
+               text = element_text(size=14))
+
+ ggplotly(SCENCEProd)
+```
+
+### Capacity
+Unmapped still
+
+
+### Final Energy
+Unmapped still
+
+### CO2 Emissions
+
+```{r ce-emis, echo=FALSE, results=TRUE, message=FALSE, warning=FALSE, fig.width=9, fig.height=5}
+
+SCENCE <- SCENdat %>%
+    filter(grepl("cement", tolower(Variable), fixed=T)) 
+
+SCENCEEMIS <-   SCENCE %>%
+    filter(grepl("emissions", tolower(Variable), fixed=T)) %>%
+    separate(Variable, c("X", "Y", "Industry", "Type"), sep = "[|]") %>%
+    filter(Region=="World" ) %>%
+    ggplot()+
+    geom_line(aes(x=Year, y=value, colour=Scenario, group=Scenario)) +
+     labs(title="CO2 Emissions",
+        x="Year",
+        y="MtCO2/yr") +
+    facet_wrap(~ Type, ncol=2) +
+         theme(axis.text.x = element_text(angle=45, hjust=1),
+               text = element_text(size=14))
+
+ ggplotly(SCENCEEMIS)
+
+```
+
+## Chemical Industry
+
+### Material Demand
+
+This seems not mapped yet..
+
+### Capacity / Feedstock
+
+```{r Chemical, results=TRUE, message=FALSE, warning=FALSE, echo=FALSE, fig.width=9, fig.height=7}
+
+SCENCHEM <- SCENdat %>%
+    filter(grepl("chemicals and petrochemicals", tolower(Variable), fixed=T)) 
+
+SCENCHEMCAP <-   SCENCHEM %>%
+    filter(grepl("feedstock energy", tolower(Variable), fixed=T)) %>%
+    separate(Variable, c("X", "Y", "Industry", "Technology"), sep = "[|]") %>%
+    filter(Region=="World" ) %>%
+    ggplot()+
+    geom_area(aes(x=Year, y=value, fill=Technology), position="stack", colour="black") +
+     labs(title="Non-energy demand",
+        x="Year",
+        y="GJ/yr") +
+    facet_wrap(~ Scenario, ncol=2) +
+         theme(axis.text.x = element_text(angle=45, hjust=1),
+               text = element_text(size=14))
+
+ ggplotly(SCENCHEMCAP)
+```
+
+### Final Energy
+
+```{r nonen-energy, echo=FALSE, results=TRUE, message=FALSE, warning=FALSE, fig.width=9, fig.height=7}
+
+SCENNONEN <- SCENdat %>%
+    filter(grepl("chemicals and petrochemicals", tolower(Variable), fixed=T)) 
+
+SCENNONENFINE <-   SCENNONEN %>%
+    filter(grepl("final energy", tolower(Variable), fixed=T)) %>%
+    separate(Variable, c("X", "Y", "Industry", "Carrier"), sep = "[|]") %>%
+  filter(!is.na(Carrier)==T) %>%
+  
+    filter(Region=="World" ) %>%
+    ggplot()+
+    geom_area(aes(x=Year, y=value, fill=Carrier), position="stack", colour="black") +
+     labs(title="Final Energy Use",
+        x="Year",
+        y="EJ/yr") +
+    facet_wrap(~ Scenario, ncol=2) +
+         theme(axis.text.x = element_text(angle=45, hjust=1),
+               text = element_text(size=14))
+
+ ggplotly(SCENNONENFINE)
+
+```
+
+
+### CO2 Emissions
+
+```{r nonen-emis, echo=FALSE, results=TRUE, message=FALSE, warning=FALSE, fig.width=9, fig.height=5}
+
+SCENCHEM <- SCENdat %>%
+    filter(grepl("chemicals and petrochemicals", tolower(Variable), fixed=T)) 
+
+SCENCHEMEMIS <-   SCENCHEM %>%
+    filter(grepl("emissions", tolower(Variable), fixed=T)) %>%
+    separate(Variable, c("X", "Y", "Industry", "Type"), sep = "[|]") %>%
+    filter(Region=="World" ) %>%
+    ggplot()+
+    geom_line(aes(x=Year, y=value, colour=Scenario, group=Scenario)) +
+     labs(title="CO2 Emissions",
+        x="Year",
+        y="MtCO2/yr") +
+    facet_wrap(~ Type, ncol=2) +
+         theme(axis.text.x = element_text(angle=45, hjust=1),
+               text = element_text(size=14))
+
+ ggplotly(SCENCHEMEMIS)
+
+```
+
+HVC emissions variable seems not reported
+
+## Pulp & Paper Industry
+
+### Material Demand
+
+Data not working / erroneously mapped
+
+
+<!-- ```{r ppi-material, echo=FALSE, results=TRUE, message=FALSE, warning=FALSE, fig.width=9, fig.height=7} -->
+
+<!-- SCENPPI <- SCENdat %>% -->
+<!--     filter(grepl("pulp and paper", tolower(Variable), fixed=T))  -->
+
+<!-- SCENPPIProd <-   SCENPPI %>% -->
+<!--     filter(grepl("production", tolower(Variable), fixed=T)) %>% -->
+<!--     separate(Variable, c("X", "Y", "Industry", "Food"), sep = "[|]") %>% -->
+<!--   filter(!Food=="Total") %>% -->
+<!--     filter(Region=="World" ) %>% -->
+<!--     ggplot()+ -->
+<!--     geom_area(aes(x=Year, y=value, fill=Food), position="stack", colour="black") + -->
+<!--      labs(title="Production", -->
+<!--         x="Year", -->
+<!--         y="Mt/Yr") + -->
+<!--     facet_wrap(~ Scenario, ncol=2) + -->
+<!--          theme(axis.text.x = element_text(angle=45, hjust=1), -->
+<!--                text = element_text(size=14)) -->
+
+<!--  ggplotly(SCENPPIProd) -->
+<!-- ``` -->
+
+
+### Capacity / Feedstock
+
+```{r ppi, echo=FALSE, results=TRUE, message=FALSE, warning=FALSE, fig.width=11, fig.height=7}
+
+SCENPPI <- SCENdat %>%
+    filter(grepl("pulp and paper", tolower(Variable), fixed=T)) 
+
+SCENPPICAP <-   SCENPPI %>%
+    filter(grepl("capacity", tolower(Variable), fixed=T)) %>%
+    separate(Variable, c("X", "Y", "Industry", "Type", "Technology", "Carrier"), sep = "[|]") %>%
+  mutate(Technology=paste(Technology, Carrier)) %>%
+    filter(Region=="World" ) %>%
+    ggplot()+
+    geom_area(aes(x=Year, y=value, fill=Technology), position="stack", colour="black") +
+     labs(title="Energy demand",
+        x="Year",
+        y="MWth") +
+    facet_grid(Type~ Scenario) +
+         theme(axis.text.x = element_text(angle=45, hjust=1),
+               text = element_text(size=14))
+
+ ggplotly(SCENPPICAP)
+```
+
+### Final Energy
+
+```{r ppi-energy, echo=FALSE, results=TRUE, message=FALSE, warning=FALSE, fig.width=9, fig.height=7}
+
+SCENPPI <- SCENdat %>%
+    filter(grepl("pulp and paper", tolower(Variable), fixed=T)) 
+
+SCENPPIFINE <-   SCENPPI %>%
+    filter(grepl("final energy", tolower(Variable), fixed=T)) %>%
+    separate(Variable, c("X", "Y", "Industry", "Carrier"), sep = "[|]") %>%
+  filter(!is.na(Carrier)==T) %>%
+  
+    filter(Region=="World" ) %>%
+    ggplot()+
+    geom_area(aes(x=Year, y=value, fill=Carrier), position="stack", colour="black") +
+     labs(title="Final Energy Use",
+        x="Year",
+        y="EJ/yr") +
+    facet_wrap(~ Scenario, ncol=2) +
+         theme(axis.text.x = element_text(angle=45, hjust=1),
+               text = element_text(size=14))
+
+ ggplotly(SCENPPIFINE)
+
+```
+
+### CO2 Emissions
+
+```{r ppi-emis, echo=FALSE, results=TRUE, message=FALSE, warning=FALSE, fig.width=9, fig.height=5}
+
+SCENPPI <- SCENdat %>%
+    filter(grepl("pulp and paper", tolower(Variable), fixed=T)) 
+
+SCENPPIEMIS <-   SCENPPI %>%
+    filter(grepl("emissions", tolower(Variable), fixed=T)) %>%
+    separate(Variable, c("X", "Y", "Industry", "Type"), sep = "[|]") %>%
+  
+    filter(Region=="World" ) %>%
+    ggplot()+
+    geom_line(aes(x=Year, y=value, colour=Scenario, group=Scenario)) +
+     labs(title="CO2 Emissions",
+        x="Year",
+        y="MtCO2/yr") +
+    facet_wrap(~ Type, ncol=2) +
+         theme(axis.text.x = element_text(angle=45, hjust=1),
+               text = element_text(size=14))
+
+ ggplotly(SCENPPIEMIS)
+
+```
+
+
+## Food Industry
+
+### Material Demand
+
+```{r food-material, echo=FALSE, results=TRUE, message=FALSE, warning=FALSE, fig.width=9, fig.height=7}
+
+SCENFood <- SCENdat %>%
+    filter(grepl("food", tolower(Variable), fixed=T)) 
+
+SCENFoodProd <-   SCENFood %>%
+    filter(grepl("production", tolower(Variable), fixed=T)) %>%
+    filter(grepl("minor", tolower(Variable), fixed=T)) %>%
+    separate(Variable, c("X", "Y", "Industry", "Z", "Food"), sep = "[|]") %>%
+    filter(Region=="World" ) %>%
+    ggplot()+
+    geom_area(aes(x=Year, y=value, fill=Food), position="stack", colour="black") +
+     labs(title="Production",
+        x="Year",
+        y="Mt/Yr") +
+    facet_wrap(~ Scenario, ncol=2) +
+         theme(axis.text.x = element_text(angle=45, hjust=1),
+               text = element_text(size=14))
+
+ ggplotly(SCENFoodProd)
+```
+
+
+### Capacity / Feedstock
+
+```{r food, echo=FALSE, results=TRUE, message=FALSE, warning=FALSE, fig.width=11, fig.height=7}
+
+SCENFood <- SCENdat %>%
+    filter(grepl("food", tolower(Variable), fixed=T)) 
+
+SCENFoodCAP <-   SCENFood %>%
+    filter(grepl("capacity", tolower(Variable), fixed=T)) %>%
+    separate(Variable, c("X", "Y", "Industry", "Z", "Type", "Technology", "Carrier"), sep = "[|]") %>%
+  mutate(Technology=paste(Technology, Carrier)) %>%
+    filter(Region=="World" ) %>%
+    ggplot()+
+    geom_area(aes(x=Year, y=value, fill=Technology), position="stack", colour="black") +
+     labs(title="Energy demand",
+        x="Year",
+        y="MWth") +
+    facet_grid(Type~ Scenario) +
+         theme(axis.text.x = element_text(angle=45, hjust=1),
+               text = element_text(size=14))
+
+ ggplotly(SCENFoodCAP)
+```
+
+### Final Energy
+
+```{r food-energy, echo=FALSE, results=TRUE, message=FALSE, warning=FALSE, fig.width=9, fig.height=7}
+
+SCENFOOD <- SCENdat %>%
+    filter(grepl("food", tolower(Variable), fixed=T)) 
+
+SCENFOODFINE <-   SCENFOOD %>%
+    filter(grepl("final energy", tolower(Variable), fixed=T)) %>%
+   filter(!grepl("electricity|", tolower(Variable), fixed=T)) %>%
+  filter(!grepl("heat|", tolower(Variable), fixed=T)) %>%
+    separate(Variable, c("X", "Y", "Industry", "Carrier"), sep = "[|]") %>%
+  filter(!is.na(Carrier)==T) %>%
+  
+    filter(Region=="World" ) %>%
+    ggplot()+
+    geom_area(aes(x=Year, y=value, fill=Carrier), position="stack", colour="black") +
+     labs(title="Final Energy Use",
+        x="Year",
+        y="EJ/yr") +
+    facet_wrap(~ Scenario, ncol=2) +
+         theme(axis.text.x = element_text(angle=45, hjust=1),
+               text = element_text(size=14))
+
+ ggplotly(SCENFOODFINE)
+
+```
+
+### CO2 Emissions
+
+```{r food-emis, echo=FALSE, results=TRUE, message=FALSE, warning=FALSE, fig.width=9, fig.height=5}
+
+SCENFOOD <- SCENdat %>%
+    filter(grepl("food", tolower(Variable), fixed=T)) 
+
+SCENFOODEMIS <-   SCENFOOD %>%
+    filter(grepl("emissions", tolower(Variable), fixed=T)) %>%
+    separate(Variable, c("X", "Y", "Industry", "Type"), sep = "[|]") %>%
+    filter(Region=="World" ) %>%
+    ggplot()+
+    geom_line(aes(x=Year, y=value, colour=Scenario, group=Scenario)) +
+     labs(title="CO2 Emissions",
+        x="Year",
+        y="MtCO2/yr") +
+    facet_wrap(~ Type, ncol=2) +
+         theme(axis.text.x = element_text(angle=45, hjust=1),
+               text = element_text(size=14))
+
+ ggplotly(SCENFOODEMIS)
+
+```
