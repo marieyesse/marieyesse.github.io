@@ -95,8 +95,44 @@ SCENINDUS <- SCENdat %>%
 
 Produced on: `r format(Sys.time(), '%B %Y')`
 
+**Known issues**:
 
-## Steel
+* **Steel:** No primary production in some scenarios 
+* **Steel:** Wel H-DRI, geen Electrowinning
+*	**Cement:** Material Demand stijgt na 2050 weer
+*	**CHemicals:** werkt nog niet / geen scenario parameterisation
+*	**PPI:**  juist de Circ en DemandMan gaan heel diep negatief
+*	**Food:** no change.
+* Geen IMAGE data nog
+
+
+
+## Steel {.tabset}
+
+### CO2 Emissions
+
+```{r steel-emis, echo=FALSE, results=TRUE, message=FALSE, warning=FALSE, fig.width=9, fig.height=5}
+
+SCENSTEEL <- SCENdat %>%
+    filter(grepl("steel", tolower(Variable), fixed=T)) 
+
+SCENSTEELEMIS <-   SCENSTEEL %>%
+    filter(grepl("emissions", tolower(Variable), fixed=T)) %>%
+    filter(!grepl("cokes", tolower(Variable), fixed=T)) %>%
+    separate(Variable, c("X", "Y", "Industry", "Type"), sep = "[|]") %>%
+    filter(Region=="EU" ) %>%
+    ggplot()+
+    geom_line(aes(x=Year, y=value, colour=Scenario, group=Scenario)) +
+     labs(title="CO2 Emissions",
+        x="Year",
+        y="MtCO2/yr") +
+    facet_wrap(~ Type, ncol=2) +
+         theme(axis.text.x = element_text(angle=45, hjust=1),
+               text = element_text(size=14))
+
+ ggplotly(SCENSTEELEMIS)
+
+```
 
 ### Material Demand
 
@@ -180,16 +216,20 @@ SCENSTEELFINE <-   SCENSTEEL %>%
 
 ```
 
+
+
+## Cement {.tabset}
+
+
 ### CO2 Emissions
 
-```{r steel-emis, echo=FALSE, results=TRUE, message=FALSE, warning=FALSE, fig.width=9, fig.height=5}
+```{r ce-emis, echo=FALSE, results=TRUE, message=FALSE, warning=FALSE, fig.width=9, fig.height=5}
 
-SCENSTEEL <- SCENdat %>%
-    filter(grepl("steel", tolower(Variable), fixed=T)) 
+SCENCE <- SCENdat %>%
+    filter(grepl("cement", tolower(Variable), fixed=T)) 
 
-SCENSTEELEMIS <-   SCENSTEEL %>%
+SCENCEEMIS <-   SCENCE %>%
     filter(grepl("emissions", tolower(Variable), fixed=T)) %>%
-    filter(!grepl("cokes", tolower(Variable), fixed=T)) %>%
     separate(Variable, c("X", "Y", "Industry", "Type"), sep = "[|]") %>%
     filter(Region=="EU" ) %>%
     ggplot()+
@@ -201,15 +241,11 @@ SCENSTEELEMIS <-   SCENSTEEL %>%
          theme(axis.text.x = element_text(angle=45, hjust=1),
                text = element_text(size=14))
 
- ggplotly(SCENSTEELEMIS)
+ ggplotly(SCENCEEMIS)
 
 ```
 
-
-## Cement
-
 ### Material Demand
-
 
 
 ```{r ce-material, echo=FALSE, results=TRUE, message=FALSE, warning=FALSE, fig.width=9, fig.height=7}
@@ -241,14 +277,19 @@ Unmapped still
 ### Final Energy
 Unmapped still
 
+
+## Chemical Industry {.tabset}
+
+
+
 ### CO2 Emissions
 
-```{r ce-emis, echo=FALSE, results=TRUE, message=FALSE, warning=FALSE, fig.width=9, fig.height=5}
+```{r nonen-emis, echo=FALSE, results=TRUE, message=FALSE, warning=FALSE, fig.width=9, fig.height=5}
 
-SCENCE <- SCENdat %>%
-    filter(grepl("cement", tolower(Variable), fixed=T)) 
+SCENCHEM <- SCENdat %>%
+    filter(grepl("chemicals and petrochemicals", tolower(Variable), fixed=T)) 
 
-SCENCEEMIS <-   SCENCE %>%
+SCENCHEMEMIS <-   SCENCHEM %>%
     filter(grepl("emissions", tolower(Variable), fixed=T)) %>%
     separate(Variable, c("X", "Y", "Industry", "Type"), sep = "[|]") %>%
     filter(Region=="EU" ) %>%
@@ -261,11 +302,9 @@ SCENCEEMIS <-   SCENCE %>%
          theme(axis.text.x = element_text(angle=45, hjust=1),
                text = element_text(size=14))
 
- ggplotly(SCENCEEMIS)
+ ggplotly(SCENCHEMEMIS)
 
 ```
-
-## Chemical Industry
 
 ### Material Demand
 
@@ -321,16 +360,21 @@ SCENNONENFINE <-   SCENNONEN %>%
 ```
 
 
+HVC emissions variable seems not reported
+
+## Pulp & Paper Industry {.tabset}
+
 ### CO2 Emissions
 
-```{r nonen-emis, echo=FALSE, results=TRUE, message=FALSE, warning=FALSE, fig.width=9, fig.height=5}
+```{r ppi-emis, echo=FALSE, results=TRUE, message=FALSE, warning=FALSE, fig.width=9, fig.height=5}
 
-SCENCHEM <- SCENdat %>%
-    filter(grepl("chemicals and petrochemicals", tolower(Variable), fixed=T)) 
+SCENPPI <- SCENdat %>%
+    filter(grepl("pulp and paper", tolower(Variable), fixed=T)) 
 
-SCENCHEMEMIS <-   SCENCHEM %>%
+SCENPPIEMIS <-   SCENPPI %>%
     filter(grepl("emissions", tolower(Variable), fixed=T)) %>%
     separate(Variable, c("X", "Y", "Industry", "Type"), sep = "[|]") %>%
+  
     filter(Region=="EU" ) %>%
     ggplot()+
     geom_line(aes(x=Year, y=value, colour=Scenario, group=Scenario)) +
@@ -341,13 +385,9 @@ SCENCHEMEMIS <-   SCENCHEM %>%
          theme(axis.text.x = element_text(angle=45, hjust=1),
                text = element_text(size=14))
 
- ggplotly(SCENCHEMEMIS)
+ ggplotly(SCENPPIEMIS)
 
 ```
-
-HVC emissions variable seems not reported
-
-## Pulp & Paper Industry
 
 ### Material Demand
 
@@ -427,17 +467,21 @@ SCENPPIFINE <-   SCENPPI %>%
 
 ```
 
+
+
+
+## Food Industry {.tabset}
+
 ### CO2 Emissions
 
-```{r ppi-emis, echo=FALSE, results=TRUE, message=FALSE, warning=FALSE, fig.width=9, fig.height=5}
+```{r food-emis, echo=FALSE, results=TRUE, message=FALSE, warning=FALSE, fig.width=9, fig.height=5}
 
-SCENPPI <- SCENdat %>%
-    filter(grepl("pulp and paper", tolower(Variable), fixed=T)) 
+SCENFOOD <- SCENdat %>%
+    filter(grepl("food", tolower(Variable), fixed=T)) 
 
-SCENPPIEMIS <-   SCENPPI %>%
+SCENFOODEMIS <-   SCENFOOD %>%
     filter(grepl("emissions", tolower(Variable), fixed=T)) %>%
     separate(Variable, c("X", "Y", "Industry", "Type"), sep = "[|]") %>%
-  
     filter(Region=="EU" ) %>%
     ggplot()+
     geom_line(aes(x=Year, y=value, colour=Scenario, group=Scenario)) +
@@ -448,12 +492,9 @@ SCENPPIEMIS <-   SCENPPI %>%
          theme(axis.text.x = element_text(angle=45, hjust=1),
                text = element_text(size=14))
 
- ggplotly(SCENPPIEMIS)
+ ggplotly(SCENFOODEMIS)
 
 ```
-
-
-## Food Industry
 
 ### Material Demand
 
@@ -532,26 +573,4 @@ SCENFOODFINE <-   SCENFOOD %>%
 
 ```
 
-### CO2 Emissions
 
-```{r food-emis, echo=FALSE, results=TRUE, message=FALSE, warning=FALSE, fig.width=9, fig.height=5}
-
-SCENFOOD <- SCENdat %>%
-    filter(grepl("food", tolower(Variable), fixed=T)) 
-
-SCENFOODEMIS <-   SCENFOOD %>%
-    filter(grepl("emissions", tolower(Variable), fixed=T)) %>%
-    separate(Variable, c("X", "Y", "Industry", "Type"), sep = "[|]") %>%
-    filter(Region=="EU" ) %>%
-    ggplot()+
-    geom_line(aes(x=Year, y=value, colour=Scenario, group=Scenario)) +
-     labs(title="CO2 Emissions",
-        x="Year",
-        y="MtCO2/yr") +
-    facet_wrap(~ Type, ncol=2) +
-         theme(axis.text.x = element_text(angle=45, hjust=1),
-               text = element_text(size=14))
-
- ggplotly(SCENFOODEMIS)
-
-```
