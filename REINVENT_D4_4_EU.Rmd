@@ -99,6 +99,7 @@ Produced on: `r format(Sys.time(), '%B %Y')`
 
 * **Steel:** No primary production in some scenarios 
 * **Steel:** Wel H-DRI, geen Electrowinning
+* **Steel:** Final Energy parameter seems off.. could be wrong variable that did not transfer from TIMER_2015
 *	**Cement:** Material Demand stijgt na 2050 weer
 *	**CHemicals:** werkt nog niet / geen scenario parameterisation
 *	**PPI:**  juist de Circ en DemandMan gaan heel diep negatief
@@ -162,6 +163,8 @@ SCENSTEELProd <-   SCENSTEEL %>%
 
 ### Capacity / Feedstock
 
+No Primary production technologies any more in Circ and DemandMan? 
+
 ```{r Steel, include=TRUE, results=TRUE, message=FALSE, warning=FALSE, echo=FALSE, fig.width=9, fig.height=7}
 
 ##############################################################################################################################
@@ -192,7 +195,10 @@ SCENSTEEL <- SCENdat %>%
 
 ### Final Energy
 
+Not sure if T2RT/endem/hidem/finalenergyexclfeedstock.out still gives off the right final energy data here... I expect coal and gas to be leading here.
+
 ```{r steel-energy, echo=FALSE, results=TRUE, message=FALSE, warning=FALSE, fig.width=9, fig.height=7}
+
 
 SCENSTEEL <- SCENdat %>%
     filter(grepl("steel", tolower(Variable), fixed=T)) 
@@ -247,6 +253,7 @@ SCENCEEMIS <-   SCENCE %>%
 
 ### Material Demand
 
+Demand seems to slowly increase again in DemandMan
 
 ```{r ce-material, echo=FALSE, results=TRUE, message=FALSE, warning=FALSE, fig.width=9, fig.height=7}
 
@@ -365,6 +372,8 @@ HVC emissions variable seems not reported
 ## Pulp & Paper Industry {.tabset}
 
 ### CO2 Emissions
+
+Deep negative emissions in Circ and DemandMan?
 
 ```{r ppi-emis, echo=FALSE, results=TRUE, message=FALSE, warning=FALSE, fig.width=9, fig.height=5}
 
