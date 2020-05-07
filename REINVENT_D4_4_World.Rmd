@@ -272,11 +272,60 @@ SCENCEProd <-   SCENCE %>%
 ```
 
 ### Capacity
-Unmapped still
+
+```{r cement, include=TRUE, results=TRUE, message=FALSE, warning=FALSE, echo=FALSE, fig.width=9, fig.height=7}
+
+##############################################################################################################################
+## Read input data
+##############################################################################################################################
+
+
+
+SCENCE <- SCENdat %>%
+    filter(grepl("non metallic mineral", tolower(Variable), fixed=T)) 
+
+ SCENCECAP <-   SCENCE %>%
+    filter(grepl("capacity", tolower(Variable), fixed=T)) %>%
+    separate(Variable, c("X", "Y", "Industry", "Technology"), sep = "[|]") %>%
+    filter(Region=="World" ) %>%
+    ggplot()+
+    geom_area(aes(x=Year, y=value, fill=Technology), position="stack", colour="black") +
+   labs(title="Capacity",
+        x="Year",
+        y="Mt/yr") +
+    facet_wrap(~ Scenario, ncol=2) +
+         theme(axis.text.x = element_text(angle=45, hjust=1),
+               text = element_text(size=14))
+
+ ggplotly(SCENCECAP)
+
+```
 
 
 ### Final Energy
-Unmapped still
+```{r ce-energy, echo=FALSE, results=TRUE, message=FALSE, warning=FALSE, fig.width=9, fig.height=7}
+
+SCENCE <- SCENdat %>%
+    filter(grepl("non metallic mineral", tolower(Variable), fixed=T)) 
+
+SCENCEFINE <-   SCENCE %>%
+    filter(grepl("final energy", tolower(Variable), fixed=T)) %>%
+    separate(Variable, c("X", "Y", "Industry", "Carrier"), sep = "[|]") %>%
+  filter(!is.na(Carrier)==T) %>%
+  
+    filter(Region=="World" ) %>%
+    ggplot()+
+    geom_area(aes(x=Year, y=value, fill=Carrier), position="stack", colour="black") +
+     labs(title="Final Energy Use",
+        x="Year",
+        y="EJ/yr") +
+    facet_wrap(~ Scenario, ncol=2) +
+         theme(axis.text.x = element_text(angle=45, hjust=1),
+               text = element_text(size=14))
+
+ ggplotly(SCENCEFINE)
+
+```
 
 
 ## Chemical Industry {.tabset}
@@ -395,27 +444,27 @@ SCENPPIEMIS <-   SCENPPI %>%
 Data not working / erroneously mapped
 
 
-<!-- ```{r ppi-material, echo=FALSE, results=TRUE, message=FALSE, warning=FALSE, fig.width=9, fig.height=7} -->
+```{r ppi-material, echo=FALSE, results=TRUE, message=FALSE, warning=FALSE, fig.width=9, fig.height=7}
 
-<!-- SCENPPI <- SCENdat %>% -->
-<!--     filter(grepl("pulp and paper", tolower(Variable), fixed=T))  -->
+SCENPPI <- SCENdat %>%
+    filter(grepl("pulp and paper", tolower(Variable), fixed=T))
 
-<!-- SCENPPIProd <-   SCENPPI %>% -->
-<!--     filter(grepl("production", tolower(Variable), fixed=T)) %>% -->
-<!--     separate(Variable, c("X", "Y", "Industry", "Food"), sep = "[|]") %>% -->
-<!--   filter(!Food=="Total") %>% -->
-<!--     filter(Region=="World" ) %>% -->
-<!--     ggplot()+ -->
-<!--     geom_area(aes(x=Year, y=value, fill=Food), position="stack", colour="black") + -->
-<!--      labs(title="Production", -->
-<!--         x="Year", -->
-<!--         y="Mt/Yr") + -->
-<!--     facet_wrap(~ Scenario, ncol=2) + -->
-<!--          theme(axis.text.x = element_text(angle=45, hjust=1), -->
-<!--                text = element_text(size=14)) -->
+SCENPPIProd <-   SCENPPI %>%
+    filter(grepl("production", tolower(Variable), fixed=T)) %>%
+    separate(Variable, c("X", "Y", "Industry", "Food"), sep = "[|]") %>%
+  filter(!Food=="Total") %>%
+    filter(Region=="World" ) %>%
+    ggplot()+
+    geom_area(aes(x=Year, y=value, fill=Food), position="stack", colour="black") +
+     labs(title="Production",
+        x="Year",
+        y="Mt/Yr") +
+    facet_wrap(~ Scenario, ncol=2) +
+         theme(axis.text.x = element_text(angle=45, hjust=1),
+               text = element_text(size=14))
 
-<!--  ggplotly(SCENPPIProd) -->
-<!-- ``` -->
+ ggplotly(SCENPPIProd)
+```
 
 
 ### Capacity / Feedstock
