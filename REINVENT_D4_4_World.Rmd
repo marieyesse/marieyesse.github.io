@@ -93,7 +93,8 @@ SCENINDUS <- SCENdat %>%
 
 ``` 
 
-Produced on:  `r format(Sys.time(), '%d %B %Y')`
+
+Produced on: `r format(Sys.time(), '%d %B %Y - time stamp: %H:%M')`
 
 **Known issues**:
 
