@@ -106,6 +106,57 @@ Produced on: `r format(Sys.time(), '%d %B %Y - time stamp: %H:%M')`
 *	**Food:** no change.
 * Geen IMAGE data nog
 
+## General {.tabset}
+
+### Demand sector emissions
+
+```{r dem-emis, echo=FALSE, results=TRUE, message=FALSE, warning=FALSE, fig.width=9, fig.height=10}
+
+INDUSDEM <- SCENdat %>%
+    filter(grepl("Emissions|CO2|Energy|Demand|", Variable, fixed=T)) 
+
+INDUSDEMTot <-   INDUSDEM %>%
+    #filter(grepl("emissions", tolower(Variable), fixed=T)) %>%
+    #filter(!grepl("cokes", tolower(Variable), fixed=T)) %>%
+    separate(Variable, c("X", "Y", "Z", "A", "Industry", "TMI"), sep = "[|]") %>%
+  filter(is.na(TMI)==T) %>%
+    filter(Region=="World" ) %>%
+    ggplot()+
+    geom_line(aes(x=Year, y=value,  group=Scenario, colour=Scenario)) +
+     labs(title="CO2 Emissions",
+        x="Year",
+        y="MtCO2/yr") +
+    facet_wrap(~ Industry, ncol=2) +
+         theme(axis.text.x = element_text(angle=45, hjust=1),
+               text = element_text(size=14))
+
+ ggplotly(INDUSDEMTot)
+
+```
+
+### Whole system emissions
+
+```{r econ-emis, echo=FALSE, results=TRUE, message=FALSE, warning=FALSE, fig.width=9, fig.height=5}
+
+ECONCO2 <- SCENdat %>%
+    filter(grepl("Emissions|CO2", Variable, fixed=T)) 
+
+ECONCO2Tot <-   ECONCO2 %>%
+    #filter(grepl("emissions", tolower(Variable), fixed=T)) %>%
+    filter(!grepl("Emissions|CO2|",Variable, fixed=T)) %>%
+    filter(Region=="World" ) %>%
+    ggplot()+
+    geom_line(aes(x=Year, y=value,  group=Scenario, colour=Scenario)) +
+     labs(title="CO2 Emissions",
+        x="Year",
+        y="MtCO2/yr") +
+    facet_wrap(~ Variable, ncol=2) +
+         theme(axis.text.x = element_text(angle=45, hjust=1),
+               text = element_text(size=14))
+
+ ggplotly(ECONCO2Tot)
+
+```
 
 
 ## Steel {.tabset}
@@ -273,7 +324,7 @@ SCENCEProd <-   SCENCE %>%
 
 ### Capacity
 
-```{r cement, include=TRUE, results=TRUE, message=FALSE, warning=FALSE, echo=FALSE, fig.width=9, fig.height=7}
+```{r cement, include=TRUE, results=TRUE, message=FALSE, warning=FALSE, echo=FALSE, fig.width=12, fig.height=7}
 
 ##############################################################################################################################
 ## Read input data
