@@ -108,6 +108,32 @@ Produced on: `r format(Sys.time(), '%d %B %Y - time stamp: %H:%M')`
 
 ## General {.tabset}
 
+
+### Whole system emissions
+
+```{r econ-emis, echo=FALSE, results=TRUE, message=FALSE, warning=FALSE, fig.width=9, fig.height=5}
+
+ECONCO2 <- SCENdat %>%
+    filter(grepl("Emissions|CO2", Variable, fixed=T)) 
+
+ECONCO2Tot <-   ECONCO2 %>%
+    #filter(grepl("emissions", tolower(Variable), fixed=T)) %>%
+    filter(!grepl("Emissions|CO2|",Variable, fixed=T)) %>%
+    filter(Region=="EU" ) %>%
+    ggplot()+
+    geom_line(aes(x=Year, y=value,  group=Scenario, colour=Scenario)) +
+     labs(title="CO2 Emissions",
+        x="Year",
+        y="MtCO2/yr") +
+    facet_wrap(~ Variable, ncol=2) +
+         theme(axis.text.x = element_text(angle=45, hjust=1),
+               text = element_text(size=14))
+
+ ggplotly(ECONCO2Tot)
+
+```
+
+
 ### Demand sector emissions
 
 ```{r dem-emis, echo=FALSE, results=TRUE, message=FALSE, warning=FALSE, fig.width=9, fig.height=10}
@@ -131,30 +157,6 @@ INDUSDEMTot <-   INDUSDEM %>%
                text = element_text(size=14))
 
  ggplotly(INDUSDEMTot)
-
-```
-
-### Whole system emissions
-
-```{r econ-emis, echo=FALSE, results=TRUE, message=FALSE, warning=FALSE, fig.width=9, fig.height=5}
-
-ECONCO2 <- SCENdat %>%
-    filter(grepl("Emissions|CO2", Variable, fixed=T)) 
-
-ECONCO2Tot <-   ECONCO2 %>%
-    #filter(grepl("emissions", tolower(Variable), fixed=T)) %>%
-    filter(!grepl("Emissions|CO2|",Variable, fixed=T)) %>%
-    filter(Region=="EU" ) %>%
-    ggplot()+
-    geom_line(aes(x=Year, y=value,  group=Scenario, colour=Scenario)) +
-     labs(title="CO2 Emissions",
-        x="Year",
-        y="MtCO2/yr") +
-    facet_wrap(~ Variable, ncol=2) +
-         theme(axis.text.x = element_text(angle=45, hjust=1),
-               text = element_text(size=14))
-
- ggplotly(ECONCO2Tot)
 
 ```
 
