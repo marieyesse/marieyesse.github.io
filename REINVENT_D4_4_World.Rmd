@@ -202,7 +202,8 @@ SCENSTEELProd <-   SCENSTEEL %>%
   
     filter(Region=="World" ) %>%
     ggplot()+
-    geom_area(aes(x=Year, y=value, fill=Material), position="stack", colour="black") +
+    geom_area(data=. %>% filter(!grepl("scrap", tolower(Material), fixed=T)), aes(x=Year, y=value, fill=Material), position="stack", colour="black") +
+    geom_area(data=. %>% filter(grepl("scrap", tolower(Material), fixed=T)), aes(x=Year, y=value, fill=Material), position="stack", colour="black") +
      labs(title="Production",
         x="Year",
         y="Mt/Yr") +
