@@ -139,7 +139,7 @@ ECONCO2Tot <-   ECONCO2 %>%
 ```{r dem-emis, echo=FALSE, results=TRUE, message=FALSE, warning=FALSE, fig.width=9, fig.height=10}
 
 INDUSDEM <- SCENdat %>%
-    filter(grepl("Emissions|CO2|Energy|Demand|", Variable, fixed=T)) 
+    filter(grepl("Emissions|CO2|Fossil Fuels and Industry|Energy Demand|", Variable, fixed=T)) 
 
 INDUSDEMTot <-   INDUSDEM %>%
     #filter(grepl("emissions", tolower(Variable), fixed=T)) %>%
