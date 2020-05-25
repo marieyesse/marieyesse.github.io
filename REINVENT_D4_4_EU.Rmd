@@ -161,7 +161,7 @@ Produced on: `r format(Sys.time(), '%d %B %Y - time stamp: %H:%M')`
 **Known issues**:
 
 * **Steel:** No primary production in some scenarios 
-* **Steel:** Wel H-DRI, geen Electrowinning
+* **Steel:** 
 * **Steel:** Final Energy parameter seems off.. could be wrong variable that did not transfer from TIMER_2015
 *	**Cement:** Material Demand stijgt na 2050 weer
 *	**CHemicals:** werkt nog niet / geen scenario parameterisation
@@ -171,6 +171,8 @@ Produced on: `r format(Sys.time(), '%d %B %Y - time stamp: %H:%M')`
 
 ## Scenario assumptions {.tabset}
 
+ <br><br>
+ 
 ### TechReplace
 
 ```{r scen-table-techreplace, echo=FALSE, results=TRUE, message=FALSE, warning=FALSE, fig.width=9, fig.height=5}
@@ -655,9 +657,35 @@ SCENCHEMEMIS <-   SCENCHEM %>%
 
 ```
 
+
 ### Material Demand
 
-This seems not mapped yet..
+
+```{r nonen-material, echo=FALSE, results=TRUE, message=FALSE, warning=FALSE, fig.width=9, fig.height=11}
+
+SCENCHEM <- SCENdat %>%
+    filter(grepl("Production|Industry|Chemical|", Variable, fixed=T)) 
+
+SCENCHEMProd <-   SCENCHEM %>%
+    #filter(grepl("production", tolower(Variable), fixed=T)) %>%
+    #separate(Variable, c("X", "Y", "Industry", "Material"), sep = "[|]") %>%
+  mutate(Variable=gsub("Production|Industry|Chemical|", "", Variable, fixed=T)) %>%  
+    filter(Region=="EU" ) %>%
+    ggplot()+
+    geom_area( aes(x=Year, y=value, fill=Variable), position="stack", colour="black") +
+    geom_area(aes(x=Year, y=value, fill=Variable), position="stack", colour="black") +
+
+     labs(title="Production",
+        x="Year",
+        y="GJ prod/Yr") +
+    facet_wrap(~ Scenario, ncol=2) +
+         theme(axis.text.x = element_text(angle=45, hjust=1),
+               text = element_text(size=14))
+
+ ggplotly(SCENCHEMProd)
+
+```
+
 
 ### Capacity / Feedstock
 
