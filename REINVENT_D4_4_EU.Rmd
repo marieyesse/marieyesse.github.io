@@ -164,10 +164,15 @@ Produced on: `r format(Sys.time(), '%d %B %Y - time stamp: %H:%M')`
 * **Steel:** 
 * **Steel:** Final Energy parameter seems off.. could be wrong variable that did not transfer from TIMER_2015
 *	**Cement:** Material Demand stijgt na 2050 weer
-*	**CHemicals:** werkt nog niet / geen scenario parameterisation
-*	**PPI:**  juist de Circ en DemandMan gaan heel diep negatief
-*	**Food:** no change.
+*	**Cement:** Hydrogen fired rotary kilns at end of century?
+*	**Chemicals:** Recycling does not seem to work properly? (should be 50% of last year that is recycled.......)
+*	**Chemicals:** Carbon Looping for CO2 does not appear.
+*	**PPI:**: Where is the material efficiency assumption coming from?
+*	**Food:** no change. David will try to get the old food scenarios up and running (Week of June 1st)
+*	**General:** No green hydrogen?
+*	**General:** implementation only until 2050
 * Geen IMAGE data nog
+
 
 ## Scenario assumptions {.tabset}
 
