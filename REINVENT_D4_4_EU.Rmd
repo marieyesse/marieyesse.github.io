@@ -4,7 +4,7 @@ author: "  TIMER_3_11, EU results "
 output: html_document
 ---
 
-```{r setup, include=FALSE}
+```{r setup, include=FALSE, echo=FALSE}
 
 #######################################################################################################################
 # THIS FILE: Analyses all the REINVENT narrative scenarios
@@ -38,6 +38,18 @@ if(!require(tm)){install.packages("tm");  library(tm)}
 if(!require(readxl)){install.packages("readxl");  library(readxl)}
 if(!require(tabulizer)){install.packages("tabulizer");  library(tabulizer)}
 
+# Social Media analysis
+if(!require(rtweet)){install.packages("rtweet");  library(rtweet)}
+if(!require(trendyy)){install.packages("trendyy");  library(trendyy)}
+if(!require(gtrendsR)){install.packages("gtrendsR");  library(gtrendsR)}
+
+# API reading and online toolng
+if(!require(googledrive)){install.packages("googledrive");  library(googledrive)}
+if(!require(googlesheets4)){install_github("tidyverse/googlesheets4");  library(googlesheets4)}
+if(!require(rscopus)){install.packages("rscopus");  library(rscopus)}
+#if(!require(orcid)){install.packages("orcid");  library(orcid)}
+if(!require(scholar)){install.packages("scholar");  library(scholar)}
+
 # maps
 if(!require(grid)){install.packages("grid"); library(grid)}
 if(!require(rworldmap)){install.packages("rworldmap");  library(rworldmap)}
@@ -54,11 +66,62 @@ if(!require(igraph)){install.packages("igraph");  library(igraph)}
 if(!require(ggraph)){install.packages("ggraph");  library(ggraph)}
 if(!require(ggforce)){install.packages("ggforce");  library(ggforce)}
 if(!require(shadowtext)){install.packages("shadowtext");  library(shadowtext)}
+if(!require(gt)){install.packages("gt");  library(gt)}
 #if(!require(animation)){install.packages("animation");  library(animation)}
 
 
 # MyM cnversion packages
 #if(!require(mym2r)){install_github("marieyesse/mym2r");  library(mym2r)}
+
+#######################################################################################################################
+### Functions (see repository "Timer_tools")
+#######################################################################################################################
+
+## Helper function "interpolate" 
+
+interpolate <- function(df, startyear, endyear){
+  df.intrapolate=seq(unique(df$Year)[1],endyear) 
+  
+  ## Activate data.table package ###
+  dfreal=data.table(df)
+  
+  #Intrapolatie with approximate
+  dfreal = dfreal[,list(approx(x=Year,y=value,xout=df.intrapolate)$y,
+                        approx(x=Year,y=value,xout=df.intrapolate)$x),
+                  by=eval(dput(names(dfreal[, -c("Year", "value")])))]
+  
+  setnames(dfreal,"V1","value")
+  setnames(dfreal,"V2","Year")
+  
+  dfreal=data.table(dfreal)
+  
+}
+
+
+cemis <- function(df, startyear, endyear){
+  
+  df.intrapolate=seq(unique(df$Year)[1],endyear) 
+  
+  ## Activate data.table package ###
+  dfreal=data.table(df)
+  
+  #Intrapolatie with approximate
+  dfreal = dfreal[,list(approx(x=Year,y=value,xout=df.intrapolate)$y,
+                        approx(x=Year,y=value,xout=df.intrapolate)$x),
+                  by=eval(dput(names(dfreal[, -c("Year", "value")])))]
+  
+  setnames(dfreal,"V1","value")
+  setnames(dfreal,"V2","Year")
+  
+  dfreal=data.table(dfreal)
+  
+  df = dfreal[Year %in% c(startyear:endyear)] %>% 
+    group_by_at(names(dfreal[, -c("Year", "value")])) %>% 
+    mutate(CEMIS=cumsum(value)) 
+  
+  df = data.table(df)
+  
+}
 ```
 
 ```{r data, include=FALSE}
@@ -106,6 +169,152 @@ Produced on: `r format(Sys.time(), '%d %B %Y - time stamp: %H:%M')`
 *	**Food:** no change.
 * Geen IMAGE data nog
 
+## Scenario assumptions {.tabset}
+
+### TechReplace
+
+```{r scen-table-techreplace, echo=FALSE, results=TRUE, message=FALSE, warning=FALSE, fig.width=9, fig.height=5}
+
+read_xlsx("../../../REINVENT_D4_4/Scenario_assumptions.xlsx") %>%
+  data.table() %>%
+  filter(Scenario=="TechReplace") %>%
+  rename_all(make.names) %>%
+  select(Focus, Sector, What, Starting.from, Convergence.to.year, Reference) %>%
+  gt(
+    rowname_col = "Focus",
+    groupname_col = "Sector"
+  ) %>%
+  tab_header(title = "Scenario assumptions") %>%
+  tab_spanner(
+    label = "Changes to SSP2",
+    columns = vars(`What`, `Starting.from`, `Convergence.to.year`, `Reference`)
+  ) %>%
+  fmt_markdown(
+    columns = vars(`What`, `Starting.from`, `Convergence.to.year`, `Reference`)
+  ) %>%
+  tab_options(table.font.size = 12,
+              table.align = "center",
+              row_group.background.color = "#D3D3D3",
+              row_group.font.size = 14,
+              row_group.font.weight = "bold",
+              table.width = pct(100),
+              column_labels.font.weight = "bold",
+              heading.title.font.size = 20,
+              heading.title.font.weight = "bold")
+
+``` 
+
+ <br><br>
+
+
+### ProcEff
+
+```{r scen-table-proceff, echo=FALSE, results=TRUE, message=FALSE, warning=FALSE, fig.width=9, fig.height=5}
+
+read_xlsx("../../../REINVENT_D4_4/Scenario_assumptions.xlsx") %>%
+  data.table() %>%
+  filter(Scenario=="ProcEff") %>%
+  rename_all(make.names) %>%
+    select(Focus, Sector, What, Starting.from, Convergence.to.year, Reference) %>%
+  gt(
+    rowname_col = "Focus",
+    groupname_col = "Sector"
+  ) %>%
+  tab_header(title = "Scenario assumptions") %>%
+  tab_spanner(
+    label = "Changes to SSP2",
+    columns = vars(`What`, `Starting.from`, `Convergence.to.year`, `Reference`)
+  ) %>%
+  fmt_markdown(
+    columns = vars(`What`, `Starting.from`, `Convergence.to.year`, `Reference`)
+  )%>%
+  tab_options(table.font.size = 12,
+              table.align = "center",
+              row_group.background.color = "#D3D3D3",
+              row_group.font.size = 14,
+              row_group.font.weight = "bold",
+              table.width = pct(100),
+              column_labels.font.weight = "bold",
+              heading.title.font.size = 20,
+              heading.title.font.weight = "bold")
+
+``` 
+
+
+ <br><br>
+
+
+### DemandMan
+
+```{r scen-table-demandman, echo=FALSE, results=TRUE, message=FALSE, warning=FALSE, fig.width=9, fig.height=5}
+
+read_xlsx("../../../REINVENT_D4_4/Scenario_assumptions.xlsx") %>%
+  data.table() %>%
+  filter(Scenario=="DemandMan") %>%
+  rename_all(make.names) %>%
+    select(Focus, Sector, What, Starting.from, Convergence.to.year, Reference) %>%
+  gt(
+    rowname_col = "Focus",
+    groupname_col = "Sector"
+  ) %>%
+  tab_header(title = "Scenario assumptions") %>%
+  tab_spanner(
+    label = "Changes to SSP2",
+    columns = vars(`What`, `Starting.from`, `Convergence.to.year`, `Reference`)
+  ) %>%
+  fmt_markdown(
+    columns = vars(`What`, `Starting.from`, `Convergence.to.year`, `Reference`)
+  ) %>%
+  tab_options(table.font.size = 12,
+              table.align = "center",
+              row_group.background.color = "#D3D3D3",
+              row_group.font.size = 14,
+              row_group.font.weight = "bold",
+              table.width = pct(100),
+              column_labels.font.weight = "bold",
+              heading.title.font.size = 20,
+              heading.title.font.weight = "bold")
+
+``` 
+
+ <br><br>
+
+
+### CircEco
+
+```{r scen-table-circeco, echo=FALSE, results=TRUE, message=FALSE, warning=FALSE, fig.width=9, fig.height=5}
+
+read_xlsx("../../../REINVENT_D4_4/Scenario_assumptions.xlsx") %>%
+  data.table() %>%
+  filter(Scenario=="CircEco") %>%
+  rename_all(make.names) %>%
+    select(Focus, Sector, What, Starting.from, Convergence.to.year, Reference) %>%
+  gt(
+    rowname_col = "Focus",
+    groupname_col = "Sector"
+  ) %>%
+  tab_header(title = "Scenario assumptions") %>%
+  tab_spanner(
+    label = "Changes to SSP2",
+    columns = vars(`What`, `Starting.from`, `Convergence.to.year`, `Reference`)
+  ) %>%
+  fmt_markdown(
+    columns = vars(`What`, `Starting.from`, `Convergence.to.year`, `Reference`)
+  ) %>%
+  tab_options(table.font.size = 12,
+              table.align = "center",
+              row_group.background.color = "#D3D3D3",
+              row_group.font.size = 14,
+              row_group.font.weight = "bold",
+              table.width = pct(100),
+              column_labels.font.weight = "bold",
+              heading.title.font.size = 20,
+              heading.title.font.weight = "bold")
+
+``` 
+
+ <br><br>
+
 ## General {.tabset}
 
 
@@ -123,6 +332,31 @@ ECONCO2Tot <-   ECONCO2 %>%
     ggplot()+
     geom_line(aes(x=Year, y=value,  group=Scenario, colour=Scenario)) +
      labs(title="CO2 Emissions",
+        x="Year",
+        y="MtCO2/yr") +
+    facet_wrap(~ Variable, ncol=2) +
+         theme(axis.text.x = element_text(angle=45, hjust=1),
+               text = element_text(size=14))
+
+ ggplotly(ECONCO2Tot)
+
+```
+
+### Cumulative emissions
+
+```{r econ-emis-cumu, echo=FALSE, results=TRUE, message=FALSE, warning=FALSE, fig.width=9, fig.height=5}
+
+ECONCO2 <- SCENdat %>%
+    filter(grepl("Emissions|CO2", Variable, fixed=T)) 
+
+ECONCO2Tot <-   ECONCO2 %>%
+    #filter(grepl("emissions", tolower(Variable), fixed=T)) %>%
+    filter(!grepl("Emissions|CO2|",Variable, fixed=T)) %>%
+    filter(Region=="EU" ) %>%
+  cemis(., 2010, 2100) %>%
+    ggplot()+
+    geom_line(aes(x=Year, y=CEMIS,  group=Scenario, colour=Scenario)) +
+     labs(title="Cumulative CO2 Emissions between 2010 and 2100",
         x="Year",
         y="MtCO2/yr") +
     facet_wrap(~ Variable, ncol=2) +
@@ -173,6 +407,7 @@ SCENSTEEL <- SCENdat %>%
 SCENSTEELEMIS <-   SCENSTEEL %>%
     filter(grepl("emissions", tolower(Variable), fixed=T)) %>%
     filter(!grepl("cokes", tolower(Variable), fixed=T)) %>%
+      filter(grepl("direct", tolower(Variable), fixed=T)) %>%
     separate(Variable, c("X", "Y", "Industry", "Type"), sep = "[|]") %>%
     filter(Region=="EU" ) %>%
     ggplot()+
@@ -291,6 +526,7 @@ SCENCE <- SCENdat %>%
 
 SCENCEEMIS <-   SCENCE %>%
     filter(grepl("emissions", tolower(Variable), fixed=T)) %>%
+      filter(grepl("direct", tolower(Variable), fixed=T)) %>%
     separate(Variable, c("X", "Y", "Industry", "Type"), sep = "[|]") %>%
     filter(Region=="EU" ) %>%
     ggplot()+
@@ -403,6 +639,7 @@ SCENCHEM <- SCENdat %>%
 
 SCENCHEMEMIS <-   SCENCHEM %>%
     filter(grepl("emissions", tolower(Variable), fixed=T)) %>%
+    filter(grepl("direct", tolower(Variable), fixed=T)) %>%
     separate(Variable, c("X", "Y", "Industry", "Type"), sep = "[|]") %>%
     filter(Region=="EU" ) %>%
     ggplot()+
@@ -487,6 +724,7 @@ SCENPPI <- SCENdat %>%
 
 SCENPPIEMIS <-   SCENPPI %>%
     filter(grepl("emissions", tolower(Variable), fixed=T)) %>%
+      filter(grepl("direct", tolower(Variable), fixed=T)) %>%
     separate(Variable, c("X", "Y", "Industry", "Type"), sep = "[|]") %>%
   
     filter(Region=="EU" ) %>%
