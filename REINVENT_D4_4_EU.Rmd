@@ -388,6 +388,7 @@ INDUSDEMTot <-   INDUSDEM %>%
     separate(Variable, c("X", "Y", "Z", "A", "Industry", "TMI"), sep = "[|]") %>%
   filter(is.na(TMI)==T) %>%
     filter(Region=="EU" ) %>%
+
     ggplot()+
     geom_line(aes(x=Year, y=value,  group=Scenario, colour=Scenario)) +
      labs(title="CO2 Emissions",
@@ -400,6 +401,35 @@ INDUSDEMTot <-   INDUSDEM %>%
  ggplotly(INDUSDEMTot)
 
 ```
+
+### Cumulative demand sector emissions
+
+```{r demsec-emis-cumu, echo=FALSE, results=TRUE, message=FALSE, warning=FALSE, fig.width=9, fig.height=5}
+
+INDUSDEM <- SCENdat %>%
+    filter(grepl("Emissions|CO2|Fossil Fuels and Industry|Energy Demand|", Variable, fixed=T)) 
+
+INDUSDEMbudget <-   INDUSDEM %>%
+    #filter(grepl("emissions", tolower(Variable), fixed=T)) %>%
+    #filter(!grepl("cokes", tolower(Variable), fixed=T)) %>%
+    separate(Variable, c("X", "Y", "Z", "A", "Industry", "TMI"), sep = "[|]") %>%
+  filter(is.na(TMI)==T) %>%
+    filter(Region=="EU" ) %>%
+    group_by(Industry) %>%
+  cemis(., 2010, 2100) %>%
+    ggplot()+
+    geom_line(aes(x=Year, y=CEMIS,  group=Scenario, colour=Scenario)) +
+     labs(title="CO2 Emissions",
+        x="Year",
+        y="MtCO2/yr") +
+    facet_wrap(~ Industry, ncol=2) +
+         theme(axis.text.x = element_text(angle=45, hjust=1),
+               text = element_text(size=14))
+
+ ggplotly(INDUSDEMbudget)
+
+```
+
 
 
 ## Steel {.tabset}
