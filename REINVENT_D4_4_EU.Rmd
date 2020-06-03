@@ -921,9 +921,9 @@ SCENFood <- SCENdat %>%
 
 SCENFoodProd <-   SCENFood %>%
     filter(grepl("production", tolower(Variable), fixed=T)) %>%
-    filter(grepl("minor", tolower(Variable), fixed=T)) %>%
+    filter(grepl("minor", tolower(Variable), fixed=T) & !grepl("dairy", tolower(Variable))) %>%
     separate(Variable, c("X", "Y", "Industry", "Z", "Food"), sep = "[|]") %>%
-    filter(Region=="EU" ) %>%
+    filter(Region=="EU" & !Food=="Meat" ) %>%
     ggplot()+
     geom_area(aes(x=Year, y=value, fill=Food), position="stack", colour="black") +
      labs(title="Production",
