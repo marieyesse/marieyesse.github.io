@@ -705,6 +705,14 @@ SCENCHEMProd <-   SCENCHEM %>%
     #separate(Variable, c("X", "Y", "Industry", "Material"), sep = "[|]") %>%
   mutate(Variable=gsub("Production|Industry|Chemical|", "", Variable, fixed=T)) %>%  
     filter(Region=="EU" ) %>%
+  bind_rows({.} %>% filter(grepl("HVC", Variable)) %>%
+              
+              spread(Variable,value) %>%
+              rename_all(make.names) %>%
+              mutate(HVC.Virgin.Production=(HVC.Total.Demand-HVC.Mechanical.recycling-HVC.Chemical.recycling)) %>%
+              select(-HVC.Total.Demand, -HVC.Mechanical.recycling, -HVC.Chemical.recycling) %>%
+              gather(Variable, value, c(HVC.Virgin.Production))) %>%
+  filter(!grepl("Total", Variable)) %>%
     ggplot()+
     geom_area( aes(x=Year, y=value, fill=Variable), position="stack", colour="black") +
     geom_area(aes(x=Year, y=value, fill=Variable), position="stack", colour="black") +
@@ -745,6 +753,32 @@ SCENCHEMCAP <-   SCENCHEM %>%
 ```
 
 ### Final Energy
+
+
+```{r nonen-procenergy, echo=FALSE, results=TRUE, message=FALSE, warning=FALSE, fig.width=9, fig.height=7}
+
+SCENNONEN <- SCENdat %>%
+    filter(grepl("chemicals and petrochemicals", tolower(Variable), fixed=T)) 
+
+SCENNONENFINEproc <-   SCENNONEN %>%
+    filter(grepl("process energy", tolower(Variable), fixed=T)) %>%
+    separate(Variable, c("X", "Y", "Industry", "Carrier"), sep = "[|]") %>%
+  filter(!is.na(Carrier)==T) %>%
+  
+    filter(Region=="EU" ) %>%
+    ggplot()+
+    geom_area(aes(x=Year, y=value, fill=Carrier), position="stack", colour="black") +
+     labs(title="Process Energy Use (Steam Cracking)",
+        x="Year",
+        y="EJ/yr") +
+    facet_wrap(~ Scenario, ncol=2) +
+         theme(axis.text.x = element_text(angle=45, hjust=1),
+               text = element_text(size=14))
+
+ ggplotly(SCENNONENFINEproc)
+
+```
+
 
 ```{r nonen-energy, echo=FALSE, results=TRUE, message=FALSE, warning=FALSE, fig.width=9, fig.height=7}
 
@@ -958,6 +992,7 @@ SCENFoodProd <-   SCENFood %>%
                text = element_text(size=14))
 
  ggplotly(SCENFoodProd)
+ 
 ```
 
 
