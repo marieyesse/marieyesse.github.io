@@ -22,7 +22,7 @@ setwd("/mnt/y/Kennisbasis/IMAGE/model/users/mariesse/R/GitHub/marieyesse.github.
 ### Install and/or load required packages / dependencies
 #######################################################################################################################
 
-# Easy scripting packages
+# Easy scripting packages.k
 if(!require(dplyr)){install.packages("dplyr");   library(dplyr)}
 if(!require(forcats)){install.packages("forcats");  library(forcats)}
 if(!require(data.table)){install.packages("data.table");  library(data.table)}
@@ -673,8 +673,8 @@ SCENCHEM <- SCENdat %>%
 SCENCHEMEMIS <-   SCENCHEM %>%
     filter(grepl("emissions", tolower(Variable), fixed=T)) %>%
     filter(grepl("direct", tolower(Variable), fixed=T)) %>%
-    separate(Variable, c("X", "Y", "Industry", "Type"), sep = "[|]") %>%
-    filter(Region=="EU" ) %>%
+    separate(Variable, c("X", "Y", "Industry", "Type", "Z"), sep = "[|]") %>%
+    filter(Region=="EU" & Type=="Direct emissions" ) %>%
     ggplot()+
     geom_line(aes(x=Year, y=value, colour=Scenario, group=Scenario)) +
      labs(title="CO2 Emissions",
@@ -685,48 +685,64 @@ SCENCHEMEMIS <-   SCENCHEM %>%
                text = element_text(size=14))
 
  ggplotly(SCENCHEMEMIS)
-
-```
-
-
-### Material Demand
-
-
-```{r nonen-material, echo=FALSE, results=TRUE, message=FALSE, warning=FALSE, fig.width=9, fig.height=11}
-
-SCENCHEM <- SCENdat %>%
-    filter(grepl("Production|Industry|Chemical|", Variable, fixed=T)) 
-
-SCENCHEMProd <-   SCENCHEM %>%
-    #filter(grepl("production", tolower(Variable), fixed=T)) %>%
-    #separate(Variable, c("X", "Y", "Industry", "Material"), sep = "[|]") %>%
-  mutate(Variable=gsub("Production|Industry|Chemical|", "", Variable, fixed=T)) %>%  
-    filter(Region=="EU" ) %>%
-  bind_rows({.} %>% filter(grepl("HVC", Variable)) %>%
-              
-              spread(Variable,value) %>%
-              rename_all(make.names) %>%
-              mutate(HVC.Virgin.Production=(HVC.Total.Demand-HVC.Mechanical.recycling-HVC.Chemical.recycling)) %>%
-              select(-HVC.Total.Demand, -HVC.Mechanical.recycling, -HVC.Chemical.recycling) %>%
-              gather(Variable, value, c(HVC.Virgin.Production))) %>%
-  filter(!grepl("Total", Variable)) %>%
-    ggplot()+
-    geom_area( aes(x=Year, y=value, fill=Variable), position="stack", colour="black") +
-    geom_area(aes(x=Year, y=value, fill=Variable), position="stack", colour="black") +
-
-     labs(title="Production",
+ 
+ SCENCHEMEMIS2 <-   SCENCHEM %>%
+    filter(grepl("emissions", tolower(Variable), fixed=T)) %>%
+    filter(grepl("direct", tolower(Variable), fixed=T))  %>%
+    separate(Variable, c("X", "Y", "Industry", "Type", "Z"), sep = "[|]") %>%
+    filter(Region=="EU" & !Type=="Direct emissions" ) %>%
+   ggplot()+
+    geom_area(aes(x=Year, y=value, fill=Type), position="stack", colour="black") +
+     labs(title="CO2 emissions",
         x="Year",
-        y="GJ prod/Yr") +
+        y="MtCO2/yr") +
     facet_wrap(~ Scenario, ncol=2) +
          theme(axis.text.x = element_text(angle=45, hjust=1),
                text = element_text(size=14))
 
- ggplotly(SCENCHEMProd)
+ ggplotly(SCENCHEMEMIS2)
 
 ```
 
 
-### Capacity / Feedstock
+<!-- ### Material Demand -->
+
+
+<!-- ```{r nonen-material, echo=FALSE, results=TRUE, message=FALSE, warning=FALSE, fig.width=9, fig.height=11} -->
+
+<!-- SCENCHEM <- SCENdat %>% -->
+<!--     filter(grepl("Production|Industry|Chemical|", Variable, fixed=T))  -->
+
+<!-- SCENCHEMProd <-   SCENCHEM %>% -->
+<!--     #filter(grepl("production", tolower(Variable), fixed=T)) %>% -->
+<!--     #separate(Variable, c("X", "Y", "Industry", "Material"), sep = "[|]") %>% -->
+<!--   mutate(Variable=gsub("Production|Industry|Chemical|", "", Variable, fixed=T)) %>%   -->
+<!--     filter(Region=="EU" ) %>% -->
+<!--   bind_rows({.} %>% filter(grepl("HVC", Variable)) %>% -->
+
+<!--               spread(Variable,value) %>% -->
+<!--               rename_all(make.names) %>% -->
+<!--               mutate(HVC.Virgin.Production=(HVC.Total.Demand-HVC.Mechanical.recycling-HVC.Chemical.recycling)) %>% -->
+<!--               select(-HVC.Total.Demand, -HVC.Mechanical.recycling, -HVC.Chemical.recycling) %>% -->
+<!--               gather(Variable, value, c(HVC.Virgin.Production))) %>% -->
+<!--   filter(!grepl("Total", Variable)) %>% -->
+<!--     ggplot()+ -->
+<!--     geom_area( aes(x=Year, y=value, fill=Variable), position="stack", colour="black") + -->
+<!--     geom_area(aes(x=Year, y=value, fill=Variable), position="stack", colour="black") + -->
+
+<!--      labs(title="Production", -->
+<!--         x="Year", -->
+<!--         y="GJ prod/Yr") + -->
+<!--     facet_wrap(~ Scenario, ncol=2) + -->
+<!--          theme(axis.text.x = element_text(angle=45, hjust=1), -->
+<!--                text = element_text(size=14)) -->
+
+<!--  ggplotly(SCENCHEMProd) -->
+
+<!-- ``` -->
+
+
+### Feedstock
 
 ```{r Chemical, results=TRUE, message=FALSE, warning=FALSE, echo=FALSE, fig.width=9, fig.height=7}
 
@@ -741,7 +757,7 @@ SCENCHEMCAP <-   SCENCHEM %>%
     geom_area(aes(x=Year, y=value, fill=Technology), position="stack", colour="black") +
      labs(title="Non-energy demand",
         x="Year",
-        y="GJ/yr") +
+        y="EJ/yr") +
     facet_wrap(~ Scenario, ncol=2) +
          theme(axis.text.x = element_text(angle=45, hjust=1),
                text = element_text(size=14))
