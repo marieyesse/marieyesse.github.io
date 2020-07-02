@@ -150,7 +150,7 @@ SCENdat <- rbindlist(SCENSdat_list, fill=TRUE) %>%
               group_by(Model, Scenario, Variable, Unit, Year) %>% 
               summarise(value=sum(value)) %>%
               mutate(Region="World")) %>%
-  filter( !Scenario %in% c("SSP2_MaxTax", "SSP2_450"))
+  filter(!Year > 2050 & !Scenario %in% c("SSP2_MaxTax", "SSP2_450"))
 
 SCENINDUS <- SCENdat %>%
     filter(grepl("industry", tolower(Variable), fixed=T))
