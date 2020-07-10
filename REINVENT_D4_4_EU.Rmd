@@ -862,15 +862,18 @@ SCENPPI <- SCENdat %>%
 
 SCENPPIProd <-   SCENPPI %>%
     filter(grepl("production", tolower(Variable), fixed=T)) %>%
-    separate(Variable, c("X", "Y", "Industry", "Food"), sep = "[|]") %>%
-  filter(!Food=="Total") %>%
+    separate(Variable, c("X", "Y", "Industry", "Product"), sep = "[|]") %>%
+  mutate(Group=case_when(grepl("Pulp", Product) ~ "Pulp",
+                         grepl("print|board", tolower(Product)) ~ "Paper",
+                         TRUE ~ "Recovered")) %>%
+  filter(!Product=="Total") %>%
     filter(Region=="EU" ) %>%
     ggplot()+
-    geom_area(aes(x=Year, y=value, fill=Food), position="stack", colour="black") +
+    geom_area(aes(x=Year, y=value, fill=Product), position="stack", colour="black") +
      labs(title="Production",
         x="Year",
         y="Mt/Yr") +
-    facet_wrap(~ Scenario, ncol=2) +
+    facet_grid(Scenario~Group) +
          theme(axis.text.x = element_text(angle=45, hjust=1),
                text = element_text(size=14))
 
