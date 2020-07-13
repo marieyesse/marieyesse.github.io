@@ -678,13 +678,15 @@ SCENCHEMEMIS <-   SCENCHEM %>%
     filter(grepl("emissions", tolower(Variable), fixed=T)) %>%
     filter(grepl("direct", tolower(Variable), fixed=T)) %>%
     separate(Variable, c("X", "Y", "Industry", "Type", "Z"), sep = "[|]") %>%
-    filter(Region=="EU" & Type=="Direct emissions" ) %>%
+  
+  filter(grepl("hvc", tolower(Type), fixed=T)) %>%
+    filter(Region=="EU" ) %>%
     ggplot()+
     geom_line(aes(x=Year, y=value, colour=Scenario, group=Scenario)) +
      labs(title="Total CO2 Emissions",
         x="Year",
         y="MtCO2/yr") +
-    facet_wrap(~ Type, ncol=2) +
+    facet_wrap(~ Z, ncol=2) +
          theme(axis.text.x = element_text(angle=45, hjust=1),
                text = element_text(size=14))
 
