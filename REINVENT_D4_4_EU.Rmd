@@ -696,7 +696,7 @@ SCENCHEMEMIS <-   SCENCHEM %>%
     filter(grepl("emissions", tolower(Variable), fixed=T)) %>%
     filter(grepl("direct", tolower(Variable), fixed=T))  %>%
     separate(Variable, c("X", "Y", "Industry", "Type", "Z"), sep = "[|]") %>%
-    filter(Region=="EU" & !Type=="Direct emissions" ) %>%
+    filter(Region=="EU" & Z=="Direct emissions" ) %>%
    ggplot()+
     geom_area(aes(x=Year, y=value, fill=Type), position="stack", colour="black") +
      labs(title="Sectoral CO2 emissions",
