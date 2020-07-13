@@ -556,14 +556,14 @@ SCENSTEELFINE <-   SCENSTEEL %>%
 
 ### CO2 Emissions
 
-```{r ce-emis, echo=FALSE, results=TRUE, message=FALSE, warning=FALSE, fig.width=9, fig.height=5}
+```{r ce-emis, echo=FALSE, results=TRUE, message=FALSE, warning=FALSE, fig.width=9, fig.height=7}
 
 SCENCE <- SCENdat %>%
     filter(grepl("cement", tolower(Variable), fixed=T)) 
 
 SCENCEEMIS <-   SCENCE %>%
     filter(grepl("emissions", tolower(Variable), fixed=T)) %>%
-      filter(grepl("direct", tolower(Variable), fixed=T)) %>%
+      #filter(grepl("direct", tolower(Variable), fixed=T)) %>%
     separate(Variable, c("X", "Y", "Industry", "Type"), sep = "[|]") %>%
     filter(Region=="EU" ) %>%
     ggplot()+
