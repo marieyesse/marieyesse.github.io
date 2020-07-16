@@ -135,7 +135,7 @@ SCENSdat_list <- lapply(SCEN_xlsx, function(x){
     dat=data.table(dat)
     })
 
-SCENdat <- rbindlist(SCENSdat_list, fill=TRUE) %>%
+SCENall <- rbindlist(SCENSdat_list, fill=TRUE) %>%
     drop_na(Model) %>%
     gather(Year, value, -c(Model, Scenario, Region, Variable, Unit)) %>%
     mutate(Year=as.numeric(Year), value=as.numeric(value)) %>%
@@ -152,6 +152,9 @@ SCENdat <- rbindlist(SCENSdat_list, fill=TRUE) %>%
               mutate(Region="World")) %>%
   filter( !Scenario %in% c("SSP2_450","SSP2_MaxTax"))#"SSP2_MaxTax", 
 
+SCENdat <- SCENall %>% 
+  filter( Scenario %in% c("TechReplace", "DemandMan", "CircEco", "ProcEff"))
+
 SCENINDUS <- SCENdat %>%
     filter(grepl("industry", tolower(Variable), fixed=T))
 
@@ -160,13 +163,6 @@ SCENINDUS <- SCENdat %>%
 Produced on: `r format(Sys.time(), '%d %B %Y - time stamp: %H:%M')`
 
 **Known issues**:
-
-*	**Cement:** Hydrogen fired rotary kilns at end of century?
-*	**Chemicals:** Final Energy should include bioenergy use?
-*	**PPI:**: 
-*	**Food:**  
-*	**General:** No green hydrogen?
-
 * Non-CO2/IMAGE-Land data not yet included
 
 <font color="#cc0000"> This is preliminary work, please do not cite </font>
@@ -432,7 +428,44 @@ INDUSDEMbudget <-   INDUSDEM %>%
 
 ```
 
+## Industrial decarbonization overview {.tabset}
 
+```{r all-emis, echo=FALSE, results=TRUE, message=FALSE, warning=FALSE, fig.width=9, fig.height=9}
+
+SCENINDUSALL <- SCENall %>%
+    filter(str_detect(tolower(Variable), c("steel", "cement", "paper",  "food"))) 
+
+SCENINDUSALLEMIS <-   SCENINDUSALL %>%
+    filter(grepl("emissions", tolower(Variable), fixed=T)) %>%
+    filter(!grepl("cokes", tolower(Variable), fixed=T)) %>%
+      filter(grepl("Direct emissions", Variable, fixed=T)) %>%
+    bind_rows(SCENall %>%
+            filter(str_detect(tolower(Variable),"chemicals and petrochemicals")) %>%
+             filter(grepl("Direct emissions", Variable, fixed=T)) %>%
+            filter(grepl("hvc", tolower(Variable)))
+       ) %>%
+  mutate(Scengroup=case_when(grepl("Circ", Scenario) ~"CircEco",
+                             grepl("Demand", Scenario) ~"DemandMan",
+                             grepl("Proc", Scenario) ~"ProcEff",
+                             grepl("Tech", Scenario) ~"TechReplace")) %>%
+    mutate(ScenLabel=case_when(grepl("4000USD", Scenario) ~"FSC infeasible ",
+                             grepl("450", Scenario) ~"new SSP2_450 ctax",
+                             grepl("MaxTax", Scenario) ~"MaxTax ctax",
+                             TRUE ~"HS MaxTax")) %>%
+    separate(Variable, c("X", "Y", "Industry", "Type"), sep = "[|]") %>%
+    filter(Region=="EU" ) %>%
+    ggplot()+
+    geom_line(aes(x=Year, y=value, colour=ScenLabel, group=Scenario)) +
+     labs(title="CO2 Emissions",
+        x="Year",
+        y="MtCO2/yr") +
+    facet_grid(Industry~Scengroup, scales="free") +
+         theme(axis.text.x = element_text(angle=45, hjust=1),
+               text = element_text(size=14))
+
+ ggplotly(SCENINDUSALLEMIS)
+
+```
 
 ## Steel {.tabset}
 
