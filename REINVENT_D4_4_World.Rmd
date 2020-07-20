@@ -1,6 +1,6 @@
 ---
 title: "REINVENT D4.4 Preliminary results"
-author: "  TIMER_3_11, WORLD results " 
+author: "  TIMER_3_11, World results " 
 output: html_document
 ---
 
@@ -135,22 +135,25 @@ SCENSdat_list <- lapply(SCEN_xlsx, function(x){
     dat=data.table(dat)
     })
 
-SCENdat <- rbindlist(SCENSdat_list, fill=TRUE) %>%
+SCENall <- rbindlist(SCENSdat_list, fill=TRUE) %>%
     drop_na(Model) %>%
     gather(Year, value, -c(Model, Scenario, Region, Variable, Unit)) %>%
     mutate(Year=as.numeric(Year), value=as.numeric(value)) %>%
     mutate(Scenario=gsub(".xlsx", "", Scenario, fixed=T)) %>%
     drop_na(Year) %>%
-        bind_rows({.} %>% filter(Region %in% c("WEU", "CEU")) %>% 
+        bind_rows({.} %>% filter(Region %in% c("WWorld", "CWorld")) %>% 
                     group_by(Model, Scenario, Variable, Unit, Year) %>% 
                     summarise(value=sum(value)) %>%
-                    mutate(Region="EU")) %>%
+                    mutate(Region="World")) %>%
   filter(!Region == "World") %>%
-    bind_rows({.} %>% filter(!Region %in% c( "EU")) %>% 
+    bind_rows({.} %>% filter(!Region %in% c( "World")) %>% 
               group_by(Model, Scenario, Variable, Unit, Year) %>% 
               summarise(value=sum(value)) %>%
               mutate(Region="World")) %>%
-  filter( !Scenario %in% c("SSP2_MaxTax", "SSP2_450"))
+  filter( !Scenario %in% c("SSP2_450","SSP2_MaxTax"))#"SSP2_MaxTax", 
+
+SCENdat <- SCENall %>% 
+  filter( Scenario %in% c("TechReplace", "DemandMan", "CircEco", "ProcEff"))
 
 SCENINDUS <- SCENdat %>%
     filter(grepl("industry", tolower(Variable), fixed=T))
@@ -159,15 +162,6 @@ SCENINDUS <- SCENdat %>%
 
 Produced on: `r format(Sys.time(), '%d %B %Y - time stamp: %H:%M')`
 
-**Known issues**:
-
-*	**Cement:** Hydrogen fired rotary kilns at end of century?
-*	**Chemicals:** Final Energy should include bioenergy use?
-*	**PPI:**: 
-*	**Food:**  
-*	**General:** No green hydrogen?
-
-* Non-CO2/IMAGE-Land data not yet included
 
 <font color="#cc0000"> This is preliminary work, please do not cite </font>
 
@@ -347,6 +341,28 @@ ECONCO2Tot <-   ECONCO2 %>%
 
 ```
 
+```{r econ-emis-ghg, echo=FALSE, results=TRUE, message=FALSE, warning=FALSE, fig.width=9, fig.height=5}
+
+ECONGHG <- SCENdat %>%
+    filter(grepl("Emissions|Kyoto Gases", Variable, fixed=T)) 
+
+ECONGHGTot <-   ECONGHG %>%
+    #filter(grepl("emissions", tolower(Variable), fixed=T)) %>%
+    #filter(!grepl("Emissions|CO2|",Variable, fixed=T)) %>%
+    filter(Region=="World" ) %>%
+    ggplot()+
+    geom_line(aes(x=Year, y=value,  group=Scenario, colour=Scenario)) +
+     labs(title="GHG Emissions",
+        x="Year",
+        y="Mt CO2-equiv/yr") +
+    facet_wrap(~ Variable, ncol=2) +
+         theme(axis.text.x = element_text(angle=45, hjust=1),
+               text = element_text(size=14))
+
+ ggplotly(ECONGHGTot)
+
+```
+
 ### Cumulative emissions
 
 ```{r econ-emis-cumu, echo=FALSE, results=TRUE, message=FALSE, warning=FALSE, fig.width=9, fig.height=5}
@@ -432,7 +448,44 @@ INDUSDEMbudget <-   INDUSDEM %>%
 
 ```
 
+<!-- ## Industrial decarbonization overview {.tabset} -->
 
+<!-- ```{r all-emis, echo=FALSE, results=TRUE, message=FALSE, warning=FALSE, fig.width=9, fig.height=9} -->
+
+<!-- SCENINDUSALL <- SCENall %>% -->
+<!--     filter(str_detect(tolower(Variable), c("steel", "cement", "paper",  "food")))  -->
+
+<!-- SCENINDUSALLEMIS <-   SCENINDUSALL %>% -->
+<!--     filter(grepl("emissions", tolower(Variable), fixed=T)) %>% -->
+<!--     filter(!grepl("cokes", tolower(Variable), fixed=T)) %>% -->
+<!--       filter(grepl("Direct emissions", Variable, fixed=T)) %>% -->
+<!--     bind_rows(SCENall %>% -->
+<!--             filter(str_detect(tolower(Variable),"chemicals and petrochemicals")) %>% -->
+<!--              filter(grepl("Direct emissions", Variable, fixed=T)) %>% -->
+<!--             filter(grepl("hvc", tolower(Variable))) -->
+<!--        ) %>% -->
+<!--   mutate(Scengroup=case_when(grepl("Circ", Scenario) ~"CircEco", -->
+<!--                              grepl("Demand", Scenario) ~"DemandMan", -->
+<!--                              grepl("Proc", Scenario) ~"ProcEff", -->
+<!--                              grepl("Tech", Scenario) ~"TechReplace")) %>% -->
+<!--     mutate(ScenLabel=case_when(grepl("4000USD", Scenario) ~"FSC infeasible ", -->
+<!--                              grepl("450", Scenario) ~"new SSP2_450 ctax", -->
+<!--                              grepl("MaxTax", Scenario) ~"MaxTax ctax", -->
+<!--                              TRUE ~"MaxTax (TIMER_2015)")) %>% -->
+<!--     separate(Variable, c("X", "Y", "Industry", "Type"), sep = "[|]") %>% -->
+<!--     filter(Region=="World" ) %>% -->
+<!--     ggplot()+ -->
+<!--     geom_line(aes(x=Year, y=value, colour=ScenLabel, group=Scenario)) + -->
+<!--      labs(title="CO2 Emissions", -->
+<!--         x="Year", -->
+<!--         y="MtCO2/yr") + -->
+<!--     facet_grid(Industry~Scengroup, scales="free") + -->
+<!--          theme(axis.text.x = element_text(angle=45, hjust=1), -->
+<!--                text = element_text(size=14)) -->
+
+<!--  ggplotly(SCENINDUSALLEMIS) -->
+
+<!-- ``` -->
 
 ## Steel {.tabset}
 
@@ -556,14 +609,14 @@ SCENSTEELFINE <-   SCENSTEEL %>%
 
 ### CO2 Emissions
 
-```{r ce-emis, echo=FALSE, results=TRUE, message=FALSE, warning=FALSE, fig.width=9, fig.height=5}
+```{r ce-emis, echo=FALSE, results=TRUE, message=FALSE, warning=FALSE, fig.width=9, fig.height=7}
 
 SCENCE <- SCENdat %>%
     filter(grepl("cement", tolower(Variable), fixed=T)) 
 
 SCENCEEMIS <-   SCENCE %>%
     filter(grepl("emissions", tolower(Variable), fixed=T)) %>%
-      filter(grepl("direct", tolower(Variable), fixed=T)) %>%
+      #filter(grepl("direct", tolower(Variable), fixed=T)) %>%
     separate(Variable, c("X", "Y", "Industry", "Type"), sep = "[|]") %>%
     filter(Region=="World" ) %>%
     ggplot()+
@@ -678,13 +731,15 @@ SCENCHEMEMIS <-   SCENCHEM %>%
     filter(grepl("emissions", tolower(Variable), fixed=T)) %>%
     filter(grepl("direct", tolower(Variable), fixed=T)) %>%
     separate(Variable, c("X", "Y", "Industry", "Type", "Z"), sep = "[|]") %>%
-    filter(Region=="World" & Type=="Direct emissions" ) %>%
+  
+  filter(grepl("hvc", tolower(Type), fixed=T)) %>%
+    filter(Region=="World" ) %>%
     ggplot()+
     geom_line(aes(x=Year, y=value, colour=Scenario, group=Scenario)) +
      labs(title="Total CO2 Emissions",
         x="Year",
         y="MtCO2/yr") +
-    facet_wrap(~ Type, ncol=2) +
+    facet_wrap(~ Z, ncol=2) +
          theme(axis.text.x = element_text(angle=45, hjust=1),
                text = element_text(size=14))
 
@@ -694,7 +749,7 @@ SCENCHEMEMIS <-   SCENCHEM %>%
     filter(grepl("emissions", tolower(Variable), fixed=T)) %>%
     filter(grepl("direct", tolower(Variable), fixed=T))  %>%
     separate(Variable, c("X", "Y", "Industry", "Type", "Z"), sep = "[|]") %>%
-    filter(Region=="World" & !Type=="Direct emissions" ) %>%
+    filter(Region=="World" & Z=="Direct emissions" ) %>%
    ggplot()+
     geom_area(aes(x=Year, y=value, fill=Type), position="stack", colour="black") +
      labs(title="Sectoral CO2 emissions",
@@ -862,15 +917,18 @@ SCENPPI <- SCENdat %>%
 
 SCENPPIProd <-   SCENPPI %>%
     filter(grepl("production", tolower(Variable), fixed=T)) %>%
-    separate(Variable, c("X", "Y", "Industry", "Food"), sep = "[|]") %>%
-  filter(!Food=="Total") %>%
+    separate(Variable, c("X", "Y", "Industry", "Product"), sep = "[|]") %>%
+  mutate(Group=case_when(grepl("Pulp", Product) ~ "Pulp",
+                         grepl("print|board", tolower(Product)) ~ "Paper",
+                         TRUE ~ "Recovered")) %>%
+  filter(!Product=="Total") %>%
     filter(Region=="World" ) %>%
     ggplot()+
-    geom_area(aes(x=Year, y=value, fill=Food), position="stack", colour="black") +
+    geom_area(aes(x=Year, y=value, fill=Product), position="stack", colour="black") +
      labs(title="Production",
         x="Year",
         y="Mt/Yr") +
-    facet_wrap(~ Scenario, ncol=2) +
+    facet_grid(Scenario~Group) +
          theme(axis.text.x = element_text(angle=45, hjust=1),
                text = element_text(size=14))
 
@@ -956,6 +1014,123 @@ SCENFOODEMIS <-   SCENFOOD %>%
  ggplotly(SCENFOODEMIS)
 
 ```
+
+<!-- ```{r food-agriemis, echo=FALSE, results=TRUE, message=FALSE, warning=FALSE, fig.width=9, fig.height=5} -->
+
+<!-- SCENFOODAGR <- SCENdat %>% -->
+<!-- filter(Variable %in% c( -->
+<!--     "AGMIP|TOT|EMIS", -->
+<!--     "AGMIP|RIC|EMIS", -->
+<!--     "AGMIP|WHT|EMIS", -->
+<!--     "AGMIP|CGR|EMIS", -->
+<!--     "AGMIP|OSD|EMIS", -->
+<!--     "AGMIP|SGC|EMIS", -->
+<!--     "AGMIP|VFN|EMIS", -->
+<!--     "AGMIP|PFB|EMIS", -->
+<!--     "AGMIP|ECP|EMIS", -->
+<!--     "AGMIP|OCR|EMIS", -->
+<!--     "AGMIP|CRP|EMIS", -->
+<!--     "AGMIP|RUM|EMIS", -->
+<!--     "AGMIP|NRM|EMIS", -->
+<!--     "AGMIP|DRY|EMIS", -->
+<!--     "AGMIP|OAP|EMIS", -->
+<!--     "AGMIP|LSP|EMIS", -->
+<!--     "AGMIP|TOT|ECH4", -->
+<!--     "AGMIP|RIC|ECH4", -->
+<!--     "AGMIP|WHT|ECH4", -->
+<!--     "AGMIP|CGR|ECH4", -->
+<!--     "AGMIP|OSD|ECH4", -->
+<!--     "AGMIP|SGC|ECH4", -->
+<!--     "AGMIP|VFN|ECH4", -->
+<!--     "AGMIP|PFB|ECH4", -->
+<!--     "AGMIP|ECP|ECH4", -->
+<!--     "AGMIP|OCR|ECH4", -->
+<!--     "AGMIP|CRP|ECH4", -->
+<!--     "AGMIP|RUM|ECH4", -->
+<!--     "AGMIP|NRM|ECH4", -->
+<!--     "AGMIP|DRY|ECH4", -->
+<!--     "AGMIP|OAP|ECH4", -->
+<!--     "AGMIP|LSP|ECH4", -->
+<!--     "AGMIP|TOT|EN2O", -->
+<!--     "AGMIP|RIC|EN2O", -->
+<!--     "AGMIP|WHT|EN2O", -->
+<!--     "AGMIP|CGR|EN2O", -->
+<!--     "AGMIP|OSD|EN2O", -->
+<!--     "AGMIP|SGC|EN2O", -->
+<!--     "AGMIP|VFN|EN2O", -->
+<!--     "AGMIP|PFB|EN2O", -->
+<!--     "AGMIP|ECP|EN2O", -->
+<!--     "AGMIP|OCR|EN2O", -->
+<!--     "AGMIP|CRP|EN2O", -->
+<!--     "AGMIP|RUM|EN2O", -->
+<!--     "AGMIP|NRM|EN2O", -->
+<!--     "AGMIP|DRY|EN2O", -->
+<!--     "AGMIP|OAP|EN2O", -->
+<!--     "AGMIP|LSP|EN2O", -->
+<!--     "AGMIP|TOT|PROD", -->
+<!--     "AGMIP|RIC|PROD", -->
+<!--     "AGMIP|WHT|PROD", -->
+<!--     "AGMIP|CGR|PROD", -->
+<!--     "AGMIP|OSD|PROD", -->
+<!--     "AGMIP|SGC|PROD", -->
+<!--     "AGMIP|VFN|PROD", -->
+<!--     "AGMIP|PFB|PROD", -->
+<!--     "AGMIP|ECP|PROD", -->
+<!--     "AGMIP|OCR|PROD", -->
+<!--     "AGMIP|CRP|PROD", -->
+<!--     "AGMIP|RUM|PROD", -->
+<!--     "AGMIP|NRM|PROD", -->
+<!--     "AGMIP|DRY|PROD", -->
+<!--     "AGMIP|OAP|PROD", -->
+<!--     "AGMIP|LSP|PROD") ) %>% -->
+<!--     mutate(Food=case_when(grepl("DRY", Variable)~"Dairy", -->
+<!--                           grepl("RUM", Variable)~"Ruminant meat", -->
+<!--                           grepl( "NRM", Variable)~"Non-ruminant meat", -->
+<!--                           grepl( "RIC", Variable)~"Rice", -->
+<!--                           grepl( "WHT", Variable)~"Wheat", -->
+<!--                           grepl( "CGR", Variable)~"Coarse grains", -->
+<!--                           grepl( "OSD", Variable)~"Oil Seeds", -->
+<!--                           grepl( "SGC", Variable)~"Sugar crops", -->
+<!--                           grepl( "VFN", Variable)~"Vegetables, Fruits & Nuts", -->
+<!--                           grepl( "PFB", Variable)~"Plant-based fibres", -->
+<!--                           grepl( "ECP", Variable)~"Energy crops", -->
+<!--                           grepl( "OCR", Variable)~"Other crops", -->
+<!--                           grepl( "CRP", Variable)~"All crops", -->
+<!--                           grepl( "OAP", Variable)~"Other animal products", -->
+<!--                           grepl( "LSP", Variable)~"Livestock", -->
+<!--                           TRUE ~ "Total")) %>% -->
+<!--   mutate( Variable=gsub("Agricultural Demand|", "", Variable, fixed=T)) %>% -->
+<!--   separate(col=Variable, sep="([\\|\\?\\:])", into=c("Project", "Commodity", "Indicator"), remove=F) %>% -->
+<!--   mutate(Type=ifelse(Indicator=="PROD", "Production", "Emissions")) %>% -->
+<!--   select(Commodity, Variable, Scenario, Region, Unit, Year, Project, Indicator ,Type, value, Food) %>% -->
+<!--   bind_rows({.} %>%  -->
+<!--               filter(Type=="Emissions") %>% -->
+<!--               group_by(Commodity, Scenario, Region, Unit, Year, Project,  Food) %>% -->
+<!--               summarise(value=sum(value)) %>% -->
+<!--                           mutate(Type = "GHG Emissions", -->
+<!--                                  Indicator="GHG Emissions", -->
+<!--                                  Variable="GHG Emissions"))  -->
+
+<!-- SCENFOODAGREMIS <- SCENFOODAGR %>% -->
+<!--   # mutate(Region=ifelse(Region=="World", "RoW", Region)) %>% -->
+<!--   # full_join({.} %>% filter(Region=="RoW") %>% -->
+<!--   #             rename("WORLDval"="value", -->
+<!--   #                    "WORLD"="Region"), by=c("Commodity", "Year", "Variable", "Scenario", "Unit", "Project", "Indicator", "Type", "Food")) %>% -->
+<!--   # mutate(WORLDshare=value/WORLDval*100, Label=paste(Scenario, Region, Variable)) %>% -->
+<!--   filter(Type %in% c( "GHG Emissions") & Scenario=="Baseline" & Commodity %in% c("DRY", "RUM", "NRM", "VFN")) %>% -->
+<!--   ggplot()+ -->
+<!--   geom_area(data=. %>% filter(Region=="RoW"), aes(x=Year, y=value, group=Label, fill=Region), alpha=1, colour="black") + -->
+
+<!--   geom_area(data=. %>% filter(!Region=="RoW" ), aes(x=Year, y=value, group=Label, fill=Region), alpha=1, colour="black") + -->
+<!--   facet_grid(Type~Food, scales="free_y") + -->
+<!--   labs(y="Total emissions (MtCO2e)", -->
+<!--        x="Year") -->
+
+
+<!--  ggplotly(SCENFOODAGREMIS) -->
+
+<!-- ``` -->
+
 
 ### Material Demand
 
