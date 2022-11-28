@@ -24,7 +24,7 @@ navbar:
       href: https://mstdn.social/@marieyesse       # CHANGE HERE 
     - text: "Linkedin"
       icon: fa-linkedin
-      href: https://www.linkedin.com/mariessevansluisveld       # CHANGE HERE 
+      href: https://www.linkedin.com/in/mariessevansluisveld      # CHANGE HERE 
 
 output:
   html_document:
