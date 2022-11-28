@@ -14,4 +14,9 @@ knitr::opts_chunk$set(echo = TRUE)
 
 <br>
 <br>
-
+<br>
+<br>
+<center>
+<i> <font style="font-size:26px; color: #C0C0C0;">“I have never tried that before, so I think I should definitely be able to do that!”</font><br>
+<font style="font-size:20px; color: #C0C0C0;">- Pippi Longstocking (Astrid Lindgren)</font> </i>
+</center>
