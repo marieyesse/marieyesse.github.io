@@ -1,7 +1,7 @@
-name: "Mariesse van Sluisveld"                                # CHANGE HERE 
+name: "Mariësse van Sluisveld"                                # CHANGE HERE 
 output_dir: "."
 navbar:
-  title: "Mariesse van Sluisveld"                             # CHANGE HERE 
+  title: "Mariësse van Sluisveld"                             # CHANGE HERE 
   type: inverse
   left:
     - text: "Home"
@@ -15,13 +15,13 @@ navbar:
   right:
     - text: "Contact me"
       icon: fa-envelope-o
-      href: mailto:mariesse.vansluisveld@pbl.nl                  # CHANGE HERE 
+      href: mailto:mariesse.vansluisveld@pbl.nl      # CHANGE HERE 
     - text: "Twitter"
       icon: fa-twitter
       href: https://www.twitter.com/marieyesse       # CHANGE HERE 
     - text: "Mastodon"
       icon: fa-comment
-      href: https://www.mstdn.social/marieyesse       # CHANGE HERE 
+      href: https://mstdn.social/@marieyesse       # CHANGE HERE 
     - text: "Linkedin"
       icon: fa-linkedin
       href: https://www.linkedin.com/mariessevansluisveld       # CHANGE HERE 
