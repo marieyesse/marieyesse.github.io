@@ -1,28 +1,32 @@
-name: "Site navigation"
+name: "Mariesse van Sluisveld"                                # CHANGE HERE 
 output_dir: "."
 navbar:
-  title: "Navigate"
+  title: "Mariesse van Sluisveld"                             # CHANGE HERE 
+  type: inverse
   left:
-  
     - text: "Home"
+      icon: fa-home
       href: index.html
 
-    - text: "My CV"
+    - text: "CV"
+      icon: fa-file-pdf-o
       href: cv.html
-    - text: "Research"
-      href: research.html
-    - text: "Tweetsheet"
-      href: tweets.html
 
+  right:
+    - text: "Contact me"
+      icon: fa-envelope-o
+      href: mailto:mariesse.vansluisveld@pbl.nl                  # CHANGE HERE 
+    - text: "Twitter"
+      icon: fa-twitter
+      href: https://www.twitter.com/marieyesse       # CHANGE HERE 
+    - text: "Mastodon"
+      icon: fa-comment
+      href: https://www.mstdn.social/marieyesse       # CHANGE HERE 
+    - text: "Linkedin"
+      icon: fa-linkedin
+      href: https://www.linkedin.com/mariessevansluisveld       # CHANGE HERE 
 
 output:
   html_document:
-    theme: spacelab
-    css: style.css  
-    includes:
-      before_body: header.html
-      after_body: footer.html
-      
-    toc: true
-    toc_depth: 3
-    toc_float: true  
+    theme: cosmo
+    highlight: textmate
